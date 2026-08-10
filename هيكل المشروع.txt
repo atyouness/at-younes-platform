@@ -1,0 +1,30 @@
+at-younes-platform/
+├── .env.example          # ملف النماذج للمتغيرات البيئية
+├── .gitignore            # الملفات التي لا ترفع إلى GitHub
+├── package.json          # قائمة المكتبات المطلوبة
+├── server.js             # الملف الرئيسي لتشغيل الخادم
+├── README.md             # شرح المشروع
+├── config/
+│   └── database.js       # إعدادات الاتصال بقاعدة البيانات
+├── models/
+│   ├── User.js           # نموذج المستخدم
+│   ├── Property.js       # نموذج العقار
+│   ├── Referral.js       # نموذج الإحالة
+│   └── Payment.js        # نموذج الدفع
+├── routes/
+│   ├── auth.js           # مسارات المصادقة (تسجيل، دخول)
+│   ├── users.js          # مسارات إدارة المستخدمين
+│   ├── properties.js     # مسارات العقارات
+│   ├── referrals.js      # مسارات الإحالات
+│   └── payments.js       # مسارات الدفع
+├── controllers/
+│   ├── authController.js
+│   ├── userController.js
+│   ├── propertyController.js
+│   ├── referralController.js
+│   └── paymentController.js
+├── middleware/
+│   ├── auth.js           # التحقق من المصادقة
+│   └── errorHandler.js   # معالجة الأخطاء
+└── public/               # ملفات الواجهة الأمامية (اختياري مؤقتاً)
+    └── index.html
