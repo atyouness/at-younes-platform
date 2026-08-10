@@ -31,7 +31,7 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // توصيل قاعدة البيانات
-// connectDB();
+connectDB();
 
 // تعريف المسارات (APIs)
 app.use('/api/auth', authRoutes);
