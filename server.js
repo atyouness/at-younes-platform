@@ -4,14 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const { connectDB } = require('./config/database');
-
-// استيراد المسارات
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/users');
-const propertyRoutes = require('./routes/properties');
-const referralRoutes = require('./routes/referrals');
-const paymentRoutes = require('./routes/payments');
+const path = require('path');
 
 // إنشاء تطبيق Express
 const app = express();
@@ -30,22 +23,50 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// توصيل قاعدة البيانات
-connectDB();
+// خدمة الملفات الثابتة من مجلد public
+app.use(express.static('public'));
 
-// تعريف المسارات (APIs)
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/properties', propertyRoutes);
-app.use('/api/referrals', referralRoutes);
-app.use('/api/payments', paymentRoutes);
-
-// صفحة رئيسية مؤقتة
+// الصفحة الرئيسية (تعرض ملف index.html من مجلد public)
 app.get('/', (req, res) => {
-  res.send('مرحباً بكم في منصة آت يونس تك! 🚀');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// بدء الخادم (مرة واحدة فقط!)
+// مسارات API مؤقتة (لتجنب أخطاء "Cannot find module")
+app.get('/api', (req, res) => {
+  res.json({ message: '✅ منصة آت يونس تك API تعمل بنجاح!' });
+});
+
+app.post('/api/auth/login', (req, res) => {
+  res.json({ message: '✅ تم تسجيل الدخول بنجاح (مؤقت)' });
+});
+
+app.post('/api/auth/register', (req, res) => {
+  res.json({ message: '✅ تم التسجيل بنجاح (مؤقت)' });
+});
+
+app.get('/api/users', (req, res) => {
+  res.json({ message: '✅ مسار المستخدمين يعمل (مؤقت)' });
+});
+
+app.get('/api/properties', (req, res) => {
+  res.json({ message: '✅ مسار العقارات يعمل (مؤقت)' });
+});
+
+app.get('/api/referrals', (req, res) => {
+  res.json({ message: '✅ مسار الإحالات يعمل (مؤقت)' });
+});
+
+app.get('/api/payments', (req, res) => {
+  res.json({ message: '✅ مسار المدفوعات يعمل (مؤقت)' });
+});
+
+// معالج الأخطاء (لتجنب تعطل التطبيق)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'حدث خطأ في الخادم', error: err.message });
+});
+
+// بدء الخادم
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ الخادم يعمل على المنفذ ${PORT}`);
 });
