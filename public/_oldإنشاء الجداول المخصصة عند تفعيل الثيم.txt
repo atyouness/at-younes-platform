@@ -1,0 +1,267 @@
+
+/**
+ * إنشاء الجداول المخصصة عند تفعيل الثيم أو الحاجة.
+ */
+function smc_create_custom_tables() {
+    global $wpdb;
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    $charset_collate = $wpdb->get_charset_collate();
+
+    // 1. جدول بيانات المستخدم الإضافية (لبيانات التسجيل)
+    $table_name_extended = $wpdb->prefix . 'smc_user_extended_data';
+    if($wpdb->get_var("SHOW TABLES LIKE '$table_name_extended'") != $table_name_extended) {
+        $sql_extended = "CREATE TABLE $table_name_extended (
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            father_name VARCHAR(255) DEFAULT NULL,
+            birth_date DATE DEFAULT NULL,
+            place_birth VARCHAR(255) DEFAULT NULL,
+            gender VARCHAR(50) DEFAULT NULL,
+            country VARCHAR(100) DEFAULT NULL,
+            mobile_number VARCHAR(50) DEFAULT NULL,
+            invitation_id VARCHAR(100) DEFAULT NULL, -- رمز الدعوة الذي أدخله المستخدم عند التسجيل
+            privacy_policy_accepted_at TIMESTAMP NULL DEFAULT NULL,
+            PRIMARY KEY  (user_id)
+        ) $charset_collate;";
+        dbDelta($sql_extended);
+    }
+
+    // 2. جدول إيداعات المستخدمين
+    $table_name_deposits = $wpdb->prefix . 'user_deposits';
+    if($wpdb->get_var("SHOW TABLES LIKE '$table_name_deposits'") != $table_name_deposits) {
+        $sql_deposits = "CREATE TABLE $table_name_deposits (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(15, 2) NOT NULL,
+            payment_method VARCHAR(100) NOT NULL,
+            status VARCHAR(50) NOT NULL DEFAULT 'pending', -- (pending, approved, rejected)
+            deposit_date DATETIME NOT NULL, -- تاريخ تقديم الطلب
+            approval_date DATETIME DEFAULT NULL, -- تاريخ الموافقة/الرفض
+            approved_by BIGINT(20) UNSIGNED DEFAULT NULL, -- User ID of admin
+            PRIMARY KEY  (id),
+            KEY user_id (user_id),
+            KEY status (status)
+        ) $charset_collate;";
+        dbDelta($sql_deposits);
+    }
+
+    // 3. جدول سحب الودائع للمستخدمين
+    $table_name_withdrawals = $wpdb->prefix . 'user_withdrawals';
+    if($wpdb->get_var("SHOW TABLES LIKE '$table_name_withdrawals'") != $table_name_withdrawals) {
+        $sql_withdrawals = "CREATE TABLE $table_name_withdrawals (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(15, 2) NOT NULL,
+            payment_method VARCHAR(100) NOT NULL,
+            withdrawal_details TEXT DEFAULT NULL, -- لتخزين تفاصيل الحساب (CCP, RIP, etc.)
+            status VARCHAR(50) NOT NULL DEFAULT 'pending', -- (pending, approved, rejected)
+            withdrawal_date DATETIME NOT NULL, -- تاريخ تقديم الطلب
+            approval_date DATETIME DEFAULT NULL, -- تاريخ الموافقة/الرفض
+            approved_by BIGINT(20) UNSIGNED DEFAULT NULL, -- User ID of admin
+            PRIMARY KEY  (id),
+            KEY user_id (user_id),
+            KEY status (status)
+        ) $charset_collate;";
+        dbDelta($sql_withdrawals);
+    }
+
+    // 4. جدول سحب الأرباح للمستخدمين
+    $table_name_profit_withdrawals = $wpdb->prefix . 'user_profit_withdrawals';
+    if($wpdb->get_var("SHOW TABLES LIKE '$table_name_profit_withdrawals'") != $table_name_profit_withdrawals) {
+        $sql_profit_withdrawals = "CREATE TABLE $table_name_profit_withdrawals (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            amount DECIMAL(15, 2) NOT NULL,
+            payment_method VARCHAR(100) NOT NULL,
+            withdrawal_details TEXT DEFAULT NULL, -- لتخزين تفاصيل الحساب
+            status VARCHAR(50) NOT NULL DEFAULT 'pending', -- (pending, approved, rejected)
+            withdrawal_date DATETIME NOT NULL, -- تاريخ تقديم الطلب
+            approval_date DATETIME DEFAULT NULL, -- تاريخ الموافقة/الرفض
+            approved_by BIGINT(20) UNSIGNED DEFAULT NULL, -- User ID of admin
+            PRIMARY KEY  (id),
+            KEY user_id (user_id),
+            KEY status (status)
+        ) $charset_collate;";
+        dbDelta($sql_profit_withdrawals);
+    }
+
+    // 5. جدول سجل الحضور اليومي للمستخدمين
+    $table_name_attendance = $wpdb->prefix . 'smc_attendance_log';
+    if($wpdb->get_var("SHOW TABLES LIKE '$table_name_attendance'") != $table_name_attendance) {
+        $sql_attendance = "CREATE TABLE $table_name_attendance (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            attendance_date DATE NOT NULL,          -- تاريخ الحضور (فقط اليوم)
+            attendance_timestamp DATETIME NOT NULL, -- وقت وتاريخ تسجيل الحضور الدقيق
+            points_awarded INT DEFAULT 0,           -- النقاط الممنوحة لهذا الحضور
+            PRIMARY KEY  (id),
+            UNIQUE KEY unique_attendance (user_id, attendance_date), -- ضمان تسجيل واحد لكل مستخدم في اليوم
+            KEY user_id (user_id),
+            KEY attendance_date (attendance_date)
+        ) $charset_collate;";
+        dbDelta($sql_attendance);
+    }
+
+    // 6. جدول سجل المكافآت
+    $rewards_table = $wpdb->prefix . 'smc_rewards_log';
+    if($wpdb->get_var("SHOW TABLES LIKE '$rewards_table'") != $rewards_table) {
+        $sql_rewards = "CREATE TABLE $rewards_table (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            reward_type VARCHAR(100) NOT NULL, -- مثل 'referral_bonus_l1', 'deposit_bonus', 'task_completion'
+            amount DECIMAL(15, 2) NOT NULL,
+            reward_timestamp DATETIME NOT NULL,
+            source_user_id BIGINT(20) UNSIGNED DEFAULT NULL, -- ID المستخدم المصدر (مثل الداعي)
+            related_info TEXT DEFAULT NULL, -- معلومات إضافية (مثل ID الإيداع، ID المهمة)
+            PRIMARY KEY  (id),
+            KEY user_id (user_id),
+            KEY reward_type (reward_type),
+            KEY reward_timestamp (reward_timestamp)
+        ) $charset_collate;";
+        dbDelta($sql_rewards);
+    }
+
+    // *** تعديل جدول سجل الصفقات الإعلانية المكتملة ليشمل جميع الأعمدة المطلوبة ***
+    $ad_deals_log_table = $wpdb->prefix . 'smc_ad_deals_log';
+    // حذف الجدول القديم إذا كان موجودًا لتطبيق التغييرات (كن حذرًا في بيئة الإنتاج)
+    // $wpdb->query("DROP TABLE IF EXISTS $ad_deals_log_table");
+    // Check if table exists and maybe check columns before running dbDelta
+    $sql_ad_deals = "CREATE TABLE $ad_deals_log_table (
+        id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+        user_id BIGINT(20) UNSIGNED NOT NULL,
+        completion_timestamp DATETIME NOT NULL,
+        ad_name VARCHAR(255) DEFAULT NULL,         -- اسم الإعلان (اختياري، يمكن أن يكون معرفًا أو وصفًا)
+        ad_price DECIMAL(15, 2) NOT NULL,           -- سعر الإعلان الأصلي
+        ad_tax DECIMAL(15, 2) NOT NULL,             -- ق.م للإعلان
+        net_ad_price DECIMAL(15, 2) NOT NULL,       -- سعر صافي للإعلان (السعر + ضريبة السعر)
+        profit_value DECIMAL(15, 2) NOT NULL,       -- ربح من الإعلان (قبل الضريبة)
+        profit_tax DECIMAL(15, 2) NOT NULL,         -- ق.م للربح
+        net_profit DECIMAL(15, 2) NOT NULL,         -- ربح صافي للإعلان (الربح - ضريبة الربح)
+        user_benefit DECIMAL(15, 2) NOT NULL,       -- فائدة المستخدم (الربح الصافي - سعر الإعلان الأصلي)
+        profit_percentage DECIMAL(8, 5) NOT NULL,   -- نسبة الربح المستخدمة (مثال: 0.18800)
+        ad_duration INT UNSIGNED NOT NULL,          -- مدة الإعلان بالثواني
+        deal_tax DECIMAL(15, 2) NOT NULL,           -- ق.م للصفقة (ضريبة السعر + ضريبة الربح)
+        PRIMARY KEY  (id),
+        KEY user_id (user_id),
+        KEY completion_timestamp (completion_timestamp)
+    ) $charset_collate;";
+    dbDelta($sql_ad_deals);
+
+
+    // 8. جدول سجل تتبع النقرات (مثال)
+    $click_log_table = $wpdb->prefix . 'smc_click_log';
+    if($wpdb->get_var("SHOW TABLES LIKE '$click_log_table'") != $click_log_table) {
+        $sql_clicks = "CREATE TABLE $click_log_table (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
+            button_id VARCHAR(255) DEFAULT NULL, -- معرف الزر أو الإجراء
+            page_url VARCHAR(2083) DEFAULT NULL, -- رابط الصفحة التي تم فيها النقر
+            click_timestamp DATETIME NOT NULL,
+            ip_address VARCHAR(100) DEFAULT NULL,
+            user_agent TEXT DEFAULT NULL,
+            PRIMARY KEY  (id),
+            KEY user_id (user_id),
+            KEY button_id (button_id),
+            KEY click_timestamp (click_timestamp)
+        ) $charset_collate;";
+        dbDelta($sql_clicks);
+    }
+
+    // 9. جدول سجل مشاهدات الإعلانات (مثال)
+    $impressions_table = $wpdb->prefix . 'smc_ad_impressions';
+    if($wpdb->get_var("SHOW TABLES LIKE '$impressions_table'") != $impressions_table) {
+        $sql_impressions = "CREATE TABLE $impressions_table (
+            id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+            ad_id BIGINT(20) UNSIGNED NOT NULL, -- ID الإعلان
+            advertiser_id BIGINT(20) UNSIGNED DEFAULT NULL, -- ID المعلن (إذا كان مختلفًا عن المستخدم)
+            user_id BIGINT(20) UNSIGNED NOT NULL, -- ID المستخدم الذي شاهد الإعلان
+            impression_timestamp DATETIME NOT NULL,
+            ip_address VARCHAR(100) DEFAULT NULL,
+            user_agent TEXT DEFAULT NULL,
+            PRIMARY KEY  (id),
+            KEY ad_id (ad_id),
+            KEY user_id (user_id),
+            KEY impression_timestamp (impression_timestamp)
+        ) $charset_collate;";
+        dbDelta($sql_impressions);
+    }
+
+}
+// تشغيل الدالة عند تفعيل الثيم
+add_action('after_switch_theme', 'smc_create_custom_tables');
+// تشغيل الدالة عند تحميل لوحة التحكم للتأكد من وجود الجداول (احتياطي)
+add_action('admin_init', 'smc_create_custom_tables');
+
+
+// Add a custom settings page (Optional - If you need a settings page in WP Admin)
+function smc_custom_settings_page() {
+    add_menu_page(
+        'SMC Settings', // Page title
+        'SMC Settings', // Menu title
+        'manage_options', // Capability
+        'smc-settings', // Menu slug
+        'smc_settings_page_content', // Callback function
+        'dashicons-admin-generic', // Icon
+        100 // Position
+    );
+}
+add_action('admin_menu', 'smc_custom_settings_page');
+
+// Create the settings page content
+function smc_settings_page_content() {
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+    ?>
+    <div class="wrap">
+        <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+        <form action="options.php" method="post">
+            <?php
+            settings_fields('smc_settings_group');
+            do_settings_sections('smc-settings');
+            submit_button('Save Settings');
+            ?>
+        </form>
+    </div>
+    <?php
+}
+
+// Register settings
+function smc_register_settings() {
+    register_setting('smc_settings_group', 'smc_settings');
+
+    add_settings_section(
+        'smc_settings_section',
+        'SMC General Settings',
+        'smc_settings_section_callback',
+        'smc-settings'
+    );
+
+    add_settings_field(
+        'smc_instructions_text', // Example setting field
+        'Instructions Text',
+        'smc_instructions_text_callback',
+        'smc-settings',
+        'smc_settings_section'
+    );
+    // Add more settings fields as needed
+}
+add_action('admin_init', 'smc_register_settings');
+
+// Settings section callback
+function smc_settings_section_callback() {
+    echo '<p>Manage SMC settings here.</p>';
+}
+
+// Instructions text callback (Example)
+function smc_instructions_text_callback() {
+    $options = get_option('smc_settings');
+    $instructions_text = isset($options['smc_instructions_text']) ? $options['smc_instructions_text'] : '';
+    echo '<textarea id="smc_instructions_text" name="smc_settings[smc_instructions_text]" rows="5" cols="50">' . esc_textarea($instructions_text) . '</textarea>';
+}
+
+// Function to get settings (Example)
+function smc_get_setting($setting_name) {
+    $options = get_option('smc_settings');
+    return isset($options[$setting_name]) ? $options[$setting_name] : '';
+}
+

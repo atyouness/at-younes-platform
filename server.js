@@ -31,7 +31,7 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // توصيل قاعدة البيانات
-// connectDB();
+connectDB();
 
 // تعريف المسارات (APIs)
 app.use('/api/auth', authRoutes);
@@ -40,14 +40,12 @@ app.use('/api/properties', propertyRoutes);
 app.use('/api/referrals', referralRoutes);
 app.use('/api/payments', paymentRoutes);
 
-// ... (باقي الكود كما هو) ...
-
 // صفحة رئيسية مؤقتة
 app.get('/', (req, res) => {
   res.send('مرحباً بكم في منصة آت يونس تك! 🚀');
 });
 
-// بدء الخادم (مرة واحدة فقط، مع الاستماع لجميع العناوين)
+// بدء الخادم (مرة واحدة فقط!)
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ الخادم يعمل على المنفذ ${PORT}`);
 });

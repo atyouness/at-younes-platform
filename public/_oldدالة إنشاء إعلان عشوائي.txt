@@ -1,0 +1,48 @@
+       // دالة إنشاء إعلان عشوائي
+        function generateRandomAd() {
+            const randomIndex = Math.floor(Math.random() * adImages.length);
+            const randomAdImage = adImages[randomIndex];
+            const minDuration = 10;
+            const maxDuration = 60;
+            const durationSteps = 10;
+            adDuration = Math.floor(Math.random() * ((maxDuration - minDuration) / durationSteps + 1)) * durationSteps + minDuration;
+
+
+            // تحديد سعر الإعلان ونسبة الربح عشوائياً بناءً على قيمة الوديعة
+            if (currentDeposit >= 2000 && currentDeposit < 5000) {
+                adPrice = Math.random() * (2 - 1) + 1; // بين 1 و 2 دج
+                profitPercentage = Math.random() * (0.2 - 0.134) + 0.134; // بين 0.134% و 0.2%
+                dailyAdLimit = 10;
+            } else if (currentDeposit >= 5000 && currentDeposit < 10000) {
+                adPrice = Math.random() * (5 - 2.5) + 2.5; // بين 2.5 و 5 دج
+                profitPercentage = Math.random() * (0.21 - 0.144) + 0.144; // بين 0.144% و 0.21%
+                dailyAdLimit = 11;
+            } else if (currentDeposit >= 10000 && currentDeposit < 25000) {
+                adPrice = Math.random() * (12 - 6) + 6; // بين 6 و 12 دج
+                profitPercentage = Math.random() * (0.22 - 0.154) + 0.154; // بين 0.154% و 0.22%
+                dailyAdLimit = 12;
+            } else if (currentDeposit >= 25000 && currentDeposit < 50000) {
+                adPrice = Math.random() * (36 - 18) + 18; // بين 18 و 36 دج
+                profitPercentage = Math.random() * (0.23 - 0.164) + 0.164; // بين 0.164% و 0.23%
+                dailyAdLimit = 13;
+            } else if (currentDeposit >= 50000 && currentDeposit < 100000) {
+                adPrice = Math.random() * (80 - 40) + 40; // بين 40 و 80 دج
+                profitPercentage = Math.random() * (0.24 - 0.174) + 0.174; // بين 0.174% و 0.24%
+                dailyAdLimit = 14;
+            } else if (currentDeposit >= 100000 && currentDeposit < 250000) {
+                adPrice = Math.random() * (180 - 90) + 90; // بين 90 و 180 دج
+                profitPercentage = Math.random() * (0.25 - 0.184) + 0.184; // بين 0.184% و 0.25%
+                dailyAdLimit = 15;
+            } else if (currentDeposit >= 250000 && currentDeposit < 500000) {
+                adPrice = Math.random() * (450 - 240) + 240; // بين 240 و 450 دج
+                profitPercentage = Math.random() * (0.26 - 0.194) + 0.194; // بين 0.194% و 0.26%
+                dailyAdLimit = 16;
+            } else if (currentDeposit >= 500000) {
+                adPrice = Math.random() * (700 - 470) + 470; // بين 470 و 700 دج
+                profitPercentage = Math.random() * (0.27 - 0.204) + 0.204; // بين 0.204% و 0.27%
+                dailyAdLimit = 17;
+            } else {
+                adPrice = 0;
+                profitPercentage = 0;
+                dailyAdLimit = 0; // في حالة عدم استيفاء أي شرط، يتم تعيين القيم إلى الصفر
+            }

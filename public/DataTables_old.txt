@@ -1,0 +1,30 @@
+ // تضمين مكتبات DataTables فقط في صفحات السجلات التي تستخدمها
+    // تأكد من أن أسماء القوالب صحيحة
+    // تم تحديث القائمة لتشمل القوالب الجديدة وتصحيح الأسماء
+    $log_templates = [
+'my-team-referrals-log.php', 	        // سجل فريقي (للمستخدم)
+'user-referral-log.php',                      // سجل الإحالات (للمستخدم)
+'users-referral-log.php',	                   // سجل الإحالات (للمسؤول)
+'user-referral-tree.php',	                   // شجرة الإحالات (للمستخدم)
+'users-referral-tree.php',	       // شجرة الإحالات المستخدمين (للمسؤول)
+'activate-daily-attendance.php',	        // صفحة الحضور الرئيسية للمستخدم 
+'user-attendance-log.php',	       // سجل الحضور المستخدم (للمستخدم)
+'users-attendance-log.php',              // سجل الحضور المستخدمين (للمسؤول)
+'user-deposit-log.php',	                  // سجل إيداع المستخدم
+'users-deposit-log.php',	                  // سجل إيداع المستخدمين
+'user-deposit-withdrawal-log.php',    // سجل سحب ودائع المستخدم (للمستخدم)
+'users-deposit-withdrawal-log.php',  // سجل سحب ودائع المستخدمين (للمسؤول)
+'user-profit-withdrawal-log.php',      // سجل سحب أرباح المستخدم
+'users-profit-withdrawal-log.php',    // سجل سحب أرباح المستخدمين (للمسؤول)
+'users-rewards-log.php', 	     // سجل مكافآت (المسؤول)
+'user-rewards-log.php',	                 // سجل مكافآت (للمستخدم)
+'user-advertising-deals-record-log.php',	     // سجل صفقات الإعلانية (للمستخدم)
+'users-advertising-deals-record-log.php',	//  سجل صفقات الإعلانية للمستخدمين (للمسؤول)
+'record-total-user-earnings-types.php', 	// سجل إجمالي أنواع أرباح المستخدم (للمستخدم)
+'record-total-users-earnings-types.php', 	// سجل إجمالي أنواع أرباح المستخدمين (للمسؤول)
+'displaying-ads-log',	//  سجل ظهور الإعلانات للمعلنين (للمسؤول)
+'number-clicks-log',	//  سجل عدد الضغطات المستخدمين (للمسؤول)
+'members-login-log.php',	// (سجل حركة الدخول (للمسؤول
+'php_error_log',	// (سجل الأخطاء (للمسؤول
+
+    ];

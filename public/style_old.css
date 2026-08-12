@@ -1,0 +1,396 @@
+/*
+Theme Name:   SMC Group DZ
+Theme URI:    https://wpastra.com/
+Description:  SMC Group DZ قالب مشروع SMC
+Author:       slimane bouabboune
+Author URI:   https://smcgroupdz.rf.gd/
+Template:     astra
+Version:      3.5.7
+Text Domain:  SMC Group DZ
+*/
+
+/* style.css */
+
+/* --- Hide Default Astra Header --- */
+#masthead {
+    display: none !important; /* إخفاء شريط الرأس الافتراضي لقالب Astra */
+}
+
+/* --- SMC Shortcode Styles --- */
+.smc-shortcode-container {
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: #fdfdfd;
+}
+
+.smc-shortcode-container h4 {
+    margin-top: 0;
+    color: #27ae60; /* أخضر */
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.smc-shortcode-container form label {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.smc-shortcode-container form input[type="text"],
+.smc-shortcode-container form input[type="number"],
+.smc-shortcode-container form input[type="file"],
+.smc-shortcode-container form select,
+.smc-shortcode-container form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+}
+
+.smc-shortcode-container form button[type="submit"] {
+    background-color: #3498db; /* أزرق */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    margin-top: 15px;
+}
+
+.smc-shortcode-container form button[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+/* Team Table Styles */
+.smc-team-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.smc-team-table th,
+.smc-team-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: right;
+}
+
+.smc-team-table th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+.smc-team-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.smc-team-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* --- Admin Settings Sections and Log Tables --- */
+.smc-admin-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.smc-admin-section h3 {
+    color: #3498db; /* أزرق */
+    margin-bottom: 15px;
+}
+
+.smc-log-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 0.9em; /* تصغير حجم الخط قليلاً للجداول */
+}
+
+.smc-log-table th,
+.smc-log-table td {
+    border: 1px solid #ddd;
+    padding: 8px 10px; /* تعديل الحشو */
+    text-align: right;
+}
+
+.smc-log-table th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+}
+
+.smc-log-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.smc-log-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* --- SMC Log Buttons (in smc-settings.php) --- */
+.smc-log-buttons {
+    margin-top: 15px;
+    margin-bottom: 25px; /* Add some space below the buttons */
+    display: flex; /* Use flexbox for button layout */
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+    gap: 10px; /* Add space between buttons */
+    justify-content: center; /* Center the buttons */
+}
+
+/* Style log buttons like header buttons */
+.smc-log-buttons .smc-button {
+    color: #28a745 !important; /* Green text */
+    text-decoration: none;
+    padding: 8px 15px;
+    margin: 0 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    background-color: #fff; /* White background */
+    border: 1px solid #28a745; /* Green border */
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.smc-log-buttons .smc-button:hover {
+    background-color: #28a745; /* Green background on hover */
+    color: #fff !important; /* White text on hover */
+    border-color: #218838; /* Darker green border on hover */
+}
+
+/* --- Custom Header Container Styles (Moved from header.php) --- */
+.smc-header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.smc-logo-title {
+    display: flex;
+    align-items: center;
+}
+
+.smc-logo-container {
+    width: 80px; /* تحديد عرض ثابت للوجو */
+    height: 80px; /* تحديد ارتفاع ثابت للوجو */
+    margin-right: 10px; /* مسافة بين اللوجو والعنوان */
+}
+
+.smc-logo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* احتواء الصورة داخل الحاوية */
+}
+
+.smc-header-title {
+    font-size: 1.5em; /* حجم الخط */
+    margin: 0; /* إزالة الهوامش */
+}
+
+/* --- Header Navigation Styles --- */
+.smc-header-nav {
+    /* Styles below are kept from original style.css */
+    background-color: #fff; /* تغيير الخلفية إلى الأبيض */
+    padding: 10px 0;
+    border: 2px solid #28a745; /* إضافة إطار أخضر */
+    border-radius: 5px; /* Add rounded corners */
+    text-align: center; /* توسيط الأزرار */
+    margin-bottom: 10px; /* Add margin to the bottom */
+}
+
+/* --- Header Navigation Styles --- */
+/* Ensure high specificity and set green color */
+.smc-header-nav nav a,
+body .smc-header-nav nav a { /* Increased specificity */
+    color: #28a745 !important; /* تغيير لون الروابط إلى الأخضر */
+    text-decoration: none;
+    padding: 8px 15px;
+    margin: 0 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    background-color: #fff; /* تغيير لون الخلفية إلى الأبيض */
+    border: 1px solid #28a745; /* Add a green border */
+}
+
+.smc-header-nav nav a:hover {
+    background-color: transparent; /* إزالة لون الخلفية عند المرور */
+    color: #218838; /* تغيير اللون عند المرور إلى أخضر أغمق */
+}
+
+/* --- Footer Navigation Styles --- */
+.smc-footer-nav {
+    background-color: #fff; /* تغيير الخلفية إلى الأبيض */
+    padding: 15px 0;
+    color: #333; /* تغيير لون النص الافتراضي إلى داكن */
+    text-align: center;
+    border: 2px solid #28a745; /* إضافة إطار أخضر كامل */
+    position: fixed; /* تثبيت التذييل في الأسفل */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* التأكد من ظهوره فوق المحتوى الآخر */
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1); /* إضافة ظل خفيف */
+}
+
+.smc-footer-nav nav {
+    display: flex; /* استخدام flexbox لتوزيع الأزرار */
+    justify-content: space-around; /* توزيع المسافات بالتساوي */
+    align-items: center;
+}
+
+/* --- Footer Navigation Styles (Horizontal Rectangles like Header) --- */
+/* Ensure high specificity and set green color */
+.smc-footer-nav nav a,
+body .smc-footer-nav nav a { /* Increased specificity */
+    color: #28a745 !important; /* Green text */
+    text-decoration: none;
+    padding: 8px 15px; /* Match header button padding */
+    margin: 0 5px; /* Match header button margin */
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+    background-color: #fff; /* White background */
+    border: 1px solid #28a745; /* Green border */
+    display: inline-block; /* Make them inline blocks */
+    /* Remove flex properties for vertical layout */
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* align-items: center; */
+    font-size: 0.9em; /* Adjust font size if needed */
+}
+
+.smc-footer-nav nav a:hover {
+    background-color: #28a745; /* Green background on hover */
+    color: #fff !important; /* White text on hover */
+    border-color: #218838; /* Darker green border on hover */
+}
+
+/* --- WordPress Login Form Styles --- */
+body.login {
+    background-color: #f1f1f1; /* Light grey background for the login page */
+}
+
+#login {
+    padding: 20px;
+    background-color: #fff; /* White background for the login box */
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 5px;
+}
+
+.login h1 a {
+    background-image: none; /* Remove default WP logo if needed */
+    /* Add your logo here if desired */
+}
+
+.login form {
+    background: transparent; /* Ensure form itself is transparent */
+    border: none;
+    box-shadow: none;
+    margin-top: 10px;
+}
+
+.login label {
+    color: #333; /* Dark text for labels */
+    font-weight: bold;
+}
+
+.login input[type="text"],
+.login input[type="password"] {
+    background-color: #fff; /* White background for input fields */
+    border: 1px solid #ccc;
+    color: #000 !important; /* Explicitly black text */
+    padding: 8px;
+    border-radius: 3px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Ensure placeholder text is visible */
+.login input[type="text"]::placeholder,
+.login input[type="password"]::placeholder {
+  color: #888 !important; /* Lighter grey for placeholder */
+}
+
+.login input[type="submit"] {
+    background-color: #28a745; /* Green background for the button */
+    border-color: #218838; /* Darker green border */
+    color: #fff; /* White text */
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    float: right; /* Align button to the right */
+    margin-top: 10px;
+}
+
+.login input[type="submit"]:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+.login #backtoblog a,
+.login #nav a {
+    color: #555; /* Grey color for back/nav links */
+}
+
+.login #backtoblog a:hover,
+.login #nav a:hover {
+    color: #28a745; /* Green on hover */
+}
+
+/* Add padding to the bottom of the body to prevent content from being hidden by the fixed footer */
+body {
+    padding-bottom: 80px; /* يجب أن تكون القيمة أكبر أو تساوي ارتفاع التذييل */
+}
+
+/* --- Media Queries --- */
+/* تنسيقات للأجهزة ذات الشاشات الصغيرة (الجوال والتابلت) */
+@media (max-width: 768px) {
+    .smc-header-container {
+        flex-direction: column; /* ترتيب العناصر عموديًا */
+        text-align: center; /* توسيط النص */
+    }
+
+    .smc-logo-title {
+        flex-direction: row-reverse; /* ترتيب اللوجو على اليمين والعنوان على اليسار */
+        justify-content: center; /* توسيط العناصر أفقيًا */
+        align-items: center; /* محاذاة العناصر عموديًا */
+        margin-bottom: 10px; /* إضافة مسافة بين اللوجو والعنوان */
+    }
+
+    .smc-logo-container {
+        width: 60px; /* تصغير عرض اللوجو */
+        height: 60px; /* تصغير ارتفاع اللوجو */
+        margin-right: 10px; /* إضافة مسافة على اليمين */
+        margin-bottom: 0; /* إزالة المسافة أسفل اللوجو */
+    }
+
+    .smc-header-title {
+        font-size: 1.2em; /* تصغير حجم الخط */
+    }
+
+    .smc-header-nav nav {
+        flex-direction: column; /* ترتيب الأزرار عموديًا */
+    }
+
+    .smc-header-nav nav a {
+        margin: 5px 0; /* إضافة مسافة بين الأزرار */
+        padding: 6px 12px; /* تصغير المساحة الداخلية للأزرار */
+        font-size: 0.9em; /* تصغير حجم الخط */
+    }
+    .smc-footer-nav nav a {
+        font-size: 0.8em; /* تصغير حجم الخط */
+    }
+    .dashboard-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}
