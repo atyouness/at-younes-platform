@@ -4,15 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const { connectDB } = require('./config/database');
 const path = require('path');
-
-// استيراد المسارات
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/users');
-const propertyRoutes = require('./routes/properties');
-const referralRoutes = require('./routes/referrals');
-const paymentRoutes = require('./routes/payments');
 
 // إنشاء تطبيق Express
 const app = express();
@@ -24,32 +16,60 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// تحديد عدد الطلبات
+// تحديد عدد الطلبات (للحماية من الهجمات)
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100
+  windowMs: 15 * 60 * 1000, // 15 دقيقة
+  max: 100 // 100 طلب لكل IP
 });
 app.use('/api', limiter);
 
-// خدمة الملفات الثابتة
-app.use(express.static('public'));
+// ✅ خدمة الملفات الثابتة من مجلد public
+app.use(express.static(path.join(__dirname, 'public')));
 
-// توصيل قاعدة البيانات (معلق مؤقتاً)
-// connectDB();
+// ✅ تأكد من وجود مجلد public
+const fs = require('fs');
+const publicPath = path.join(__dirname, 'public');
+if (!fs.existsSync(publicPath)) {
+  console.log('⚠️ مجلد public غير موجود، سيتم إنشاؤه...');
+  fs.mkdirSync(publicPath, { recursive: true });
+}
 
-// تعريف المسارات (APIs)
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/properties', propertyRoutes);
-app.use('/api/referrals', referralRoutes);
-app.use('/api/payments', paymentRoutes);
-
-// الصفحة الرئيسية
+// ✅ الصفحة الرئيسية (تعرض index.html من مجلد public)
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  const indexPath = path.join(__dirname, 'public', 'index.html');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    // إذا كان index.html غير موجود، عرض رسالة ترحيب
+    res.send(`
+      <h1>مرحباً بكم في منصة آت يونس تك! 🚀</h1>
+      <p>تم تشغيل الخادم بنجاح، لكن ملف index.html غير موجود في مجلد public.</p>
+      <p>يرجى إضافة ملف index.html إلى مجلد public.</p>
+    `);
+  }
 });
 
-// بدء الخادم
+// ✅ مسارات API مؤقتة (للتأكد من أن الخادم يعمل)
+app.get('/api/status', (req, res) => {
+  res.json({ 
+    status: '✅ الخادم يعمل بنجاح!',
+    time: new Date().toISOString(),
+    publicExists: fs.existsSync(publicPath)
+  });
+});
+
+// ✅ معالج الأخطاء (لتجنب تعطل التطبيق)
+app.use((err, req, res, next) => {
+  console.error('❌ خطأ:', err.stack);
+  res.status(500).json({ 
+    message: 'حدث خطأ في الخادم', 
+    error: err.message 
+  });
+});
+
+// ✅ بدء الخادم
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`✅ الخادم يعمل على المنفذ ${PORT}`);
+  console.log(`📁 مجلد public: ${publicPath}`);
+  console.log(`📄 ملف index.html موجود: ${fs.existsSync(path.join(publicPath, 'index.html'))}`);
 });
