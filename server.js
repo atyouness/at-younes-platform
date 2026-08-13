@@ -36,10 +36,10 @@ app.use('/api', limiter);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ✅ توصيل قاعدة البيانات وإنشاء الجداول
-connectDB();
+// connectDB();
 
 // التحقق من وجود الجدول وإنشائه إذا لزم الأمر
-User.ensureTable();
+// User.ensureTable();
 
 // تعريف المسارات (APIs)
 app.use('/api/auth', authRoutes);
