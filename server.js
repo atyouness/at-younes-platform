@@ -36,8 +36,8 @@ app.use('/api', limiter);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ✅ توصيل قاعدة البيانات وإنشاء الجداول
-// connectDB();
-// User.createTable(); // <-- السطر الجديد
+connectDB();
+User.createTable(); // <-- السطر الجديد
 
 // تعريف المسارات (APIs)
 app.use('/api/auth', authRoutes);
