@@ -37,7 +37,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ✅ توصيل قاعدة البيانات وإنشاء الجداول
 connectDB();
-// User.createTable();السطر الجديد
+
+// التحقق من وجود الجدول وإنشائه إذا لزم الأمر
+User.ensureTable();
 
 // تعريف المسارات (APIs)
 app.use('/api/auth', authRoutes);
