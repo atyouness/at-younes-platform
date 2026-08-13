@@ -8,6 +8,8 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD || 'UJN741ik85/*',
   database: process.env.DB_NAME || 'at_younes_db',
   ssl: false  // ✅ هذا يحل مشكلة SSL
+connectionTimeoutMillis: 5000, // مهلة 5 ثوانٍ
+  idleTimeoutMillis: 30000 // مهلة الخمول
 });
 
 const connectDB = async () => {
