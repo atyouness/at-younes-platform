@@ -7,7 +7,7 @@ const pool = new Pool({
   user: process.env.DB_USER || 'u188242994',
   password: process.env.DB_PASSWORD || 'UJN741ik85/*',
   database: process.env.DB_NAME || 'at_younes_db',
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  ssl: { rejectUnauthorized: false } // ✅ هذا يحل مشكلة SSL
 });
 
 const connectDB = async () => {
