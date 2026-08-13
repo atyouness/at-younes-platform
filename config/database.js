@@ -1,19 +1,22 @@
-const { Pool } = require('pg');
+const mysql = require('mysql2/promise');
 require('dotenv').config();
 
-const pool = new Pool({
-  host: process.env.DB_HOST || '46.202.156.218',
-  port: process.env.DB_PORT || 65002,
-  user: process.env.DB_USER || 'u188242994',
+const pool = mysql.createPool({
+  host: process.env.DB_HOST || 'localhost',
+  port: process.env.DB_PORT || 3306,
+  user: process.env.DB_USER || 'u188242994_atyouness',
   password: process.env.DB_PASSWORD || 'UJN741ik85/*',
-  database: process.env.DB_NAME || 'at_younes_db',
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  database: process.env.DB_NAME || 'u188242994_slimane',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
 const connectDB = async () => {
   try {
-    await pool.connect();
+    const connection = await pool.getConnection();
     console.log('✅ تم الاتصال بقاعدة البيانات بنجاح!');
+    connection.release();
   } catch (error) {
     console.error('❌ فشل الاتصال بقاعدة البيانات:', error.message);
   }
