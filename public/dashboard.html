@@ -34,33 +34,13 @@
       flex-wrap: wrap;
       gap: 10px;
     }
-    .header h1 {
-      margin: 0;
-      color: #2c3e50;
-      font-size: 22px;
-      font-weight: 700;
-    }
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .user-info .username {
-      font-weight: 600;
-      color: #2c3e50;
-      font-size: 15px;
-    }
+    .header h1 { margin: 0; color: #2c3e50; font-size: 22px; font-weight: 700; }
+    .user-info { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .user-info .username { font-weight: 600; color: #2c3e50; font-size: 15px; }
     .logout-btn {
-      background: #dc3545;
-      color: white;
-      border: none;
-      padding: 6px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13px;
-      transition: background 0.3s;
-      font-weight: 500;
+      background: #dc3545; color: white; border: none;
+      padding: 6px 16px; border-radius: 8px; cursor: pointer;
+      font-size: 13px; font-weight: 500; transition: background 0.3s;
     }
     .logout-btn:hover { background: #c82333; }
 
@@ -77,19 +57,14 @@
       border-radius: 12px;
       text-align: center;
       transition: transform 0.2s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
     }
-    .stat-card:hover { transform: translateY(-3px); }
-    .stat-card .number {
-      font-size: 24px;
-      font-weight: 700;
-      color: #2c3e50;
-      margin-bottom: 2px;
-    }
-    .stat-card .label {
-      color: #6c757d;
-      font-size: 13px;
-      font-weight: 500;
-    }
+    .stat-card:hover { transform: translateY(-3px); background: #e9ecef; }
+    .stat-card .number { font-size: 24px; font-weight: 700; color: #2c3e50; margin-bottom: 2px; }
+    .stat-card .label { color: #6c757d; font-size: 13px; font-weight: 500; }
 
     /* ====== الأقسام ====== */
     .section {
@@ -104,92 +79,43 @@
       color: #2c3e50;
       font-size: 17px;
       font-weight: 700;
-    }
-
-    /* ====== نظام الإحالات ====== */
-    .referral-box {
-      background: white;
-      padding: 16px;
-      border-radius: 12px;
       display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
       justify-content: space-between;
       align-items: center;
     }
-    .referral-box > div { flex: 1 1 auto; min-width: 120px; }
-    .referral-box p {
-      margin: 0;
-      color: #6c757d;
+    .section h2 a {
       font-size: 13px;
-    }
-    .referral-code {
-      background: #e9ecef;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 16px;
-      font-weight: 700;
-      display: inline-block;
-      margin-top: 4px;
-      font-family: monospace;
-      letter-spacing: 1px;
-    }
-    .referral-count {
-      font-size: 26px;
-      font-weight: 700;
       color: #2563eb;
-    }
-    .copy-btn {
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 6px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13px;
+      text-decoration: none;
       font-weight: 500;
-      transition: background 0.3s;
-      white-space: nowrap;
     }
-    .copy-btn:hover { background: #1d4ed8; }
+    .section h2 a:hover { text-decoration: underline; }
 
-    /* ====== رسائل ====== */
-    .message {
-      margin-top: 12px;
-      padding: 10px 14px;
-      border-radius: 8px;
-      display: none;
+    /* ====== قائمة الروابط السريعة ====== */
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .quick-link {
+      background: white;
+      padding: 14px 12px;
+      border-radius: 12px;
+      text-align: center;
+      text-decoration: none;
+      color: #2c3e50;
+      font-weight: 500;
       font-size: 14px;
+      transition: all 0.3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1px solid #e9ecef;
     }
-    .message.success {
-      display: block;
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-    .message.error {
-      display: block;
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
+    .quick-link:hover { transform: translateY(-3px); border-color: #2563eb; }
+    .quick-link .icon { font-size: 28px; display: block; margin-bottom: 6px; }
 
-    /* ====== قائمة الإحالات ====== */
-    .referral-list-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid #f0f0f0;
-      font-size: 14px;
-    }
-    .referral-list-item:last-child { border-bottom: none; }
-    .referral-list-item .date {
-      color: #6c757d;
-      font-size: 12px;
-    }
-
-    /* ====== المهام وسجل النشاطات ====== */
-    .task-item, .log-item {
+    /* ====== قائمة المهام ====== */
+    .task-item, .log-item, .news-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -198,62 +124,38 @@
       font-size: 14px;
       gap: 8px;
     }
-    .task-item:last-child, .log-item:last-child { border-bottom: none; }
-    .task-item .points {
-      color: #2563eb;
-      font-weight: 600;
-      font-size: 13px;
-    }
+    .task-item:last-child, .log-item:last-child, .news-item:last-child { border-bottom: none; }
+    .task-item .points { color: #2563eb; font-weight: 600; font-size: 13px; }
     .task-btn {
-      background: #007bff;
-      color: white;
-      border: none;
-      padding: 4px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 500;
+      background: #007bff; color: white; border: none;
+      padding: 4px 12px; border-radius: 6px; cursor: pointer;
+      font-size: 12px; font-weight: 500;
     }
     .task-btn:hover { background: #0069d9; }
-    .log-item .log-date {
+    .log-item .log-date, .news-item .news-date {
       color: #6c757d;
       font-size: 12px;
       font-weight: 400;
     }
-    .log-item .log-action {
-      font-weight: 500;
-    }
+    .log-item .log-action { font-weight: 500; }
+    .news-item .news-title { font-weight: 500; flex: 1; }
 
-    /* ====== تحسينات خاصة للجوال ====== */
+    /* ====== تحسينات الجوال ====== */
     @media (max-width: 600px) {
       body { padding: 8px; }
       .dashboard-container { padding: 14px; border-radius: 12px; }
       .header h1 { font-size: 18px; }
       .user-info .username { font-size: 13px; }
       .logout-btn { font-size: 12px; padding: 5px 12px; }
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
-      }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
       .stat-card { padding: 10px 8px; }
       .stat-card .number { font-size: 20px; }
       .stat-card .label { font-size: 11px; }
       .section { padding: 12px; }
       .section h2 { font-size: 15px; }
-      .referral-box { padding: 12px; gap: 8px; flex-direction: column; align-items: stretch; }
-      .referral-box > div { text-align: center; }
-      .referral-code { font-size: 14px; padding: 4px 10px; }
-      .referral-count { font-size: 22px; }
-      .copy-btn { width: 100%; text-align: center; padding: 8px; }
-      .task-item, .log-item { font-size: 13px; flex-wrap: wrap; }
-      .task-item .points { font-size: 12px; }
-      .task-btn { font-size: 11px; padding: 3px 10px; }
-      .log-item .log-date { font-size: 11px; }
-    }
-
-    @media (max-width: 400px) {
-      .stats-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
-      .stat-card .number { font-size: 17px; }
+      .quick-links { grid-template-columns: repeat(2, 1fr); }
+      .quick-link { padding: 12px 8px; font-size: 13px; }
+      .quick-link .icon { font-size: 22px; }
     }
   </style>
 </head>
@@ -270,35 +172,69 @@
 
     <!-- الإحصائيات -->
     <div class="stats-grid">
-      <div class="stat-card">
-        <div class="number" id="balance">0</div>
-        <div class="label">💰 الرصيد</div>
-      </div>
-      <div class="stat-card">
+      <a href="/referrals.html" class="stat-card">
         <div class="number" id="referralsCount">0</div>
         <div class="label">👥 الإحالات</div>
-      </div>
-      <div class="stat-card">
-        <div class="number" id="earnings">0</div>
-        <div class="label">📈 الأرباح</div>
-      </div>
-      <div class="stat-card">
-        <div class="number" id="rank">مبتدئ</div>
-        <div class="label">🏆 الرتبة</div>
+      </a>
+      <a href="/profits.html" class="stat-card">
+        <div class="number" id="balance">0</div>
+        <div class="label">💰 الأرباح</div>
+      </a>
+      <a href="/tasks.html" class="stat-card">
+        <div class="number" id="tasksDone">0</div>
+        <div class="label">✅ المهام</div>
+      </a>
+      <a href="/news.html" class="stat-card">
+        <div class="number" id="newsCount">0</div>
+        <div class="label">📰 الأخبار</div>
+      </a>
+    </div>
+
+    <!-- الروابط السريعة -->
+    <div class="section">
+      <h2>🚀 الروابط السريعة</h2>
+      <div class="quick-links">
+        <a href="/referrals.html" class="quick-link">
+          <span class="icon">👥</span>
+          شبكة الإحالات
+        </a>
+        <a href="/marketing.html" class="quick-link">
+          <span class="icon">📢</span>
+          نشاطات التسويق
+        </a>
+        <a href="/products.html" class="quick-link">
+          <span class="icon">🏷️</span>
+          المنتجات والعروض
+        </a>
+        <a href="/tasks.html" class="quick-link">
+          <span class="icon">📋</span>
+          المهام
+        </a>
+        <a href="/news.html" class="quick-link">
+          <span class="icon">📰</span>
+          الأخبار والقوانين
+        </a>
+        <a href="/training.html" class="quick-link">
+          <span class="icon">📚</span>
+          التدريب
+        </a>
+        <a href="/profits.html" class="quick-link">
+          <span class="icon">📈</span>
+          الأرباح
+        </a>
       </div>
     </div>
 
-    <!-- نظام الإحالات -->
-    <div style="margin-top:12px;text-align:center;">
-  <a href="/referrals.html" style="color:#2563eb;text-decoration:none;font-weight:600;">
-    👥 عرض شبكة الإحالات بالكامل →
-  </a>
-</div>
- 
     <!-- المهام اليومية -->
     <div class="section">
-      <h2>📋 المهام اليومية</h2>
+      <h2>📋 المهام اليومية <a href="/tasks.html">عرض الكل →</a></h2>
       <div id="dailyTasks"><p style="color:#6c757d;font-size:14px;">جاري تحميل المهام...</p></div>
+    </div>
+
+    <!-- آخر الأخبار -->
+    <div class="section">
+      <h2>📰 آخر الأخبار <a href="/news.html">عرض الكل →</a></h2>
+      <div id="latestNews"><p style="color:#6c757d;font-size:14px;">جاري تحميل الأخبار...</p></div>
     </div>
 
     <!-- سجل النشاطات -->
@@ -309,44 +245,18 @@
   </div>
 
   <script>
-
     // ============================================================
     //  دوال مساعدة لتنسيق التاريخ
     // ============================================================
-    function formatDate(dateString) {
+    function formatDateTime(dateString) {
       const date = new Date(dateString);
       if (isNaN(date.getTime())) return 'تاريخ غير صحيح';
-      
-      const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      };
-      return date.toLocaleDateString('ar-EG', options);
+      const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', calendar: 'gregorian' };
+      const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
+      const datePart = date.toLocaleDateString('ar-EG', dateOptions);
+      const timePart = date.toLocaleTimeString('ar-EG', timeOptions);
+      return `${datePart} - ${timePart}`;
     }
-
-    function formatDateTime(dateString) {
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) return 'تاريخ غير صحيح';
-  
-  // استخدام الأرقام العربية الشرقية (الإنجليزية) مع تنسيق 24 ساعة
-  const dateOptions = { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric',
-    calendar: 'gregorian'
-  };
-  const timeOptions = { 
-    hour: '2-digit', 
-    minute: '2-digit',
-    hour12: false // ✅ 24 ساعة
-  };
-  
-  const datePart = date.toLocaleDateString('ar-EG', dateOptions);
-  const timePart = date.toLocaleTimeString('ar-EG', timeOptions);
-  
-  return `${datePart} - ${timePart}`;
-}
 
     // ============================================================
     //  عرض معلومات المستخدم
@@ -359,11 +269,6 @@
       }
       document.getElementById('username').textContent = `مرحباً، ${user.username} 👋`;
       document.getElementById('balance').textContent = user.balance || 0;
-      document.getElementById('rank').textContent = user.role || 'مبتدئ';
-      
-      if (user.referralCode) {
-        document.getElementById('referralCodeDisplay').textContent = user.referralCode;
-      }
     }
 
     // ============================================================
@@ -372,88 +277,21 @@
     async function loadReferralStats() {
       const token = localStorage.getItem('token');
       if (!token) return;
-
       try {
         const response = await fetch('/api/auth/referrals/stats', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
-
         if (response.status === 401) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          window.location.href = '/login.html';
-          return;
+          localStorage.removeItem('token'); localStorage.removeItem('user');
+          window.location.href = '/login.html'; return;
         }
-
         if (!response.ok) throw new Error('فشل في تحميل البيانات');
-
         const data = await response.json();
-        document.getElementById('referralCountDisplay').textContent = data.count || 0;
-
-        const listContainer = document.getElementById('referralsList');
-        if (data.referrals && data.referrals.length > 0) {
-          listContainer.innerHTML = data.referrals.map(ref => `
-            <div class="referral-list-item">
-              <span>👤 ${ref.username}</span>
-              <span class="date">${formatDate(ref.joinedAt)}</span>
-            </div>
-          `).join('');
-        } else {
-          listContainer.innerHTML = '<p style="color:#6c757d;font-size:14px;">لا توجد إحالات حتى الآن. شارك رابطك لدعوة الآخرين!</p>';
-        }
+        document.getElementById('referralsCount').textContent = data.count || 0;
       } catch (error) {
         console.error('❌ خطأ في تحميل الإحالات:', error);
-        document.getElementById('referralsList').innerHTML = '<p style="color:#dc3545;font-size:14px;">حدث خطأ في تحميل البيانات</p>';
       }
     }
-
-    // ============================================================
-    //  نسخ رابط الإحالة
-    // ============================================================
-    function setupCopyReferral() {
-      const copyBtn = document.getElementById('copyReferralBtn');
-      const msgDiv = document.getElementById('referralMessage');
-
-      copyBtn.addEventListener('click', async function() {
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (!user || !user.referralCode) {
-          showMessage('⚠️ لا يوجد كود إحالة متاح', 'error');
-          return;
-        }
-
-        const referralLink = `${window.location.origin}/register.html?ref=${user.referralCode}`;
-        
-        try {
-          await navigator.clipboard.writeText(referralLink);
-          showMessage('✅ تم نسخ رابط الإحالة بنجاح! شاركه الآن.', 'success');
-        } catch (err) {
-          // طريقة بديلة للنسخ
-          const textArea = document.createElement('textarea');
-          textArea.value = referralLink;
-          document.body.appendChild(textArea);
-          textArea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textArea);
-          showMessage('✅ تم نسخ رابط الإحالة بنجاح!', 'success');
-        }
-      });
-    }
-
-    function showMessage(message, type) {
-      const msgDiv = document.getElementById('referralMessage');
-      msgDiv.textContent = message;
-      msgDiv.className = `message ${type}`;
-      setTimeout(() => { msgDiv.className = 'message'; }, 5000);
-    }
-
-    // ============================================================
-    //  تسجيل الخروج
-    // ============================================================
-    document.getElementById('logoutBtn').addEventListener('click', function() {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = '/login.html';
-    });
 
     // ============================================================
     //  المهام اليومية
@@ -474,19 +312,35 @@
           </div>
         </div>
       `).join('');
+      document.getElementById('tasksDone').textContent = tasks.length;
     }
+    function completeTask(taskName) { alert(`✅ تم إنجاز المهمة: ${taskName}`); }
 
-    function completeTask(taskName) {
-      alert(`✅ تم إنجاز المهمة: ${taskName}`);
+    // ============================================================
+    //  آخر الأخبار
+    // ============================================================
+    function loadLatestNews() {
+      const news = [
+        { title: '🚀 إطلاق منصة آت يونس تك رسمياً', date: new Date().toISOString() },
+        { title: '📢 نظام الإحالات الجديد متاح الآن', date: new Date().toISOString() },
+        { title: '🎯 مكافآت يومية للمشاركين النشطين', date: new Date().toISOString() }
+      ];
+      const container = document.getElementById('latestNews');
+      container.innerHTML = news.map(item => `
+        <div class="news-item">
+          <span class="news-title">${item.title}</span>
+          <span class="news-date">${formatDateTime(item.date)}</span>
+        </div>
+      `).join('');
+      document.getElementById('newsCount').textContent = news.length;
     }
 
     // ============================================================
-    //  سجل النشاطات (مع تنسيق تاريخ محسن)
+    //  سجل النشاطات
     // ============================================================
     function loadActivityLog() {
-      const now = new Date();
       const log = [
-        { date: now.toISOString(), action: '🔑 تم تسجيل الدخول' }
+        { date: new Date().toISOString(), action: '🔑 تم تسجيل الدخول' }
       ];
       const container = document.getElementById('activityLog');
       if (log.length === 0) {
@@ -502,13 +356,21 @@
     }
 
     // ============================================================
+    //  تسجيل الخروج
+    // ============================================================
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      localStorage.removeItem('token'); localStorage.removeItem('user');
+      window.location.href = '/login.html';
+    });
+
+    // ============================================================
     //  تهيئة الصفحة
     // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
       loadUserInfo();
       loadReferralStats();
-      setupCopyReferral();
       loadDailyTasks();
+      loadLatestNews();
       loadActivityLog();
     });
   </script>
