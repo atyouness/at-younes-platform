@@ -222,31 +222,43 @@ class User {
   // ============================================================
   //  إنشاء جدول المستخدمين (الهيكل الكامل)
   // ============================================================
-  static async createTable() {
+static async createTable() {
+  try {
+    const query = `
+      CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        referral_code VARCHAR(10) UNIQUE NOT NULL,
+        referred_by INT DEFAULT NULL,
+        balance DECIMAL(10,2) DEFAULT 0,
+        role VARCHAR(20) DEFAULT 'user',
+        is_active BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      )
+    `;
+    await pool.query(query);
+    console.log('✅ جدول المستخدمين جاهز');
+    
+    // إضافة الأعمدة الجديدة إذا لم تكن موجودة (اختياري)
     try {
-      const query = `
-        CREATE TABLE IF NOT EXISTS users (
-          id INT AUTO_INCREMENT PRIMARY KEY,
-          username VARCHAR(50) UNIQUE NOT NULL,
-          email VARCHAR(100) UNIQUE NOT NULL,
-          password VARCHAR(255) NOT NULL,
-          referral_code VARCHAR(10) UNIQUE NOT NULL,
-          referred_by INT DEFAULT NULL,
-          full_name VARCHAR(100) DEFAULT NULL,
-          phone VARCHAR(20) DEFAULT NULL,
-          balance DECIMAL(10,2) DEFAULT 0,
-          role VARCHAR(20) DEFAULT 'user',
-          is_active BOOLEAN DEFAULT TRUE,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )
-      `;
-      await pool.query(query);
-      console.log('✅ جدول المستخدمين جاهز');
-    } catch (error) {
-      console.error('❌ فشل في إنشاء جدول المستخدمين:', error.message);
-      throw error;
+      await pool.query(`ALTER TABLE users ADD COLUMN full_name VARCHAR(100) DEFAULT NULL`);
+      console.log('✅ تم إضافة عمود full_name');
+    } catch (e) {
+      // العمود موجود بالفعل
     }
+    try {
+      await pool.query(`ALTER TABLE users ADD COLUMN phone VARCHAR(20) DEFAULT NULL`);
+      console.log('✅ تم إضافة عمود phone');
+    } catch (e) {
+      // العمود موجود بالفعل
+    }
+    
+  } catch (error) {
+    console.error('❌ فشل في إنشاء جدول المستخدمين:', error.message);
+    throw error;
   }
 }
 
