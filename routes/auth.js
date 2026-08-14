@@ -19,6 +19,27 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'البريد الإلكتروني مسجل بالفعل' });
     }
 
+    // التحقق من وجود كود الإحالة (إذا تم إدخاله)
+let referredBy = null;
+if (referralCode) {
+  const referrer = await User.findByReferralCode(referralCode);
+  if (referrer) {
+    referredBy = referrer.id;
+    console.log(`✅ مستخدم جديد مسجل عن طريق: ${referrer.username} (ID: ${referrer.id})`);
+  } else {
+    console.log(`⚠️ كود إحالة غير صالح: ${referralCode}`);
+  }
+}
+
+// إنشاء المستخدم مع referredBy
+const newUser = await User.create({
+  username,
+  email,
+  password,
+  referralCode: generateReferralCode(),
+  referredBy // <-- إضافة هذا السطر
+});
+    
     // إنشاء المستخدم
     const newUser = await User.create({
       username,
