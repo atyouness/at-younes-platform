@@ -49,6 +49,42 @@ class User {
     }
   }
 
+// البحث عن مستخدم بواسطة كود الإحالة
+static async findByReferralCode(referralCode) {
+  try {
+    const query = 'SELECT id, username, email FROM users WHERE referral_code = ?';
+    const [rows] = await pool.query(query, [referralCode]);
+    return rows[0];
+  } catch (error) {
+    console.error('❌ خطأ في البحث بكود الإحالة:', error.message);
+    return null;
+  }
+}
+
+// الحصول على عدد الإحالات لمستخدم معين
+static async getReferralCount(userId) {
+  try {
+    const query = 'SELECT COUNT(*) as count FROM users WHERE referred_by = ?';
+    const [rows] = await pool.query(query, [userId]);
+    return rows[0].count;
+  } catch (error) {
+    console.error('❌ خطأ في جلب عدد الإحالات:', error.message);
+    return 0;
+  }
+}
+
+// الحصول على قائمة الإحالات لمستخدم معين
+static async getReferrals(userId) {
+  try {
+    const query = 'SELECT id, username, email, created_at FROM users WHERE referred_by = ? ORDER BY created_at DESC';
+    const [rows] = await pool.query(query, [userId]);
+    return rows;
+  } catch (error) {
+    console.error('❌ خطأ في جلب قائمة الإحالات:', error.message);
+    return [];
+  }
+}
+
   // التحقق من كلمة المرور
   static async comparePassword(plainPassword, hashedPassword) {
     return await bcrypt.compare(plainPassword, hashedPassword);
@@ -105,42 +141,6 @@ class User {
       console.error('❌ فشل في إنشاء جدول المستخدمين:', error.message);
       throw error;
     }
-  }
-}
-
-// البحث عن مستخدم بواسطة كود الإحالة
-static async findByReferralCode(referralCode) {
-  try {
-    const query = 'SELECT id, username, email FROM users WHERE referral_code = ?';
-    const [rows] = await pool.query(query, [referralCode]);
-    return rows[0];
-  } catch (error) {
-    console.error('❌ خطأ في البحث بكود الإحالة:', error.message);
-    return null;
-  }
-}
-
-// الحصول على عدد الإحالات لمستخدم معين
-static async getReferralCount(userId) {
-  try {
-    const query = 'SELECT COUNT(*) as count FROM users WHERE referred_by = ?';
-    const [rows] = await pool.query(query, [userId]);
-    return rows[0].count;
-  } catch (error) {
-    console.error('❌ خطأ في جلب عدد الإحالات:', error.message);
-    return 0;
-  }
-}
-
-// الحصول على قائمة الإحالات لمستخدم معين
-static async getReferrals(userId) {
-  try {
-    const query = 'SELECT id, username, email, created_at FROM users WHERE referred_by = ? ORDER BY created_at DESC';
-    const [rows] = await pool.query(query, [userId]);
-    return rows;
-  } catch (error) {
-    console.error('❌ خطأ في جلب قائمة الإحالات:', error.message);
-    return [];
   }
 }
 
