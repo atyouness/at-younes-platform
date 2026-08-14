@@ -17,6 +17,7 @@ const paymentRoutes = require('./routes/payments');
 
 // إنشاء تطبيق Express
 const app = express();
+app.set('trust proxy', 1); // ✅ تفعيل الثقة بالبروكسي
 const PORT = process.env.PORT || 3000;
 
 // إعدادات الأمان والأداء
