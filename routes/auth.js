@@ -19,7 +19,7 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'البريد الإلكتروني مسجل بالفعل' });
     }
 
-    // التحقق من وجود كود الإحالة (إذا تم إدخاله)
+// التحقق من وجود كود الإحالة (إذا تم إدخاله)
 let referredBy = null;
 if (referralCode) {
   const referrer = await User.findByReferralCode(referralCode);
@@ -39,7 +39,7 @@ const newUser = await User.create({
   referralCode: generateReferralCode(),
   referredBy // <-- إضافة هذا السطر
 });
-    
+
     // إنشاء المستخدم
     const newUser = await User.create({
       username,
@@ -147,6 +147,51 @@ router.get('/verify', async (req, res) => {
 // ✅ تسجيل الخروج
 router.post('/logout', (req, res) => {
   res.json({ message: '✅ تم تسجيل الخروج بنجاح' });
+});
+
+// ✅ الحصول على إحصائيات الإحالات
+router.get('/referrals/stats', async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ message: 'غير مصرح' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+    const userId = decoded.userId;
+
+    const count = await User.getReferralCount(userId);
+    const referrals = await User.getReferrals(userId);
+
+    res.json({
+      count,
+      referrals: referrals.map(ref => ({
+        id: ref.id,
+        username: ref.username,
+        email: ref.email,
+        joinedAt: ref.created_at
+      }))
+    });
+  } catch (error) {
+    console.error('❌ خطأ في جلب إحصائيات الإحالات:', error);
+    res.status(500).json({ message: 'حدث خطأ في الخادم' });
+  }
+});
+
+// ✅ التحقق من صحة كود الإحالة (للواجهة)
+router.get('/referrals/validate/:code', async (req, res) => {
+  try {
+    const { code } = req.params;
+    const user = await User.findByReferralCode(code);
+    if (user) {
+      res.json({ valid: true, username: user.username });
+    } else {
+      res.json({ valid: false });
+    }
+  } catch (error) {
+    console.error('❌ خطأ في التحقق من كود الإحالة:', error);
+    res.status(500).json({ message: 'حدث خطأ في الخادم' });
+  }
 });
 
 module.exports = router;
