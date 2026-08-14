@@ -2,21 +2,25 @@ const { pool } = require('../config/database');
 const bcrypt = require('bcrypt');
 
 class User {
-  // إنشاء مستخدم جديد
-  static async create({ username, email, password, referralCode, referredBy }) {
+  // ============================================================
+  //  إنشاء مستخدم جديد
+  // ============================================================
+  static async create({ username, email, password, referralCode, referredBy, fullName, phone }) {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
       const query = `
-        INSERT INTO users (username, email, password, referral_code, referred_by)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO users (username, email, password, referral_code, referred_by, full_name, phone)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
       `;
-      const values = [username, email, hashedPassword, referralCode, referredBy];
+      const values = [username, email, hashedPassword, referralCode, referredBy, fullName || null, phone || null];
       const [result] = await pool.query(query, values);
       return {
         id: result.insertId,
         username,
         email,
         referral_code: referralCode,
+        full_name: fullName || null,
+        phone: phone || null,
         created_at: new Date().toISOString()
       };
     } catch (error) {
@@ -25,7 +29,9 @@ class User {
     }
   }
 
-  // البحث عن مستخدم بالبريد الإلكتروني
+  // ============================================================
+  //  البحث عن مستخدم بالبريد الإلكتروني
+  // ============================================================
   static async findByEmail(email) {
     try {
       const query = 'SELECT * FROM users WHERE email = ?';
@@ -37,10 +43,12 @@ class User {
     }
   }
 
-  // البحث عن مستخدم بالمعرف
+  // ============================================================
+  //  البحث عن مستخدم بالمعرف
+  // ============================================================
   static async findById(id) {
     try {
-      const query = 'SELECT id, username, email, referral_code, balance, role FROM users WHERE id = ?';
+      const query = 'SELECT id, username, email, full_name, phone, referral_code, balance, role FROM users WHERE id = ?';
       const [rows] = await pool.query(query, [id]);
       return rows[0];
     } catch (error) {
@@ -49,116 +57,117 @@ class User {
     }
   }
 
-// البحث عن مستخدم بواسطة كود الإحالة
-static async findByReferralCode(referralCode) {
-  try {
-    const query = 'SELECT id, username, email FROM users WHERE referral_code = ?';
-    const [rows] = await pool.query(query, [referralCode]);
-    return rows[0];
-  } catch (error) {
-    console.error('❌ خطأ في البحث بكود الإحالة:', error.message);
-    return null;
+  // ============================================================
+  //  البحث عن مستخدم بواسطة كود الإحالة
+  // ============================================================
+  static async findByReferralCode(referralCode) {
+    try {
+      const query = 'SELECT id, username, email, full_name, phone FROM users WHERE referral_code = ?';
+      const [rows] = await pool.query(query, [referralCode]);
+      return rows[0];
+    } catch (error) {
+      console.error('❌ خطأ في البحث بكود الإحالة:', error.message);
+      return null;
+    }
   }
-}
 
-// الحصول على عدد الإحالات لمستخدم معين
-static async getReferralCount(userId) {
-  try {
-    const query = 'SELECT COUNT(*) as count FROM users WHERE referred_by = ?';
-    const [rows] = await pool.query(query, [userId]);
-    return rows[0].count;
-  } catch (error) {
-    console.error('❌ خطأ في جلب عدد الإحالات:', error.message);
-    return 0;
+  // ============================================================
+  //  الحصول على عدد الإحالات لمستخدم معين
+  // ============================================================
+  static async getReferralCount(userId) {
+    try {
+      const query = 'SELECT COUNT(*) as count FROM users WHERE referred_by = ?';
+      const [rows] = await pool.query(query, [userId]);
+      return rows[0].count;
+    } catch (error) {
+      console.error('❌ خطأ في جلب عدد الإحالات:', error.message);
+      return 0;
+    }
   }
-}
 
-// الحصول على قائمة الإحالات لمستخدم معين
-static async getReferrals(userId) {
-  try {
-    const query = 'SELECT id, username, email, created_at FROM users WHERE referred_by = ? ORDER BY created_at DESC';
-    const [rows] = await pool.query(query, [userId]);
-    return rows;
-  } catch (error) {
-    console.error('❌ خطأ في جلب قائمة الإحالات:', error.message);
-    return [];
+  // ============================================================
+  //  الحصول على قائمة الإحالات لمستخدم معين
+  // ============================================================
+  static async getReferrals(userId) {
+    try {
+      const query = 'SELECT id, username, email, full_name, phone, created_at FROM users WHERE referred_by = ? ORDER BY created_at DESC';
+      const [rows] = await pool.query(query, [userId]);
+      return rows;
+    } catch (error) {
+      console.error('❌ خطأ في جلب قائمة الإحالات:', error.message);
+      return [];
+    }
   }
-}
 
-  // الحصول على شبكة الإحالات (المستويات 1، 2، 3)
-static async getReferralTree(userId) {
-  try {
-    // المستوى الأول (المباشرين)
-    const level1Query = `
-      SELECT id, username, email, phone, full_name, 
-             (SELECT COUNT(*) FROM users WHERE referred_by = u.id) as referralCount
-      FROM users u
-      WHERE referred_by = ?
-      ORDER BY created_at DESC
-    `;
-    const [level1Rows] = await pool.query(level1Query, [userId]);
-
-    const level1 = [];
-    const level2 = [];
-    const level3 = [];
-
-    for (const user of level1Rows) {
-      // حساب حجم فريق المستوى الأول
-      const teamQuery = `SELECT COUNT(*) as count FROM users WHERE referred_by = ?`;
-      const [teamRows] = await pool.query(teamQuery, [user.id]);
-      user.teamSize = teamRows[0].count || 0;
-      level1.push(user);
-
-      // المستوى الثاني (إحالات المباشرين)
-      const level2Query = `
-        SELECT id, username, email, phone, full_name,
-               (SELECT COUNT(*) FROM users WHERE referred_by = u.id) as referralCount
+  // ============================================================
+  //  الحصول على شبكة الإحالات (المستويات 1، 2، 3)
+  // ============================================================
+  static async getReferralTree(userId) {
+    try {
+      const level1Query = `
+        SELECT id, username, email, full_name, phone,
+               (SELECT COUNT(*) FROM users WHERE referred_by = u.id) as referralCount,
+               (SELECT COUNT(*) FROM users WHERE referred_by IN (SELECT id FROM users WHERE referred_by = u.id)) as teamSize
         FROM users u
         WHERE referred_by = ?
         ORDER BY created_at DESC
       `;
-      const [level2Rows] = await pool.query(level2Query, [user.id]);
-      for (const u2 of level2Rows) {
-        // حساب حجم فريق المستوى الثاني
-        const teamQuery2 = `SELECT COUNT(*) as count FROM users WHERE referred_by = ?`;
-        const [teamRows2] = await pool.query(teamQuery2, [u2.id]);
-        u2.teamSize = teamRows2[0].count || 0;
-        level2.push(u2);
+      const [level1Rows] = await pool.query(level1Query, [userId]);
 
-        // المستوى الثالث (إحالات المستوى الثاني)
-        const level3Query = `
-          SELECT id, username, email, phone, full_name,
-                 (SELECT COUNT(*) FROM users WHERE referred_by = u.id) as referralCount
+      const level1 = [];
+      const level2 = [];
+      const level3 = [];
+
+      for (const user of level1Rows) {
+        level1.push(user);
+
+        const level2Query = `
+          SELECT id, username, email, full_name, phone,
+                 (SELECT COUNT(*) FROM users WHERE referred_by = u.id) as referralCount,
+                 (SELECT COUNT(*) FROM users WHERE referred_by IN (SELECT id FROM users WHERE referred_by = u.id)) as teamSize
           FROM users u
           WHERE referred_by = ?
           ORDER BY created_at DESC
         `;
-        const [level3Rows] = await pool.query(level3Query, [u2.id]);
-        for (const u3 of level3Rows) {
-          const teamQuery3 = `SELECT COUNT(*) as count FROM users WHERE referred_by = ?`;
-          const [teamRows3] = await pool.query(teamQuery3, [u3.id]);
-          u3.teamSize = teamRows3[0].count || 0;
-          level3.push(u3);
+        const [level2Rows] = await pool.query(level2Query, [user.id]);
+        for (const u2 of level2Rows) {
+          level2.push(u2);
+
+          const level3Query = `
+            SELECT id, username, email, full_name, phone,
+                   (SELECT COUNT(*) FROM users WHERE referred_by = u.id) as referralCount,
+                   (SELECT COUNT(*) FROM users WHERE referred_by IN (SELECT id FROM users WHERE referred_by = u.id)) as teamSize
+            FROM users u
+            WHERE referred_by = ?
+            ORDER BY created_at DESC
+          `;
+          const [level3Rows] = await pool.query(level3Query, [u2.id]);
+          for (const u3 of level3Rows) {
+            level3.push(u3);
+          }
         }
       }
-    }
 
-    return { level1, level2, level3 };
-  } catch (error) {
-    console.error('❌ خطأ في جلب شبكة الإحالات:', error);
-    return { level1: [], level2: [], level3: [] };
+      return { level1, level2, level3 };
+    } catch (error) {
+      console.error('❌ خطأ في جلب شبكة الإحالات:', error);
+      return { level1: [], level2: [], level3: [] };
+    }
   }
-}
- 
-  // التحقق من كلمة المرور
+
+  // ============================================================
+  //  التحقق من كلمة المرور
+  // ============================================================
   static async comparePassword(plainPassword, hashedPassword) {
     return await bcrypt.compare(plainPassword, hashedPassword);
   }
 
-  // التحقق من وجود الجدول وإنشائه
+  // ============================================================
+  //  التحقق من وجود الجدول وإنشائه (مع الأعمدة الجديدة)
+  // ============================================================
   static async ensureTable() {
     try {
-      // التحقق من وجود الجدول
+      // 1. التحقق من وجود الجدول
       const checkQuery = `
         SELECT COUNT(*) as count 
         FROM information_schema.tables 
@@ -174,6 +183,8 @@ static async getReferralTree(userId) {
         console.log('✅ تم إنشاء جدول users بنجاح');
       } else {
         console.log('✅ جدول users موجود بالفعل');
+        // 2. التحقق من وجود الأعمدة الجديدة وإضافتها إذا كانت مفقودة
+        await this.ensureColumns();
       }
       return true;
     } catch (error) {
@@ -182,7 +193,35 @@ static async getReferralTree(userId) {
     }
   }
 
-  // إنشاء جدول المستخدمين
+  // ============================================================
+  //  التحقق من وجود الأعمدة الجديدة وإضافتها
+  // ============================================================
+  static async ensureColumns() {
+    try {
+      const columns = ['full_name', 'phone'];
+      for (const column of columns) {
+        const checkColumnQuery = `
+          SELECT COUNT(*) as count 
+          FROM information_schema.columns 
+          WHERE table_schema = DATABASE() 
+          AND table_name = 'users' 
+          AND column_name = ?
+        `;
+        const [rows] = await pool.query(checkColumnQuery, [column]);
+        if (rows[0].count === 0) {
+          console.log(`⚠️ العمود ${column} غير موجود، سيتم إضافته...`);
+          await pool.query(`ALTER TABLE users ADD COLUMN ${column} VARCHAR(100) DEFAULT NULL`);
+          console.log(`✅ تم إضافة العمود ${column} بنجاح`);
+        }
+      }
+    } catch (error) {
+      console.error('❌ فشل في إضافة الأعمدة الجديدة:', error.message);
+    }
+  }
+
+  // ============================================================
+  //  إنشاء جدول المستخدمين (الهيكل الكامل)
+  // ============================================================
   static async createTable() {
     try {
       const query = `
@@ -193,6 +232,8 @@ static async getReferralTree(userId) {
           password VARCHAR(255) NOT NULL,
           referral_code VARCHAR(10) UNIQUE NOT NULL,
           referred_by INT DEFAULT NULL,
+          full_name VARCHAR(100) DEFAULT NULL,
+          phone VARCHAR(20) DEFAULT NULL,
           balance DECIMAL(10,2) DEFAULT 0,
           role VARCHAR(20) DEFAULT 'user',
           is_active BOOLEAN DEFAULT TRUE,
