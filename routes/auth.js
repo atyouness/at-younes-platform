@@ -40,15 +40,7 @@ const newUser = await User.create({
   referredBy // <-- إضافة هذا السطر
 });
 
-    // إنشاء المستخدم
-    const newUser = await User.create({
-      username,
-      email,
-      password,
-      referralCode: generateReferralCode()
-    });
-
-    // إنشاء توكن JWT (إذا أردت)
+   // إنشاء توكن JWT (إذا أردت)
     const token = jwt.sign(
       { userId: newUser.id, email: newUser.email },
       process.env.JWT_SECRET || 'secret_key',
