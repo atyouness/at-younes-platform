@@ -345,17 +345,27 @@
     }
 
     function formatDateTime(dateString) {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) return 'تاريخ غير صحيح';
-      
-      const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-      const timeOptions = { hour: '2-digit', minute: '2-digit' };
-      
-      const datePart = date.toLocaleDateString('ar-EG', dateOptions);
-      const timePart = date.toLocaleTimeString('ar-EG', timeOptions);
-      
-      return `${datePart} - ${timePart}`;
-    }
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return 'تاريخ غير صحيح';
+  
+  // استخدام الأرقام العربية الشرقية (الإنجليزية) مع تنسيق 24 ساعة
+  const dateOptions = { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric',
+    calendar: 'gregorian'
+  };
+  const timeOptions = { 
+    hour: '2-digit', 
+    minute: '2-digit',
+    hour12: false // ✅ 24 ساعة
+  };
+  
+  const datePart = date.toLocaleDateString('ar-EG', dateOptions);
+  const timePart = date.toLocaleTimeString('ar-EG', timeOptions);
+  
+  return `${datePart} - ${timePart}`;
+}
 
     // ============================================================
     //  عرض معلومات المستخدم
