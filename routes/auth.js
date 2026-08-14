@@ -11,7 +11,7 @@ const generateReferralCode = () => {
 // ✅ تسجيل مستخدم جديد
 router.post('/register', async (req, res) => {
   try {
-    const { username, email, password, referralCode } = req.body;
+    const { username, email, password, full_name, phone, whatsapp, referralCode } = req.body;
 
     // التحقق من وجود البريد الإلكتروني
     const existingUser = await User.findByEmail(email);
@@ -19,7 +19,13 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'البريد الإلكتروني مسجل بالفعل' });
     }
 
-    // التحقق من وجود كود الإحالة (إذا تم إدخاله)
+    // التحقق من وجود اسم المستخدم
+    const existingUsername = await User.findByUsername(username);
+    if (existingUsername) {
+      return res.status(400).json({ message: 'اسم المستخدم غير متاح' });
+    }
+
+    // التحقق من كود الإحالة
     let referredBy = null;
     if (referralCode) {
       const referrer = await User.findByReferralCode(referralCode);
@@ -31,13 +37,16 @@ router.post('/register', async (req, res) => {
       }
     }
 
-    // إنشاء المستخدم (تعريف واحد فقط!)
+    // إنشاء المستخدم
     const newUser = await User.create({
       username,
       email,
       password,
       referralCode: generateReferralCode(),
-      referredBy // <-- إضافة هذا السطر
+      referredBy,
+      full_name: full_name || null,
+      phone: phone || null,
+      whatsapp: whatsapp || null
     });
 
     // إنشاء توكن JWT
@@ -54,7 +63,12 @@ router.post('/register', async (req, res) => {
         id: newUser.id,
         username: newUser.username,
         email: newUser.email,
-        referralCode: newUser.referral_code
+        referralCode: newUser.referral_code,
+        full_name: newUser.full_name,
+        phone: newUser.phone,
+        whatsapp: newUser.whatsapp,
+        balance: newUser.balance || 0,
+        role: newUser.role || 'user'
       }
     });
   } catch (error) {
@@ -63,24 +77,21 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// ✅ تسجيل الدخول (قاعدة بيانات)
+// ✅ تسجيل الدخول
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // البحث عن المستخدم
     const user = await User.findByEmail(email);
     if (!user) {
       return res.status(401).json({ message: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' });
     }
 
-    // التحقق من كلمة المرور
     const isPasswordValid = await User.comparePassword(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' });
     }
 
-    // إنشاء توكن JWT
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET || 'secret_key',
@@ -95,6 +106,9 @@ router.post('/login', async (req, res) => {
         username: user.username,
         email: user.email,
         referralCode: user.referral_code,
+        full_name: user.full_name,
+        phone: user.phone,
+        whatsapp: user.whatsapp,
         balance: user.balance,
         role: user.role
       }
@@ -105,7 +119,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// ✅ التحقق من صحة التوكن (للحفاظ على الجلسة)
+// ✅ التحقق من صحة التوكن
 router.get('/verify', async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
@@ -126,6 +140,9 @@ router.get('/verify', async (req, res) => {
         username: user.username,
         email: user.email,
         referralCode: user.referral_code,
+        full_name: user.full_name,
+        phone: user.phone,
+        whatsapp: user.whatsapp,
         balance: user.balance,
         role: user.role
       }
@@ -161,6 +178,8 @@ router.get('/referrals/stats', async (req, res) => {
         id: ref.id,
         username: ref.username,
         email: ref.email,
+        full_name: ref.full_name,
+        phone: ref.phone,
         joinedAt: ref.created_at
       }))
     });
@@ -170,13 +189,13 @@ router.get('/referrals/stats', async (req, res) => {
   }
 });
 
-// ✅ التحقق من صحة كود الإحالة (للواجهة)
+// ✅ التحقق من صحة كود الإحالة
 router.get('/referrals/validate/:code', async (req, res) => {
   try {
     const { code } = req.params;
     const user = await User.findByReferralCode(code);
     if (user) {
-      res.json({ valid: true, username: user.username });
+      res.json({ valid: true, username: user.username, full_name: user.full_name });
     } else {
       res.json({ valid: false });
     }
@@ -186,7 +205,7 @@ router.get('/referrals/validate/:code', async (req, res) => {
   }
 });
 
-// ✅ الحصول على شبكة الإحالات (المستويات 1، 2، 3)
+// ✅ الحصول على شبكة الإحالات
 router.get('/referrals/tree', async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
@@ -197,9 +216,18 @@ router.get('/referrals/tree', async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
     const userId = decoded.userId;
 
+    const currentUser = await User.findById(userId);
+    if (!currentUser) {
+      return res.status(404).json({ message: 'المستخدم غير موجود' });
+    }
+
+    let sponsor = null;
+    if (currentUser.referred_by) {
+      sponsor = await User.findById(currentUser.referred_by);
+    }
+
     const tree = await User.getReferralTree(userId);
-    
-    // حساب الرتبة بناءً على حجم الفريق
+
     const totalTeam = tree.level1.length + tree.level2.length + tree.level3.length;
     let userRank = '👤 عضو';
     if (totalTeam >= 20) userRank = '🎖️ قائد';
@@ -210,7 +238,16 @@ router.get('/referrals/tree', async (req, res) => {
       totalReferrals: tree.level1.length,
       totalTeam,
       userRank,
-      ...tree
+      sponsor: sponsor ? {
+        id: sponsor.id,
+        username: sponsor.username,
+        full_name: sponsor.full_name || sponsor.username,
+        phone: sponsor.phone || null,
+        teamSize: await User.getReferralCount(sponsor.id)
+      } : null,
+      level1: tree.level1,
+      level2: tree.level2,
+      level3: tree.level3
     });
   } catch (error) {
     console.error('❌ خطأ في جلب شبكة الإحالات:', error);
