@@ -8,7 +8,7 @@ const generateReferralCode = () => {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 };
 
-// ✅ تسجيل مستخدم جديد (قاعدة بيانات)
+// ✅ تسجيل مستخدم جديد
 router.post('/register', async (req, res) => {
   try {
     const { username, email, password, referralCode } = req.body;
@@ -19,28 +19,28 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'البريد الإلكتروني مسجل بالفعل' });
     }
 
-// التحقق من وجود كود الإحالة (إذا تم إدخاله)
-let referredBy = null;
-if (referralCode) {
-  const referrer = await User.findByReferralCode(referralCode);
-  if (referrer) {
-    referredBy = referrer.id;
-    console.log(`✅ مستخدم جديد مسجل عن طريق: ${referrer.username} (ID: ${referrer.id})`);
-  } else {
-    console.log(`⚠️ كود إحالة غير صالح: ${referralCode}`);
-  }
-}
+    // التحقق من وجود كود الإحالة (إذا تم إدخاله)
+    let referredBy = null;
+    if (referralCode) {
+      const referrer = await User.findByReferralCode(referralCode);
+      if (referrer) {
+        referredBy = referrer.id;
+        console.log(`✅ مستخدم جديد مسجل عن طريق: ${referrer.username} (ID: ${referrer.id})`);
+      } else {
+        console.log(`⚠️ كود إحالة غير صالح: ${referralCode}`);
+      }
+    }
 
-// إنشاء المستخدم مع referredBy
-const newUser = await User.create({
-  username,
-  email,
-  password,
-  referralCode: generateReferralCode(),
-  referredBy // <-- إضافة هذا السطر
-});
+    // إنشاء المستخدم (تعريف واحد فقط!)
+    const newUser = await User.create({
+      username,
+      email,
+      password,
+      referralCode: generateReferralCode(),
+      referredBy // <-- إضافة هذا السطر
+    });
 
-   // إنشاء توكن JWT (إذا أردت)
+    // إنشاء توكن JWT
     const token = jwt.sign(
       { userId: newUser.id, email: newUser.email },
       process.env.JWT_SECRET || 'secret_key',
