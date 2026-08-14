@@ -195,6 +195,35 @@
       <div class="message" id="copyMessage"></div>
     </div>
 
+<!-- نظام الإحالات -->
+<div class="section">
+  <h2>🔗 نظام الإحالات</h2>
+  <div style="background:white;padding:20px;border-radius:12px;margin-top:10px;">
+    <div style="display:flex;flex-wrap:wrap;gap:20px;justify-content:space-between;align-items:center;">
+      <div>
+        <p style="margin:0;color:#6c757d;font-size:14px;">كود الإحالة الخاص بك</p>
+        <code id="referralCodeDisplay" style="background:#e9ecef;padding:10px 15px;border-radius:8px;font-size:18px;font-weight:bold;display:inline-block;margin-top:5px;">جاري التحميل...</code>
+      </div>
+      <div>
+        <p style="margin:0;color:#6c757d;font-size:14px;">عدد الإحالات</p>
+        <span id="referralCountDisplay" style="font-size:32px;font-weight:bold;color:#2563eb;">0</span>
+      </div>
+    </div>
+    <div style="margin-top:15px;">
+      <button id="copyReferralBtn" class="copy-btn" style="background:#2563eb;">📋 نسخ رابط الإحالة</button>
+    </div>
+    <div id="referralMessage" class="message" style="margin-top:10px;"></div>
+  </div>
+</div>
+
+<!-- قائمة الإحالات -->
+<div class="section">
+  <h2>👥 قائمة المحالين (المشتركين عن طريقك)</h2>
+  <div id="referralsList" style="background:white;padding:15px;border-radius:12px;margin-top:10px;">
+    <p style="color:#6c757d;">جاري تحميل قائمة الإحالات...</p>
+  </div>
+</div>   
+    
     <!-- المهام اليومية -->
     <div class="section">
       <h2>📋 المهام اليومية</h2>
