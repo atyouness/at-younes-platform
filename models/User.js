@@ -3,20 +3,23 @@ const bcrypt = require('bcrypt');
 
 class User {
   // إنشاء مستخدم جديد
-  static async create({ username, email, password, referralCode, referredBy }) {
+  static async create({ username, email, password, referralCode, referredBy, full_name, phone, whatsapp }) {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
       const query = `
-        INSERT INTO users (username, email, password, referral_code, referred_by)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO users (username, email, password, referral_code, referred_by, full_name, phone, whatsapp)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `;
-      const values = [username, email, hashedPassword, referralCode, referredBy];
+      const values = [username, email, hashedPassword, referralCode, referredBy, full_name, phone, whatsapp];
       const [result] = await pool.query(query, values);
       return {
         id: result.insertId,
         username,
         email,
         referral_code: referralCode,
+        full_name,
+        phone,
+        whatsapp,
         created_at: new Date().toISOString()
       };
     } catch (error) {
@@ -40,7 +43,7 @@ class User {
   // البحث عن مستخدم بالمعرف
   static async findById(id) {
     try {
-      const query = 'SELECT id, username, email, referral_code, balance, role FROM users WHERE id = ?';
+      const query = 'SELECT id, username, email, referral_code, full_name, phone, whatsapp, balance, role FROM users WHERE id = ?';
       const [rows] = await pool.query(query, [id]);
       return rows[0];
     } catch (error) {
@@ -52,11 +55,23 @@ class User {
   // البحث عن مستخدم بواسطة كود الإحالة
   static async findByReferralCode(referralCode) {
     try {
-      const query = 'SELECT id, username, email FROM users WHERE referral_code = ?';
+      const query = 'SELECT id, username, email, full_name, phone FROM users WHERE referral_code = ?';
       const [rows] = await pool.query(query, [referralCode]);
       return rows[0];
     } catch (error) {
       console.error('❌ خطأ في البحث بكود الإحالة:', error.message);
+      return null;
+    }
+  }
+
+  // البحث عن مستخدم بواسطة اسم المستخدم
+  static async findByUsername(username) {
+    try {
+      const query = 'SELECT id, username, email FROM users WHERE username = ?';
+      const [rows] = await pool.query(query, [username]);
+      return rows[0];
+    } catch (error) {
+      console.error('❌ خطأ في البحث باسم المستخدم:', error.message);
       return null;
     }
   }
@@ -76,7 +91,7 @@ class User {
   // الحصول على قائمة الإحالات لمستخدم معين
   static async getReferrals(userId) {
     try {
-      const query = 'SELECT id, username, email, created_at FROM users WHERE referred_by = ? ORDER BY created_at DESC';
+      const query = 'SELECT id, username, email, full_name, phone, created_at FROM users WHERE referred_by = ? ORDER BY created_at DESC';
       const [rows] = await pool.query(query, [userId]);
       return rows;
     } catch (error) {
@@ -88,7 +103,6 @@ class User {
   // الحصول على شبكة الإحالات (المستويات 1، 2، 3)
   static async getReferralTree(userId) {
     try {
-      // المستوى الأول (المباشرين)
       const level1Query = `
         SELECT id, username, email, phone, full_name, 
                (SELECT COUNT(*) FROM users WHERE referred_by = u.id) as referralCount
@@ -108,7 +122,6 @@ class User {
         user.teamSize = teamRows[0].count || 0;
         level1.push(user);
 
-        // المستوى الثاني
         const level2Query = `
           SELECT id, username, email, phone, full_name,
                  (SELECT COUNT(*) FROM users WHERE referred_by = u.id) as referralCount
@@ -123,7 +136,6 @@ class User {
           u2.teamSize = teamRows2[0].count || 0;
           level2.push(u2);
 
-          // المستوى الثالث
           const level3Query = `
             SELECT id, username, email, phone, full_name,
                    (SELECT COUNT(*) FROM users WHERE referred_by = u.id) as referralCount
@@ -179,7 +191,7 @@ class User {
     }
   }
 
-  // إنشاء جدول المستخدمين (بدون ALTER TABLE داخل CREATE)
+  // إنشاء جدول المستخدمين
   static async createTable() {
     try {
       const query = `
@@ -190,6 +202,9 @@ class User {
           password VARCHAR(255) NOT NULL,
           referral_code VARCHAR(10) UNIQUE NOT NULL,
           referred_by INT DEFAULT NULL,
+          full_name VARCHAR(100) DEFAULT NULL,
+          phone VARCHAR(20) DEFAULT NULL,
+          whatsapp VARCHAR(20) DEFAULT NULL,
           balance DECIMAL(10,2) DEFAULT 0,
           role VARCHAR(20) DEFAULT 'user',
           is_active BOOLEAN DEFAULT TRUE,
@@ -199,21 +214,6 @@ class User {
       `;
       await pool.query(query);
       console.log('✅ جدول المستخدمين جاهز');
-
-      // إضافة الأعمدة الجديدة (بشكل منفصل)
-      try {
-        await pool.query(`ALTER TABLE users ADD COLUMN full_name VARCHAR(100) DEFAULT NULL`);
-        console.log('✅ تم إضافة عمود full_name');
-      } catch (e) {
-        // العمود موجود بالفعل
-      }
-      try {
-        await pool.query(`ALTER TABLE users ADD COLUMN phone VARCHAR(20) DEFAULT NULL`);
-        console.log('✅ تم إضافة عمود phone');
-      } catch (e) {
-        // العمود موجود بالفعل
-      }
-
     } catch (error) {
       console.error('❌ فشل في إنشاء جدول المستخدمين:', error.message);
       throw error;
