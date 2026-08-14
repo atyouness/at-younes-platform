@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المنتجات والعروض | آت يونس تك</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Tajawal', 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 12px;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      padding: 20px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .header h1 { margin: 0; color: #2c3e50; font-size: 22px; font-weight: 700; }
+    .back-btn {
+      background: #6c757d; color: white; border: none;
+      padding: 6px 16px; border-radius: 8px; cursor: pointer;
+      font-size: 13px; font-weight: 500; text-decoration: none;
+    }
+    .back-btn:hover { background: #5a6268; }
+    .product-card {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .product-card .info { flex: 1; }
+    .product-card .info .name { font-weight: 600; font-size: 16px; }
+    .product-card .info .desc { color: #6c757d; font-size: 14px; }
+    .product-card .price { font-weight: 700; color: #2563eb; font-size: 18px; }
+    .product-card .btn {
+      background: #2563eb; color: white; border: none;
+      padding: 6px 16px; border-radius: 8px; cursor: pointer;
+      font-size: 13px;
+    }
+    .product-card .btn:hover { background: #1d4ed8; }
+    .empty-state { text-align: center; padding: 40px 0; color: #6c757d; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🏷️ المنتجات والعروض</h1>
+      <a href="/dashboard.html" class="back-btn">← العودة للوحة</a>
+    </div>
+    <div id="productsList">
+      <div class="product-card">
+        <div class="info">
+          <div class="name">🏢 شقة سكنية - المرادية</div>
+          <div class="desc">شقة 120 م² في قلب العاصمة، إطلالة بحر</div>
+        </div>
+        <div class="price">3.5 مليار</div>
+        <button class="btn">اطلب الآن</button>
+      </div>
+      <div class="product-card">
+        <div class="info">
+          <div class="name">🏬 محل تجاري - المرادية</div>
+          <div class="desc">محل بمساحة 60 م²، موقع مميز</div>
+        </div>
+        <div class="price">2.8 مليار</div>
+        <button class="btn">اطلب الآن</button>
+      </div>
+      <div class="product-card">
+        <div class="info">
+          <div class="name">🚗 موقف سيارات</div>
+          <div class="desc">موقف تحت الأرض في مشروع المرادية</div>
+        </div>
+        <div class="price">400 مليون</div>
+        <button class="btn">اطلب الآن</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
