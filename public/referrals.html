@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>شبكة الإحالات | آت يونس تك</title>
+  <style>
+    /* ====== الأنماط الأساسية ====== */
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Tajawal', 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 12px;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      padding: 20px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .header h1 {
+      margin: 0;
+      color: #2c3e50;
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .back-btn {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: background 0.3s;
+      text-decoration: none;
+    }
+    .back-btn:hover { background: #5a6268; }
+    .section {
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 12px;
+      margin-top: 16px;
+    }
+    .section h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      color: #2c3e50;
+      font-size: 17px;
+      font-weight: 700;
+    }
+    /* ====== بطاقة المستوى ====== */
+    .level-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+    }
+    .level-1 { background: #2563eb; }
+    .level-2 { background: #7c3aed; }
+    .level-3 { background: #dc2626; }
+    /* ====== بطاقة المستخدم ====== */
+    .user-card {
+      background: white;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      border-right: 4px solid #2563eb;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: transform 0.2s;
+      gap: 8px;
+    }
+    .user-card:hover { transform: translateY(-2px); }
+    .user-card .level-1 { border-right-color: #2563eb; }
+    .user-card .level-2 { border-right-color: #7c3aed; }
+    .user-card .level-3 { border-right-color: #dc2626; }
+    .user-card .info {
+      flex: 1;
+      min-width: 150px;
+    }
+    .user-card .info .name {
+      font-weight: 600;
+      color: #1a2a3a;
+      font-size: 15px;
+    }
+    .user-card .info .username {
+      color: #6c757d;
+      font-size: 13px;
+      display: block;
+    }
+    .user-card .info .phone {
+      color: #6c757d;
+      font-size: 13px;
+      direction: ltr;
+      display: inline-block;
+    }
+    .user-card .stats {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .user-card .stats .stat-item {
+      text-align: center;
+    }
+    .user-card .stats .stat-item .num {
+      font-weight: 700;
+      font-size: 18px;
+      color: #2c3e50;
+    }
+    .user-card .stats .stat-item .label {
+      font-size: 11px;
+      color: #6c757d;
+      display: block;
+    }
+    .user-card .rank-badge {
+      background: #f1c40f;
+      color: #2c3e50;
+      padding: 2px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .sub-referrals {
+      margin-right: 20px;
+      border-right: 2px dashed #d1d5db;
+      padding-right: 16px;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 30px 0;
+      color: #6c757d;
+    }
+    .empty-state .icon { font-size: 48px; margin-bottom: 10px; }
+    .loading { text-align: center; padding: 20px; color: #6c757d; }
+    /* ====== تحسينات الجوال ====== */
+    @media (max-width: 600px) {
+      body { padding: 8px; }
+      .container { padding: 14px; }
+      .header h1 { font-size: 18px; }
+      .user-card { flex-direction: column; align-items: stretch; }
+      .user-card .stats { justify-content: space-around; }
+      .sub-referrals { margin-right: 10px; padding-right: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- الهيدر -->
+    <div class="header">
+      <h1>👥 شبكة الإحالات</h1>
+      <a href="/dashboard.html" class="back-btn">← العودة للوحة</a>
+    </div>
+
+    <!-- الإحصائيات العامة -->
+    <div class="section" style="background:linear-gradient(135deg,#2563eb,#1d4ed8);color:white;">
+      <div style="display:flex;justify-content:space-around;flex-wrap:wrap;gap:10px;">
+        <div style="text-align:center;">
+          <div style="font-size:28px;font-weight:700;" id="totalReferrals">0</div>
+          <div style="font-size:13px;opacity:0.9;">إجمالي الإحالات</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:28px;font-weight:700;" id="totalTeam">0</div>
+          <div style="font-size:13px;opacity:0.9;">حجم الفريق</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:28px;font-weight:700;" id="userRank">-</div>
+          <div style="font-size:13px;opacity:0.9;">الرتبة</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- شبكة الإحالات -->
+    <div class="section">
+      <h2>🔗 المباشرين (المستوى الأول)</h2>
+      <div id="level1Container"><div class="loading">جاري تحميل البيانات...</div></div>
+    </div>
+
+    <div class="section">
+      <h2>🔹 المستوى الثاني</h2>
+      <div id="level2Container"><div class="loading">جاري تحميل البيانات...</div></div>
+    </div>
+
+    <div class="section">
+      <h2>🔸 المستوى الثالث</h2>
+      <div id="level3Container"><div class="loading">جاري تحميل البيانات...</div></div>
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    //  دوال مساعدة
+    // ============================================================
+    function maskPhone(phone, level) {
+      if (!phone) return 'غير متوفر';
+      // المستوى الأول: يظهر كاملاً
+      if (level === 1) return phone;
+      // المستوى الثاني والثالث: تمويه
+      if (phone.length >= 8) {
+        const start = phone.slice(0, 4);
+        const end = phone.slice(-2);
+        return `${start}****${end}`;
+      }
+      return phone;
+    }
+
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return '-';
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return date.toLocaleDateString('ar-EG', options);
+    }
+
+    function getRank(teamSize) {
+      if (teamSize >= 20) return '🎖️ قائد';
+      if (teamSize >= 10) return '🏅 نقيب';
+      if (teamSize >= 5) return '⭐ عضو مميز';
+      return '👤 عضو';
+    }
+
+    function renderUserCard(user, level) {
+      const teamSize = user.teamSize || 0;
+      const rank = getRank(teamSize);
+      return `
+        <div class="user-card level-${level}">
+          <div class="info">
+            <div class="name">${user.fullName || user.username}</div>
+            <span class="username">@${user.username}</span>
+            <span class="phone">📱 ${maskPhone(user.phone, level)}</span>
+            <br><span class="rank-badge">${rank}</span>
+          </div>
+          <div class="stats">
+            <div class="stat-item">
+              <div class="num">${teamSize}</div>
+              <span class="label">👥 الفريق</span>
+            </div>
+            <div class="stat-item">
+              <div class="num">${user.referralCount || 0}</div>
+              <span class="label">📌 إحالات</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ============================================================
+    //  تحميل البيانات
+    // ============================================================
+    async function loadReferralTree() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/login.html';
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/auth/referrals/tree', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (response.status === 401) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          window.location.href = '/login.html';
+          return;
+        }
+
+        if (!response.ok) throw new Error('فشل في تحميل البيانات');
+
+        const data = await response.json();
+        
+        // تحديث الإحصائيات العامة
+        document.getElementById('totalReferrals').textContent = data.totalReferrals || 0;
+        document.getElementById('totalTeam').textContent = data.totalTeam || 0;
+        document.getElementById('userRank').textContent = data.userRank || '-';
+
+        // عرض المستويات
+        renderLevel('level1Container', data.level1 || [], 1);
+        renderLevel('level2Container', data.level2 || [], 2);
+        renderLevel('level3Container', data.level3 || [], 3);
+
+      } catch (error) {
+        console.error('❌ خطأ في تحميل شبكة الإحالات:', error);
+        document.getElementById('level1Container').innerHTML = '<p style="color:#dc3545;">حدث خطأ في تحميل البيانات</p>';
+        document.getElementById('level2Container').innerHTML = '<p style="color:#dc3545;">حدث خطأ في تحميل البيانات</p>';
+        document.getElementById('level3Container').innerHTML = '<p style="color:#dc3545;">حدث خطأ في تحميل البيانات</p>';
+      }
+    }
+
+    function renderLevel(containerId, users, level) {
+      const container = document.getElementById(containerId);
+      if (!users || users.length === 0) {
+        container.innerHTML = '<div class="empty-state"><div class="icon">📭</div><p>لا يوجد أعضاء في هذا المستوى</p></div>';
+        return;
+      }
+      container.innerHTML = users.map(user => renderUserCard(user, level)).join('');
+    }
+
+    // ============================================================
+    //  تهيئة الصفحة
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', function() {
+      loadReferralTree();
+    });
+  </script>
+</body>
+</html>
