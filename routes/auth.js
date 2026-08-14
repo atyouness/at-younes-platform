@@ -186,4 +186,36 @@ router.get('/referrals/validate/:code', async (req, res) => {
   }
 });
 
+// ✅ الحصول على شبكة الإحالات (المستويات 1، 2، 3)
+router.get('/referrals/tree', async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ message: 'غير مصرح' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+    const userId = decoded.userId;
+
+    const tree = await User.getReferralTree(userId);
+    
+    // حساب الرتبة بناءً على حجم الفريق
+    const totalTeam = tree.level1.length + tree.level2.length + tree.level3.length;
+    let userRank = '👤 عضو';
+    if (totalTeam >= 20) userRank = '🎖️ قائد';
+    else if (totalTeam >= 10) userRank = '🏅 نقيب';
+    else if (totalTeam >= 5) userRank = '⭐ عضو مميز';
+
+    res.json({
+      totalReferrals: tree.level1.length,
+      totalTeam,
+      userRank,
+      ...tree
+    });
+  } catch (error) {
+    console.error('❌ خطأ في جلب شبكة الإحالات:', error);
+    res.status(500).json({ message: 'حدث خطأ في الخادم' });
+  }
+});
+
 module.exports = router;
