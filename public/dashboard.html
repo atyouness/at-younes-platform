@@ -2,15 +2,18 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>لوحة التحكم | آت يونس تك</title>
   <link rel="stylesheet" href="/css/style.css">
   <style>
+    /* ====== الأنماط الأساسية ====== */
+    * { box-sizing: border-box; }
     body {
-      font-family: 'Tajawal', sans-serif;
+      font-family: 'Tajawal', 'Segoe UI', sans-serif;
       background: #f0f4f8;
       margin: 0;
-      padding: 20px;
+      padding: 12px;
+      min-height: 100vh;
     }
     .dashboard-container {
       max-width: 1200px;
@@ -18,84 +21,239 @@
       background: white;
       border-radius: 16px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      padding: 30px;
+      padding: 20px;
     }
+    /* ====== الهيدر ====== */
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 2px solid #e9ecef;
-      padding-bottom: 20px;
-      margin-bottom: 30px;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
-    .header h1 { margin: 0; color: #2c3e50; font-size: 28px; }
-    .user-info { display: flex; align-items: center; gap: 15px; }
-    .user-info .username { font-weight: bold; color: #2c3e50; }
+    .header h1 {
+      margin: 0;
+      color: #2c3e50;
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .user-info .username {
+      font-weight: 600;
+      color: #2c3e50;
+      font-size: 15px;
+    }
     .logout-btn {
-      background: #dc3545; color: white; border: none;
-      padding: 8px 20px; border-radius: 8px; cursor: pointer;
-      font-size: 14px; transition: background 0.3s;
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background 0.3s;
+      font-weight: 500;
     }
     .logout-btn:hover { background: #c82333; }
+
+    /* ====== بطاقات الإحصائيات ====== */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px; margin-bottom: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
     }
     .stat-card {
-      background: #f8f9fa; padding: 20px; border-radius: 12px;
-      text-align: center; transition: transform 0.2s;
+      background: #f8f9fa;
+      padding: 14px 10px;
+      border-radius: 12px;
+      text-align: center;
+      transition: transform 0.2s;
     }
     .stat-card:hover { transform: translateY(-3px); }
     .stat-card .number {
-      font-size: 32px; font-weight: bold; color: #2c3e50;
-      margin-bottom: 5px;
+      font-size: 24px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 2px;
     }
-    .stat-card .label { color: #6c757d; font-size: 14px; }
+    .stat-card .label {
+      color: #6c757d;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* ====== الأقسام ====== */
     .section {
-      background: #f8f9fa; padding: 20px; border-radius: 12px;
-      margin-top: 20px;
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 12px;
+      margin-top: 16px;
     }
-    .section h2 { margin-top: 0; color: #2c3e50; font-size: 20px; }
+    .section h2 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      color: #2c3e50;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    /* ====== نظام الإحالات ====== */
     .referral-box {
-      background: white; padding: 20px; border-radius: 12px;
-      display: flex; flex-wrap: wrap; gap: 20px;
-      justify-content: space-between; align-items: center;
+      background: white;
+      padding: 16px;
+      border-radius: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .referral-box > div { flex: 1 1 auto; min-width: 120px; }
+    .referral-box p {
+      margin: 0;
+      color: #6c757d;
+      font-size: 13px;
     }
     .referral-code {
-      background: #e9ecef; padding: 10px 15px;
-      border-radius: 8px; font-size: 18px; font-weight: bold;
-      display: inline-block; margin-top: 5px;
+      background: #e9ecef;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 700;
+      display: inline-block;
+      margin-top: 4px;
+      font-family: monospace;
+      letter-spacing: 1px;
     }
     .referral-count {
-      font-size: 32px; font-weight: bold; color: #2563eb;
+      font-size: 26px;
+      font-weight: 700;
+      color: #2563eb;
     }
     .copy-btn {
-      background: #2563eb; color: white; border: none;
-      padding: 8px 20px; border-radius: 8px; cursor: pointer;
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
       transition: background 0.3s;
+      white-space: nowrap;
     }
     .copy-btn:hover { background: #1d4ed8; }
+
+    /* ====== رسائل ====== */
     .message {
-      margin-top: 15px; padding: 12px; border-radius: 8px;
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
       display: none;
+      font-size: 14px;
     }
     .message.success {
-      display: block; background: #d4edda; color: #155724;
+      display: block;
+      background: #d4edda;
+      color: #155724;
       border: 1px solid #c3e6cb;
     }
     .message.error {
-      display: block; background: #f8d7da; color: #721c24;
+      display: block;
+      background: #f8d7da;
+      color: #721c24;
       border: 1px solid #f5c6cb;
     }
+
+    /* ====== قائمة الإحالات ====== */
     .referral-list-item {
-      display: flex; justify-content: space-between;
-      padding: 10px 0; border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
     }
-    @media (max-width: 768px) {
-      .header { flex-direction: column; gap: 15px; align-items: stretch; }
-      .user-info { justify-content: space-between; }
-      .referral-box { flex-direction: column; align-items: stretch; }
+    .referral-list-item:last-child { border-bottom: none; }
+    .referral-list-item .date {
+      color: #6c757d;
+      font-size: 12px;
+    }
+
+    /* ====== المهام وسجل النشاطات ====== */
+    .task-item, .log-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
+      gap: 8px;
+    }
+    .task-item:last-child, .log-item:last-child { border-bottom: none; }
+    .task-item .points {
+      color: #2563eb;
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .task-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 4px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .task-btn:hover { background: #0069d9; }
+    .log-item .log-date {
+      color: #6c757d;
+      font-size: 12px;
+      font-weight: 400;
+    }
+    .log-item .log-action {
+      font-weight: 500;
+    }
+
+    /* ====== تحسينات خاصة للجوال ====== */
+    @media (max-width: 600px) {
+      body { padding: 8px; }
+      .dashboard-container { padding: 14px; border-radius: 12px; }
+      .header h1 { font-size: 18px; }
+      .user-info .username { font-size: 13px; }
+      .logout-btn { font-size: 12px; padding: 5px 12px; }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .stat-card { padding: 10px 8px; }
+      .stat-card .number { font-size: 20px; }
+      .stat-card .label { font-size: 11px; }
+      .section { padding: 12px; }
+      .section h2 { font-size: 15px; }
+      .referral-box { padding: 12px; gap: 8px; flex-direction: column; align-items: stretch; }
+      .referral-box > div { text-align: center; }
+      .referral-code { font-size: 14px; padding: 4px 10px; }
+      .referral-count { font-size: 22px; }
+      .copy-btn { width: 100%; text-align: center; padding: 8px; }
+      .task-item, .log-item { font-size: 13px; flex-wrap: wrap; }
+      .task-item .points { font-size: 12px; }
+      .task-btn { font-size: 11px; padding: 3px 10px; }
+      .log-item .log-date { font-size: 11px; }
+    }
+
+    @media (max-width: 400px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
+      .stat-card .number { font-size: 17px; }
     }
   </style>
 </head>
@@ -130,48 +288,78 @@
       </div>
     </div>
 
-    <!-- نظام الإحالات (نسخة موحدة) -->
+    <!-- نظام الإحالات -->
     <div class="section">
       <h2>🔗 نظام الإحالات</h2>
       <div class="referral-box">
         <div>
-          <p style="margin:0;color:#6c757d;font-size:14px;">كود الإحالة الخاص بك</p>
+          <p>كود الإحالة الخاص بك</p>
           <code class="referral-code" id="referralCodeDisplay">جاري التحميل...</code>
         </div>
         <div>
-          <p style="margin:0;color:#6c757d;font-size:14px;">عدد الإحالات</p>
+          <p>عدد الإحالات</p>
           <span class="referral-count" id="referralCountDisplay">0</span>
         </div>
         <div>
-          <button class="copy-btn" id="copyReferralBtn">📋 نسخ رابط الإحالة</button>
+          <button class="copy-btn" id="copyReferralBtn">📋 نسخ الرابط</button>
         </div>
       </div>
-      <div id="referralMessage" class="message" style="margin-top:10px;"></div>
+      <div id="referralMessage" class="message"></div>
     </div>
 
     <!-- قائمة الإحالات -->
     <div class="section">
-      <h2>👥 قائمة المحالين (المشتركين عن طريقك)</h2>
-      <div id="referralsList" style="background:white;padding:15px;border-radius:12px;margin-top:10px;">
-        <p style="color:#6c757d;">جاري تحميل قائمة الإحالات...</p>
+      <h2>👥 قائمة المحالين</h2>
+      <div id="referralsList" style="background:white;padding:12px;border-radius:12px;">
+        <p style="color:#6c757d;font-size:14px;">جاري تحميل قائمة الإحالات...</p>
       </div>
     </div>
 
     <!-- المهام اليومية -->
     <div class="section">
       <h2>📋 المهام اليومية</h2>
-      <div id="dailyTasks"><p>جاري تحميل المهام...</p></div>
+      <div id="dailyTasks"><p style="color:#6c757d;font-size:14px;">جاري تحميل المهام...</p></div>
     </div>
 
     <!-- سجل النشاطات -->
     <div class="section">
       <h2>📜 سجل النشاطات</h2>
-      <div id="activityLog"><p>لا توجد نشاطات حتى الآن.</p></div>
+      <div id="activityLog"><p style="color:#6c757d;font-size:14px;">لا توجد نشاطات حتى الآن.</p></div>
     </div>
   </div>
 
   <script>
-    // ========== وظائف عرض البيانات ==========
+    // ============================================================
+    //  دوال مساعدة لتنسيق التاريخ
+    // ============================================================
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'تاريخ غير صحيح';
+      
+      const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      };
+      return date.toLocaleDateString('ar-EG', options);
+    }
+
+    function formatDateTime(dateString) {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'تاريخ غير صحيح';
+      
+      const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+      const timeOptions = { hour: '2-digit', minute: '2-digit' };
+      
+      const datePart = date.toLocaleDateString('ar-EG', dateOptions);
+      const timePart = date.toLocaleTimeString('ar-EG', timeOptions);
+      
+      return `${datePart} - ${timePart}`;
+    }
+
+    // ============================================================
+    //  عرض معلومات المستخدم
+    // ============================================================
     function loadUserInfo() {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) {
@@ -182,13 +370,14 @@
       document.getElementById('balance').textContent = user.balance || 0;
       document.getElementById('rank').textContent = user.role || 'مبتدئ';
       
-      // عرض كود الإحالة
       if (user.referralCode) {
         document.getElementById('referralCodeDisplay').textContent = user.referralCode;
       }
     }
 
-    // ========== تحميل إحصائيات الإحالات ==========
+    // ============================================================
+    //  تحميل إحصائيات الإحالات
+    // ============================================================
     async function loadReferralStats() {
       const token = localStorage.getItem('token');
       if (!token) return;
@@ -215,19 +404,21 @@
           listContainer.innerHTML = data.referrals.map(ref => `
             <div class="referral-list-item">
               <span>👤 ${ref.username}</span>
-              <span style="color:#6c757d;font-size:13px;">${new Date(ref.joinedAt).toLocaleDateString('ar-EG')}</span>
+              <span class="date">${formatDate(ref.joinedAt)}</span>
             </div>
           `).join('');
         } else {
-          listContainer.innerHTML = '<p style="color:#6c757d;">لا توجد إحالات حتى الآن. شارك رابطك لدعوة الآخرين!</p>';
+          listContainer.innerHTML = '<p style="color:#6c757d;font-size:14px;">لا توجد إحالات حتى الآن. شارك رابطك لدعوة الآخرين!</p>';
         }
       } catch (error) {
         console.error('❌ خطأ في تحميل الإحالات:', error);
-        document.getElementById('referralsList').innerHTML = '<p style="color:#dc3545;">حدث خطأ في تحميل البيانات</p>';
+        document.getElementById('referralsList').innerHTML = '<p style="color:#dc3545;font-size:14px;">حدث خطأ في تحميل البيانات</p>';
       }
     }
 
-    // ========== نسخ رابط الإحالة ==========
+    // ============================================================
+    //  نسخ رابط الإحالة
+    // ============================================================
     function setupCopyReferral() {
       const copyBtn = document.getElementById('copyReferralBtn');
       const msgDiv = document.getElementById('referralMessage');
@@ -264,25 +455,32 @@
       setTimeout(() => { msgDiv.className = 'message'; }, 5000);
     }
 
-    // ========== تسجيل الخروج ==========
+    // ============================================================
+    //  تسجيل الخروج
+    // ============================================================
     document.getElementById('logoutBtn').addEventListener('click', function() {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       window.location.href = '/login.html';
     });
 
-    // ========== المهام اليومية (تجربة) ==========
+    // ============================================================
+    //  المهام اليومية
+    // ============================================================
     function loadDailyTasks() {
       const tasks = [
         { name: '📱 مشاركة منشور على فيسبوك', points: 10 },
         { name: '🐦 تغريدة عن المنصة', points: 5 },
         { name: '📢 دعوة صديق جديد', points: 15 }
       ];
-      document.getElementById('dailyTasks').innerHTML = tasks.map(task => `
-        <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #e9ecef;">
+      const container = document.getElementById('dailyTasks');
+      container.innerHTML = tasks.map(task => `
+        <div class="task-item">
           <span>${task.name}</span>
-          <span>${task.points} نقطة</span>
-          <button onclick="completeTask('${task.name}')" style="background:#007bff;color:white;border:none;padding:5px 15px;border-radius:6px;cursor:pointer;">إنجاز</button>
+          <div>
+            <span class="points">${task.points} نقطة</span>
+            <button class="task-btn" onclick="completeTask('${task.name}')">إنجاز</button>
+          </div>
         </div>
       `).join('');
     }
@@ -291,25 +489,30 @@
       alert(`✅ تم إنجاز المهمة: ${taskName}`);
     }
 
-    // ========== سجل النشاطات (تجربة) ==========
+    // ============================================================
+    //  سجل النشاطات (مع تنسيق تاريخ محسن)
+    // ============================================================
     function loadActivityLog() {
+      const now = new Date();
       const log = [
-        { date: new Date().toLocaleString('ar-EG'), action: '🔑 تم تسجيل الدخول' }
+        { date: now.toISOString(), action: '🔑 تم تسجيل الدخول' }
       ];
       const container = document.getElementById('activityLog');
       if (log.length === 0) {
-        container.innerHTML = '<p>لا توجد نشاطات حتى الآن.</p>';
+        container.innerHTML = '<p style="color:#6c757d;font-size:14px;">لا توجد نشاطات حتى الآن.</p>';
       } else {
         container.innerHTML = log.map(item => `
-          <div style="padding:8px 0;border-bottom:1px solid #f0f0f0;">
-            <span style="color:#6c757d;font-size:13px;">${item.date}</span>
-            <span style="margin-right:10px;">${item.action}</span>
+          <div class="log-item">
+            <span class="log-action">${item.action}</span>
+            <span class="log-date">${formatDateTime(item.date)}</span>
           </div>
         `).join('');
       }
     }
 
-    // ========== تهيئة الصفحة ==========
+    // ============================================================
+    //  تهيئة الصفحة
+    // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
       loadUserInfo();
       loadReferralStats();
