@@ -3,14 +3,14 @@ const bcrypt = require('bcrypt');
 
 class User {
   // إنشاء مستخدم جديد
-  static async create({ username, email, password, referralCode }) {
+  static async create({ username, email, password, referralCode, referredBy }) {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
       const query = `
         INSERT INTO users (username, email, password, referral_code, referred_by)
         VALUES (?, ?, ?, ?, ?)
       `;
-      const values = [username, email, hashedPassword, referralCode, null];
+      const values = [username, email, hashedPassword, referralCode, referredBy];
       const [result] = await pool.query(query, values);
       return {
         id: result.insertId,
