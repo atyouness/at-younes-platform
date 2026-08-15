@@ -374,4 +374,52 @@ router.post('/resend-activation', async (req, res) => {
   }
 });
 
+// ✅ استعادة كلمة المرور (نسيت كلمة المرور)
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: 'البريد الإلكتروني مطلوب' });
+    }
+
+    const user = await User.findByEmail(email);
+    if (!user) {
+      return res.status(404).json({ message: 'المستخدم غير موجود' });
+    }
+
+    // إنشاء توكن استعادة
+    const token = crypto.randomBytes(32).toString('hex');
+    // يمكنك تخزين التوكن في قاعدة بيانات أو في memory
+    // هذا مثال بسيط:
+    resetTokens[token] = { userId: user.id, expires: Date.now() + 3600000 };
+
+    // إرسال بريد استعادة كلمة المرور
+    const resetLink = `https://atyouness.com/reset-password?token=${token}`;
+    const mailOptions = {
+      from: '"آت يونس تك" <info@atyouness.com>',
+      to: email,
+      subject: '🔑 استعادة كلمة المرور - آت يونس تك',
+      html: `
+        <div dir="rtl" style="font-family: 'Tajawal', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h2 style="color: #2563eb;">مرحباً ${user.username}،</h2>
+          <p>لقد تلقينا طلباً لاستعادة كلمة المرور الخاصة بك.</p>
+          <p>لإعادة تعيين كلمة المرور، يرجى النقر على الرابط التالي:</p>
+          <div style="text-align: center; margin: 25px 0;">
+            <a href="${resetLink}" style="background: #2563eb; color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 600;">استعادة كلمة المرور</a>
+          </div>
+          <p style="color: #6c757d;">إذا لم تطلب استعادة كلمة المرور، يرجى تجاهل هذا البريد.</p>
+        </div>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.json({ message: '✅ تم إرسال رابط استعادة كلمة المرور' });
+  } catch (error) {
+    console.error('❌ خطأ في استعادة كلمة المرور:', error);
+    res.status(500).json({ message: 'حدث خطأ في الخادم' });
+  }
+});
+
 module.exports = router;
