@@ -76,7 +76,7 @@ class User {
     }
   }
 
-  // الحصول على عدد الإحالات المباشرة لمستخدم معين
+  // الحصول على عدد الإحالات المباشرة
   static async getReferralCount(userId) {
     try {
       const query = 'SELECT COUNT(*) as count FROM users WHERE referred_by = ?';
@@ -88,10 +88,9 @@ class User {
     }
   }
 
-  // الحصول على حجم الفريق بالكامل (المباشرين وغير المباشرين)
+  // الحصول على حجم الفريق بالكامل
   static async getTeamSize(userId) {
     try {
-      // استخدام استعلام متكرر لحساب جميع الأعضاء في الشجرة الفرعية
       const query = `
         WITH RECURSIVE team AS (
           SELECT id FROM users WHERE referred_by = ?
@@ -109,7 +108,7 @@ class User {
     }
   }
 
-  // الحصول على قائمة الإحالات المباشرة لمستخدم معين
+  // الحصول على قائمة الإحالات المباشرة
   static async getReferrals(userId) {
     try {
       const query = 'SELECT id, username, email, full_name, phone, created_at FROM users WHERE referred_by = ? ORDER BY created_at DESC';
@@ -121,10 +120,9 @@ class User {
     }
   }
 
-  // الحصول على شبكة الإحالات (المستويات 1، 2، 3) مع حساب حجم الفريق بدقة
+  // الحصول على شبكة الإحالات (المستويات 1، 2، 3)
   static async getReferralTree(userId) {
     try {
-      // المستوى الأول (المباشرين)
       const level1Query = `
         SELECT id, username, email, phone, full_name,
                (SELECT COUNT(*) FROM users WHERE referred_by = u.id) as referralCount
@@ -138,13 +136,10 @@ class User {
       const level2 = [];
       const level3 = [];
 
-      // معالجة المستوى الأول
       for (const user of level1Rows) {
-        // حساب حجم الفريق الكامل (جميع الأعضاء في الشجرة الفرعية)
         user.teamSize = await this.getTeamSize(user.id);
         level1.push(user);
 
-        // المستوى الثاني (إحالات المباشرين)
         const level2Query = `
           SELECT id, username, email, phone, full_name,
                  (SELECT COUNT(*) FROM users WHERE referred_by = u.id) as referralCount
@@ -155,11 +150,9 @@ class User {
         const [level2Rows] = await pool.query(level2Query, [user.id]);
 
         for (const u2 of level2Rows) {
-          // حساب حجم فريق المستوى الثاني (جميع الأعضاء في شجرته الفرعية)
           u2.teamSize = await this.getTeamSize(u2.id);
           level2.push(u2);
 
-          // المستوى الثالث (إحالات المستوى الثاني)
           const level3Query = `
             SELECT id, username, email, phone, full_name,
                    (SELECT COUNT(*) FROM users WHERE referred_by = u.id) as referralCount
@@ -170,7 +163,6 @@ class User {
           const [level3Rows] = await pool.query(level3Query, [u2.id]);
 
           for (const u3 of level3Rows) {
-            // حساب حجم فريق المستوى الثالث (جميع الأعضاء في شجرته الفرعية)
             u3.teamSize = await this.getTeamSize(u3.id);
             level3.push(u3);
           }
