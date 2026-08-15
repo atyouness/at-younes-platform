@@ -42,15 +42,15 @@ class User {
 
   // البحث عن مستخدم بالمعرف
   static async findById(id) {
-    try {
-      const query = 'SELECT id, username, email, referral_code, full_name, phone, whatsapp, balance, role FROM users WHERE id = ?';
-      const [rows] = await pool.query(query, [id]);
-      return rows[0];
-    } catch (error) {
-      console.error('❌ خطأ في البحث عن المستخدم بالمعرف:', error.message);
-      return null;
-    }
+  try {
+    const query = 'SELECT id, username, email, referral_code, referred_by, full_name, phone, whatsapp, balance, role FROM users WHERE id = ?';
+    const [rows] = await pool.query(query, [id]);
+    return rows[0];
+  } catch (error) {
+    console.error('❌ خطأ في البحث عن المستخدم بالمعرف:', error.message);
+    return null;
   }
+}
 
   // البحث عن مستخدم بواسطة كود الإحالة
   static async findByReferralCode(referralCode) {
