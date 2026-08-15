@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>شبكة الإحالات | آت يونس تك</title>
   <style>
-    /* ====== الأنماط الأساسية ====== */
+    /* ============================================================
+       الأنماط الأساسية
+    ============================================================ */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Tajawal', 'Segoe UI', sans-serif;
@@ -14,60 +16,54 @@
       padding: 16px;
     }
     .container {
-      max-width: 1000px;
+      max-width: 1200px;
       margin: 0 auto;
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
       border-radius: 24px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.12);
-      padding: 28px;
+      padding: 24px 20px;
       border: 1px solid rgba(255,255,255,0.3);
     }
 
-    /* ====== الهيدر ====== */
+    /* ============================================================
+       الهيدر
+    ============================================================ */
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 2px solid #e9ecef;
-      padding-bottom: 16px;
-      margin-bottom: 24px;
+      padding-bottom: 14px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
       gap: 10px;
     }
     .header h1 {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 800;
       color: #1a2a3a;
-      margin: 0;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
-    .header h1 span { background: #2563eb; color: white; font-size: 14px; padding: 2px 12px; border-radius: 20px; }
+    .header h1 span { background: #2563eb; color: white; font-size: 13px; padding: 2px 14px; border-radius: 20px; }
     .back-btn {
-      background: #e9ecef;
-      color: #2c3e50;
-      border: none;
-      padding: 8px 20px;
-      border-radius: 30px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: all 0.3s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      background: #e9ecef; color: #2c3e50; border: none;
+      padding: 8px 18px; border-radius: 30px; cursor: pointer;
+      font-size: 14px; font-weight: 600; text-decoration: none;
+      transition: all 0.3s; display: inline-flex; align-items: center; gap: 6px;
     }
     .back-btn:hover { background: #d1d5db; transform: translateX(-2px); }
 
-    /* ====== بطاقة الراعي ====== */
+    /* ============================================================
+       بطاقة الراعي
+    ============================================================ */
     .sponsor-card {
       background: linear-gradient(135deg, #2563eb, #1d4ed8);
       border-radius: 16px;
-      padding: 20px 24px;
-      margin-bottom: 24px;
+      padding: 16px 22px;
+      margin-bottom: 18px;
       color: white;
       display: flex;
       flex-wrap: wrap;
@@ -75,212 +71,245 @@
       align-items: center;
       box-shadow: 0 8px 30px rgba(37,99,235,0.25);
     }
-    .sponsor-card .info { flex: 1; min-width: 200px; }
-    .sponsor-card .info .label { font-size: 13px; opacity: 0.8; margin-bottom: 4px; }
-    .sponsor-card .info .name { font-size: 20px; font-weight: 700; }
-    .sponsor-card .info .username { font-size: 15px; opacity: 0.9; }
-    .sponsor-card .info .phone { font-size: 15px; opacity: 0.9; direction: ltr; display: inline-block; }
+    .sponsor-card .info { flex: 1; min-width: 160px; }
+    .sponsor-card .info .label { font-size: 12px; opacity: 0.8; margin-bottom: 2px; }
+    .sponsor-card .info .name { font-size: 18px; font-weight: 700; }
+    .sponsor-card .info .username { font-size: 14px; opacity: 0.9; }
+    .sponsor-card .info .phone { font-size: 14px; opacity: 0.9; direction: ltr; display: inline-block; }
     .sponsor-card .badge {
-      background: rgba(255,255,255,0.2);
-      padding: 6px 16px;
-      border-radius: 30px;
-      font-size: 13px;
-      font-weight: 600;
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(255,255,255,0.15);
-    }
-    .sponsor-card .no-sponsor {
-      background: rgba(255,255,255,0.15);
-      padding: 10px 20px;
-      border-radius: 12px;
-      font-size: 14px;
+      background: rgba(255,255,255,0.2); padding: 4px 14px;
+      border-radius: 30px; font-size: 13px; font-weight: 600;
+      backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.15);
     }
 
-    /* ====== رابط الإحالة ====== */
+    /* ============================================================
+       رابط الإحالة
+    ============================================================ */
     .referral-link-box {
-      background: #f8f9fa;
-      border-radius: 16px;
-      padding: 16px 20px;
-      margin-bottom: 24px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      border: 2px dashed #d1d5db;
+      background: #f8f9fa; border-radius: 14px; padding: 12px 16px;
+      margin-bottom: 18px; display: flex; flex-wrap: wrap;
+      justify-content: space-between; align-items: center;
+      gap: 10px; border: 2px dashed #d1d5db;
       transition: border-color 0.3s;
     }
     .referral-link-box:hover { border-color: #2563eb; }
-    .referral-link-box .label { font-weight: 600; color: #2c3e50; font-size: 14px; }
+    .referral-link-box .label { font-weight: 600; color: #2c3e50; font-size: 13px; }
     .referral-link-box .link {
-      background: white;
-      padding: 8px 16px;
-      border-radius: 10px;
-      font-size: 14px;
-      font-family: monospace;
-      color: #2563eb;
-      word-break: break-all;
-      flex: 1;
-      min-width: 200px;
-      border: 1px solid #e9ecef;
-      direction: ltr;
-      text-align: left;
+      background: white; padding: 6px 14px; border-radius: 8px;
+      font-size: 13px; font-family: monospace; color: #2563eb;
+      word-break: break-all; flex: 1; min-width: 140px;
+      border: 1px solid #e9ecef; direction: ltr; text-align: left;
     }
     .copy-btn {
-      background: #2563eb;
-      color: white;
-      border: none;
-      padding: 8px 20px;
-      border-radius: 30px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      transition: all 0.3s;
+      background: #2563eb; color: white; border: none;
+      padding: 6px 18px; border-radius: 30px; cursor: pointer;
+      font-size: 13px; font-weight: 600; transition: all 0.3s;
       white-space: nowrap;
     }
     .copy-btn:hover { background: #1d4ed8; transform: scale(1.02); }
     .copy-btn.copied { background: #22c55e; }
 
-    /* ====== الإحصائيات السريعة ====== */
+    /* ============================================================
+       الإحصائيات السريعة (أيقونات صغيرة)
+    ============================================================ */
     .stats-mini {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 12px;
-      margin-bottom: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
     }
     .stats-mini .stat {
-      background: #f8f9fa;
-      padding: 14px;
-      border-radius: 12px;
-      text-align: center;
-      border: 1px solid #e9ecef;
+      background: #f8f9fa; padding: 10px 8px; border-radius: 12px;
+      text-align: center; border: 1px solid #e9ecef;
     }
-    .stats-mini .stat .num { font-size: 26px; font-weight: 800; color: #1a2a3a; }
-    .stats-mini .stat .label { font-size: 13px; color: #6c757d; }
+    .stats-mini .stat .num { font-size: 20px; font-weight: 800; color: #1a2a3a; }
+    .stats-mini .stat .label { font-size: 11px; color: #6c757d; }
 
-    /* ====== الأقسام ====== */
+    /* ============================================================
+       الأقسام (كل مستوى في صف أفقي)
+    ============================================================ */
     .section {
       background: #f8f9fa;
       border-radius: 16px;
-      padding: 18px 20px;
-      margin-top: 20px;
+      padding: 14px 12px;
+      margin-top: 14px;
       border: 1px solid #e9ecef;
     }
-    .section h2 {
-      font-size: 18px;
+    .section .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .section .section-header h2 {
+      font-size: 16px;
       font-weight: 700;
       color: #1a2a3a;
-      margin-bottom: 14px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
-    .section h2 .level-badge {
-      font-size: 12px;
-      padding: 2px 12px;
-      border-radius: 20px;
-      color: white;
-      font-weight: 600;
+    .section .section-header .level-badge {
+      font-size: 11px; padding: 2px 12px; border-radius: 20px;
+      color: white; font-weight: 600;
     }
     .level-1-badge { background: #2563eb; }
     .level-2-badge { background: #7c3aed; }
     .level-3-badge { background: #dc2626; }
+    .section .section-header .count-badge {
+      background: white; padding: 2px 12px; border-radius: 20px;
+      font-size: 12px; font-weight: 600; color: #2c3e50;
+      border: 1px solid #e9ecef;
+    }
 
-    /* ====== بطاقة المستخدم ====== */
-    .user-card {
+    /* ============================================================
+       الحاوية الأفقية (Horizontal Scroll)
+    ============================================================ */
+    .horizontal-scroll {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      gap: 12px;
+      padding: 4px 4px 10px 4px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: #c1c7cd #f1f3f5;
+      direction: rtl;
+    }
+    .horizontal-scroll::-webkit-scrollbar { height: 6px; }
+    .horizontal-scroll::-webkit-scrollbar-track { background: #f1f3f5; border-radius: 10px; }
+    .horizontal-scroll::-webkit-scrollbar-thumb { background: #c1c7cd; border-radius: 10px; }
+    .horizontal-scroll::-webkit-scrollbar-thumb:hover { background: #a0a7ad; }
+
+    /* ============================================================
+       بطاقة المستخدم (الأفقية)
+    ============================================================ */
+    .user-card-h {
+      flex: 0 0 auto;
+      width: 170px;
       background: white;
-      border-radius: 12px;
-      padding: 14px 18px;
-      margin-bottom: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      border-right: 5px solid #2563eb;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border-radius: 16px;
+      padding: 16px 12px 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      border-right: 4px solid #2563eb;
       transition: all 0.3s;
-      gap: 8px;
-    }
-    .user-card:hover { transform: translateX(4px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
-    .user-card.level-2 { border-right-color: #7c3aed; }
-    .user-card.level-3 { border-right-color: #dc2626; }
-    .user-card .info { flex: 1; min-width: 150px; }
-    .user-card .info .name { font-weight: 700; color: #1a2a3a; font-size: 15px; }
-    .user-card .info .username { color: #6c757d; font-size: 13px; display: block; }
-    .user-card .info .phone {
-      color: #6c757d;
-      font-size: 13px;
-      direction: ltr;
-      display: inline-block;
-      background: #f1f3f5;
-      padding: 0 8px;
-      border-radius: 4px;
-    }
-    .user-card .stats {
+      text-align: center;
       display: flex;
-      gap: 16px;
+      flex-direction: column;
       align-items: center;
-      flex-wrap: wrap;
+      min-height: 200px;
     }
-    .user-card .stats .stat-item { text-align: center; }
-    .user-card .stats .stat-item .num { font-weight: 700; font-size: 18px; color: #2c3e50; }
-    .user-card .stats .stat-item .label { font-size: 11px; color: #6c757d; display: block; }
-    .user-card .rank-badge {
-      background: #f1c40f;
-      color: #2c3e50;
-      padding: 2px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
+    .user-card-h:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.10); }
+    .user-card-h.level-2 { border-right-color: #7c3aed; }
+    .user-card-h.level-3 { border-right-color: #dc2626; }
+
+    .user-card-h .avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, #e9ecef, #d1d5db);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 700; color: #2c3e50;
+      margin-bottom: 6px;
+      flex-shrink: 0;
+    }
+    .user-card-h .name {
+      font-weight: 700; color: #1a2a3a; font-size: 14px;
+      line-height: 1.3; white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis; max-width: 100%;
+    }
+    .user-card-h .username {
+      color: #6c757d; font-size: 12px;
+      white-space: nowrap; overflow: hidden;
+      text-overflow: ellipsis; max-width: 100%;
+    }
+    .user-card-h .phone {
+      color: #6c757d; font-size: 12px; direction: ltr;
+      background: #f1f3f5; padding: 0 8px; border-radius: 4px;
+      margin-top: 2px; font-family: monospace;
+    }
+    .user-card-h .stats-row {
+      display: flex; gap: 12px; margin-top: 6px;
+      justify-content: center; width: 100%;
+    }
+    .user-card-h .stats-row .item {
+      text-align: center;
+    }
+    .user-card-h .stats-row .item .num {
+      font-weight: 700; font-size: 16px; color: #2c3e50;
+    }
+    .user-card-h .stats-row .item .label {
+      font-size: 9px; color: #6c757d; display: block;
+    }
+    .user-card-h .rank-tag {
+      margin-top: 4px; font-size: 10px; font-weight: 600;
+      background: #f1c40f; color: #2c3e50; padding: 0 10px;
+      border-radius: 20px; display: inline-block;
+    }
+    .user-card-h .empty-msg {
+      font-size: 13px; color: #adb5bd; padding: 20px 0;
     }
 
-    /* ====== حالة فارغة ====== */
-    .empty-state { text-align: center; padding: 30px 0; color: #6c757d; }
-    .empty-state .icon { font-size: 48px; margin-bottom: 10px; opacity: 0.5; }
-    .empty-state p { font-size: 15px; }
-
-    /* ====== رسالة ====== */
-    .message {
-      margin-top: 10px;
-      padding: 10px 16px;
-      border-radius: 10px;
-      display: none;
-      font-size: 14px;
+    /* ============================================================
+       رسالة نسخ
+    ============================================================ */
+    .msg {
+      margin-top: 6px; padding: 8px 14px; border-radius: 10px;
+      display: none; font-size: 13px;
     }
-    .message.success { display: block; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-    .message.error { display: block; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .msg.success { display: block; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .msg.error { display: block; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
-    /* ====== تحسينات الجوال ====== */
-    @media (max-width: 600px) {
+    /* ============================================================
+       تحسينات الجوال والتابلت
+    ============================================================ */
+    @media (max-width: 768px) {
       body { padding: 10px; }
-      .container { padding: 16px; border-radius: 16px; }
+      .container { padding: 16px 12px; border-radius: 18px; }
       .header h1 { font-size: 18px; }
-      .sponsor-card { padding: 16px; flex-direction: column; align-items: stretch; text-align: center; }
-      .sponsor-card .info .name { font-size: 17px; }
+      .header h1 span { font-size: 11px; padding: 1px 10px; }
+      .sponsor-card { padding: 14px 16px; flex-direction: column; text-align: center; gap: 6px; }
+      .sponsor-card .info .name { font-size: 16px; }
       .referral-link-box { flex-direction: column; align-items: stretch; }
-      .referral-link-box .link { font-size: 13px; text-align: center; }
+      .referral-link-box .link { font-size: 12px; text-align: center; }
       .copy-btn { width: 100%; text-align: center; }
-      .user-card { flex-direction: column; align-items: stretch; }
-      .user-card .stats { justify-content: space-around; }
-      .stats-mini { grid-template-columns: repeat(2, 1fr); }
-      .section { padding: 14px; }
-      .section h2 { font-size: 16px; }
+      .stats-mini { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+      .stats-mini .stat { padding: 8px 4px; }
+      .stats-mini .stat .num { font-size: 17px; }
+      .user-card-h { width: 150px; padding: 12px 10px; min-height: 170px; }
+      .user-card-h .avatar { width: 40px; height: 40px; font-size: 16px; }
+      .user-card-h .name { font-size: 13px; }
+      .user-card-h .stats-row .item .num { font-size: 14px; }
+      .section { padding: 10px 8px; }
+      .section .section-header h2 { font-size: 14px; }
     }
-    @media (max-width: 400px) {
-      .stats-mini { grid-template-columns: 1fr 1fr; gap: 8px; }
-      .stats-mini .stat .num { font-size: 20px; }
+
+    @media (max-width: 480px) {
+      .user-card-h { width: 130px; padding: 10px 8px; min-height: 150px; }
+      .user-card-h .avatar { width: 34px; height: 34px; font-size: 14px; }
+      .user-card-h .name { font-size: 12px; }
+      .user-card-h .username { font-size: 10px; }
+      .user-card-h .phone { font-size: 10px; }
+      .user-card-h .stats-row .item .num { font-size: 12px; }
+      .user-card-h .stats-row .item .label { font-size: 8px; }
+      .stats-mini .stat .num { font-size: 15px; }
+      .stats-mini .stat .label { font-size: 10px; }
+      .sponsor-card .info .name { font-size: 14px; }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .user-card-h { width: 160px; }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- الهيدر -->
+    <!-- ====== الهيدر ====== -->
     <div class="header">
       <h1>👥 شبكة الإحالات <span>شجرة النجاح</span></h1>
       <a href="/dashboard.html" class="back-btn">← العودة للوحة</a>
     </div>
 
-    <!-- بطاقة الراعي -->
+    <!-- ====== الراعي ====== -->
     <div class="sponsor-card" id="sponsorCard">
       <div class="info" id="sponsorInfo">
         <div class="label">🌟 الراعي الخاص بك</div>
@@ -288,53 +317,56 @@
         <div class="username" id="sponsorUsername">@...</div>
         <div class="phone" id="sponsorPhone">📱 ...</div>
       </div>
-      <div class="badge" id="sponsorBadge">🏅 عضو مميز</div>
+      <div class="badge" id="sponsorBadge">👤 عضو</div>
     </div>
 
-    <!-- رابط الإحالة -->
+    <!-- ====== رابط الإحالة ====== -->
     <div class="referral-link-box">
       <span class="label">🔗 رابط الإحالة الخاص بك</span>
       <code class="link" id="referralLink">جاري التحميل...</code>
-      <button class="copy-btn" id="copyReferralBtn">📋 نسخ الرابط</button>
+      <button class="copy-btn" id="copyReferralBtn">📋 نسخ</button>
     </div>
-    <div id="copyMessage" class="message"></div>
+    <div id="copyMsg" class="msg"></div>
 
-    <!-- الإحصائيات السريعة -->
+    <!-- ====== إحصائيات سريعة ====== -->
     <div class="stats-mini">
-      <div class="stat">
-        <div class="num" id="totalReferrals">0</div>
-        <div class="label">إجمالي الإحالات</div>
+      <div class="stat"><div class="num" id="totalReferrals">0</div><div class="label">الإحالات</div></div>
+      <div class="stat"><div class="num" id="totalTeam">0</div><div class="label">الفريق</div></div>
+      <div class="stat"><div class="num" id="userRank">👤</div><div class="label">الرتبة</div></div>
+      <div class="stat"><div class="num" id="commissionEarned">0</div><div class="label">العمولات</div></div>
+    </div>
+
+    <!-- ====== المستوى الأول ====== -->
+    <div class="section">
+      <div class="section-header">
+        <h2>🔗 المباشرين <span class="level-badge level-1-badge">المستوى الأول</span></h2>
+        <span class="count-badge" id="level1Count">0</span>
       </div>
-      <div class="stat">
-        <div class="num" id="totalTeam">0</div>
-        <div class="label">حجم الفريق</div>
-      </div>
-      <div class="stat">
-        <div class="num" id="userRank">👤 عضو</div>
-        <div class="label">الرتبة</div>
-      </div>
-      <div class="stat">
-        <div class="num" id="commissionEarned">0</div>
-        <div class="label">العمولات</div>
+      <div class="horizontal-scroll" id="level1Container">
+        <div class="user-card-h"><div class="empty-msg">📭 لا يوجد أعضاء</div></div>
       </div>
     </div>
 
-    <!-- المستوى الأول -->
+    <!-- ====== المستوى الثاني ====== -->
     <div class="section">
-      <h2>🔗 المباشرين <span class="level-badge level-1-badge">المستوى الأول</span></h2>
-      <div id="level1Container"><div class="empty-state"><div class="icon">📭</div><p>لا يوجد أعضاء في هذا المستوى</p></div></div>
+      <div class="section-header">
+        <h2>🔹 المستوى الثاني <span class="level-badge level-2-badge">المستوى الثاني</span></h2>
+        <span class="count-badge" id="level2Count">0</span>
+      </div>
+      <div class="horizontal-scroll" id="level2Container">
+        <div class="user-card-h"><div class="empty-msg">📭 لا يوجد أعضاء</div></div>
+      </div>
     </div>
 
-    <!-- المستوى الثاني -->
+    <!-- ====== المستوى الثالث ====== -->
     <div class="section">
-      <h2>🔹 المستوى الثاني <span class="level-badge level-2-badge">المستوى الثاني</span></h2>
-      <div id="level2Container"><div class="empty-state"><div class="icon">📭</div><p>لا يوجد أعضاء في هذا المستوى</p></div></div>
-    </div>
-
-    <!-- المستوى الثالث -->
-    <div class="section">
-      <h2>🔸 المستوى الثالث <span class="level-badge level-3-badge">المستوى الثالث</span></h2>
-      <div id="level3Container"><div class="empty-state"><div class="icon">📭</div><p>لا يوجد أعضاء في هذا المستوى</p></div></div>
+      <div class="section-header">
+        <h2>🔸 المستوى الثالث <span class="level-badge level-3-badge">المستوى الثالث</span></h2>
+        <span class="count-badge" id="level3Count">0</span>
+      </div>
+      <div class="horizontal-scroll" id="level3Container">
+        <div class="user-card-h"><div class="empty-msg">📭 لا يوجد أعضاء</div></div>
+      </div>
     </div>
   </div>
 
@@ -353,13 +385,6 @@
       return phone;
     }
 
-    function formatDate(dateString) {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) return '-';
-      const options = { year: 'numeric', month: 'long', day: 'numeric' };
-      return date.toLocaleDateString('ar-EG', options);
-    }
-
     function getRank(teamSize) {
       if (teamSize >= 20) return '🎖️ قائد';
       if (teamSize >= 10) return '🏅 نقيب';
@@ -367,37 +392,47 @@
       return '👤 عضو';
     }
 
+    function getInitials(name) {
+      if (!name) return '?';
+      const parts = name.trim().split(' ');
+      if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
+      return (parts[0].charAt(0) + parts[parts.length-1].charAt(0)).toUpperCase();
+    }
+
+    function showMsg(elementId, message, type) {
+      const el = document.getElementById(elementId);
+      el.textContent = message;
+      el.className = `msg ${type}`;
+      setTimeout(() => { el.className = 'msg'; }, 4000);
+    }
+
+    // ============================================================
+    //  عرض بطاقة المستخدم (أفقية)
+    // ============================================================
     function renderUserCard(user, level) {
       const teamSize = user.teamSize || 0;
       const rank = getRank(teamSize);
       const levelClass = level === 1 ? '' : level === 2 ? 'level-2' : 'level-3';
+      const initials = getInitials(user.full_name || user.username);
       return `
-        <div class="user-card ${levelClass}">
-          <div class="info">
-            <div class="name">${user.full_name || user.username}</div>
-            <span class="username">@${user.username}</span>
-            <span class="phone">📱 ${maskPhone(user.phone, level)}</span>
-          </div>
-          <div class="stats">
-            <div class="stat-item">
+        <div class="user-card-h ${levelClass}">
+          <div class="avatar">${initials}</div>
+          <div class="name">${user.full_name || user.username}</div>
+          <div class="username">@${user.username}</div>
+          <div class="phone">📱 ${maskPhone(user.phone, level)}</div>
+          <div class="stats-row">
+            <div class="item">
               <div class="num">${teamSize}</div>
               <span class="label">👥 الفريق</span>
             </div>
-            <div class="stat-item">
+            <div class="item">
               <div class="num">${user.referralCount || 0}</div>
               <span class="label">📌 إحالات</span>
             </div>
-            <span class="rank-badge">${rank}</span>
           </div>
+          <span class="rank-tag">${rank}</span>
         </div>
       `;
-    }
-
-    function showMessage(message, type) {
-      const msgDiv = document.getElementById('copyMessage');
-      msgDiv.textContent = message;
-      msgDiv.className = `message ${type}`;
-      setTimeout(() => { msgDiv.className = 'message'; }, 4000);
     }
 
     // ============================================================
@@ -426,20 +461,20 @@
 
         const data = await response.json();
 
-        // تحديث الإحصائيات العامة
+        // الإحصائيات
         document.getElementById('totalReferrals').textContent = data.totalReferrals || 0;
         document.getElementById('totalTeam').textContent = data.totalTeam || 0;
-        document.getElementById('userRank').textContent = data.userRank || '👤 عضو';
+        document.getElementById('userRank').textContent = data.userRank || '👤';
         document.getElementById('commissionEarned').textContent = (data.totalReferrals || 0) * 5;
 
-        // عرض رابط الإحالة
+        // رابط الإحالة
         const user = JSON.parse(localStorage.getItem('user'));
         if (user && user.referralCode) {
           const referralLink = `${window.location.origin}/register.html?ref=${user.referralCode}`;
           document.getElementById('referralLink').textContent = referralLink;
         }
 
-        // عرض معلومات الراعي
+        // الراعي
         if (data.sponsor) {
           document.getElementById('sponsorName').textContent = data.sponsor.full_name || data.sponsor.username;
           document.getElementById('sponsorUsername').textContent = `@${data.sponsor.username}`;
@@ -448,30 +483,35 @@
           document.getElementById('sponsorCard').style.display = 'flex';
         } else {
           document.getElementById('sponsorName').textContent = 'لا يوجد راعي';
-          document.getElementById('sponsorUsername').textContent = 'أنت أول عضو في شبكتك';
-          document.getElementById('sponsorPhone').textContent = '🚀 قائد المنصة';
+          document.getElementById('sponsorUsername').textContent = '🚀 أنت قائد المنصة';
+          document.getElementById('sponsorPhone').textContent = '👑 مؤسس';
           document.getElementById('sponsorBadge').textContent = '👑 مؤسس';
         }
 
         // عرض المستويات
-        renderLevel('level1Container', data.level1 || [], 1);
-        renderLevel('level2Container', data.level2 || [], 2);
-        renderLevel('level3Container', data.level3 || [], 3);
+        renderLevel('level1Container', 'level1Count', data.level1 || [], 1);
+        renderLevel('level2Container', 'level2Count', data.level2 || [], 2);
+        renderLevel('level3Container', 'level3Count', data.level3 || [], 3);
 
       } catch (error) {
-        console.error('❌ خطأ في تحميل شبكة الإحالات:', error);
-        document.getElementById('level1Container').innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>حدث خطأ في تحميل البيانات</p></div>';
-        document.getElementById('level2Container').innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>حدث خطأ في تحميل البيانات</p></div>';
-        document.getElementById('level3Container').innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>حدث خطأ في تحميل البيانات</p></div>';
+        console.error('❌ خطأ:', error);
+        document.getElementById('level1Container').innerHTML = `<div class="user-card-h"><div class="empty-msg">⚠️ خطأ في التحميل</div></div>`;
+        document.getElementById('level2Container').innerHTML = `<div class="user-card-h"><div class="empty-msg">⚠️ خطأ في التحميل</div></div>`;
+        document.getElementById('level3Container').innerHTML = `<div class="user-card-h"><div class="empty-msg">⚠️ خطأ في التحميل</div></div>`;
       }
     }
 
-    function renderLevel(containerId, users, level) {
+    function renderLevel(containerId, countId, users, level) {
       const container = document.getElementById(containerId);
+      const countEl = document.getElementById(countId);
+
       if (!users || users.length === 0) {
-        container.innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>لا يوجد أعضاء في هذا المستوى</p></div>`;
+        container.innerHTML = `<div class="user-card-h"><div class="empty-msg">📭 لا يوجد أعضاء</div></div>`;
+        countEl.textContent = '0';
         return;
       }
+
+      countEl.textContent = users.length;
       container.innerHTML = users.map(user => renderUserCard(user, level)).join('');
     }
 
@@ -479,38 +519,36 @@
     //  نسخ رابط الإحالة
     // ============================================================
     function setupCopyReferral() {
-      const copyBtn = document.getElementById('copyReferralBtn');
-
-      copyBtn.addEventListener('click', async function() {
-        const linkElement = document.getElementById('referralLink');
-        const link = linkElement.textContent;
-
+      const btn = document.getElementById('copyReferralBtn');
+      btn.addEventListener('click', async function() {
+        const linkEl = document.getElementById('referralLink');
+        const link = linkEl.textContent;
         if (!link || link === 'جاري التحميل...') {
-          showMessage('⚠️ رابط الإحالة غير متاح حالياً', 'error');
+          showMsg('copyMsg', '⚠️ رابط الإحالة غير متاح', 'error');
           return;
         }
-
         try {
           await navigator.clipboard.writeText(link);
-          this.textContent = '✅ تم النسخ!';
+          this.textContent = '✅ تم!';
           this.classList.add('copied');
-          showMessage('✅ تم نسخ رابط الإحالة بنجاح! شاركه الآن.', 'success');
+          showMsg('copyMsg', '✅ تم نسخ الرابط بنجاح!', 'success');
           setTimeout(() => {
-            this.textContent = '📋 نسخ الرابط';
+            this.textContent = '📋 نسخ';
             this.classList.remove('copied');
-          }, 3000);
-        } catch (err) {
-          const textArea = document.createElement('textarea');
-          textArea.value = link;
-          document.body.appendChild(textArea);
-          textArea.select();
+          }, 2500);
+        } catch {
+          // طريقة بديلة للنسخ
+          const ta = document.createElement('textarea');
+          ta.value = link;
+          document.body.appendChild(ta);
+          ta.select();
           document.execCommand('copy');
-          document.body.removeChild(textArea);
-          this.textContent = '✅ تم النسخ!';
-          showMessage('✅ تم نسخ رابط الإحالة بنجاح!', 'success');
+          document.body.removeChild(ta);
+          this.textContent = '✅ تم!';
+          showMsg('copyMsg', '✅ تم نسخ الرابط بنجاح!', 'success');
           setTimeout(() => {
-            this.textContent = '📋 نسخ الرابط';
-          }, 3000);
+            this.textContent = '📋 نسخ';
+          }, 2500);
         }
       });
     }
