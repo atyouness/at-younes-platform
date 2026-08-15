@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>التسجيل | آت يونس تك</title>
-  <link rel="stylesheet" href="/css/style.css">
   <style>
-    /* ====== الأنماط الأساسية ====== */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Tajawal', 'Segoe UI', sans-serif;
@@ -27,224 +25,64 @@
       padding: 32px 28px;
       border: 1px solid rgba(255,255,255,0.3);
     }
-    .logo {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-    .logo h1 {
-      font-size: 26px;
-      font-weight: 800;
-      color: #1a2a3a;
-      letter-spacing: -0.5px;
-    }
+    .logo { text-align: center; margin-bottom: 24px; }
+    .logo h1 { font-size: 26px; font-weight: 800; color: #1a2a3a; }
     .logo h1 span { color: #2563eb; }
-    .logo p {
-      color: #6c757d;
-      font-size: 14px;
-      margin-top: 4px;
-    }
-    .divider {
-      border: none;
-      border-top: 2px solid #e9ecef;
-      margin: 16px 0 24px;
-    }
+    .logo p { color: #6c757d; font-size: 14px; margin-top: 4px; }
+    .divider { border: none; border-top: 2px solid #e9ecef; margin: 16px 0 24px; }
 
-    /* ====== الحقول ====== */
-    .form-group {
-      margin-bottom: 16px;
-    }
-    .form-group label {
-      display: block;
-      font-weight: 600;
-      font-size: 14px;
-      color: #2c3e50;
-      margin-bottom: 5px;
-    }
-    .form-group label .required {
-      color: #dc3545;
-      margin-right: 2px;
-    }
-    .form-group .hint {
-      font-size: 12px;
-      color: #6c757d;
-      margin-top: 3px;
-    }
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 12px 16px;
-      border: 2px solid #e9ecef;
-      border-radius: 12px;
-      font-size: 15px;
-      font-family: inherit;
-      transition: all 0.3s;
-      background: #f8f9fa;
-      color: #1a2a3a;
-      direction: ltr;
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-weight: 600; font-size: 14px; color: #2c3e50; margin-bottom: 5px; }
+    .form-group label .required { color: #dc3545; margin-right: 2px; }
+    .form-group .hint { font-size: 12px; color: #6c757d; margin-top: 3px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group input {
+      width: 100%; padding: 12px 16px; border: 2px solid #e9ecef; border-radius: 12px;
+      font-size: 15px; font-family: inherit; transition: all 0.3s;
+      background: #f8f9fa; color: #1a2a3a; direction: ltr;
     }
     .form-group input:focus {
-      border-color: #2563eb;
-      outline: none;
-      background: white;
-      box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
+      border-color: #2563eb; outline: none; background: white; box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
     }
-    .form-group input.error {
-      border-color: #dc3545;
-      background: #fff5f5;
-    }
-    .form-group input.success {
-      border-color: #22c55e;
-      background: #f0fdf4;
-    }
-    .form-group input::placeholder {
-      color: #adb5bd;
-      font-size: 14px;
-    }
+    .form-group input.error { border-color: #dc3545; background: #fff5f5; }
+    .form-group input.success { border-color: #22c55e; background: #f0fdf4; }
 
-    /* ====== رمز الإحالة (غير قابل للتعديل) ====== */
     .referral-code-display {
-      background: #e9ecef;
-      border-radius: 12px;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border: 2px dashed #adb5bd;
+      background: #e9ecef; border-radius: 12px; padding: 12px 16px;
+      display: flex; align-items: center; gap: 12px; border: 2px dashed #adb5bd;
     }
-    .referral-code-display .label {
-      font-weight: 600;
-      color: #2c3e50;
-      font-size: 14px;
-      white-space: nowrap;
-    }
-    .referral-code-display .code {
-      font-family: monospace;
-      font-size: 18px;
-      font-weight: 700;
-      color: #2563eb;
-      letter-spacing: 2px;
-      flex: 1;
-      text-align: center;
-    }
-    .referral-code-display .lock-icon {
-      color: #6c757d;
-      font-size: 16px;
-    }
+    .referral-code-display .label { font-weight: 600; color: #2c3e50; font-size: 14px; white-space: nowrap; }
+    .referral-code-display .code { font-family: monospace; font-size: 18px; font-weight: 700; color: #2563eb; letter-spacing: 2px; flex: 1; text-align: center; }
+    .referral-code-display .lock-icon { color: #6c757d; font-size: 16px; }
 
-    /* ====== الموافقة على الشروط ====== */
     .terms-group {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      margin: 8px 0 16px;
-      padding: 12px 16px;
-      background: #f8f9fa;
-      border-radius: 12px;
-      border: 1px solid #e9ecef;
+      display: flex; align-items: flex-start; gap: 12px; margin: 8px 0 16px;
+      padding: 12px 16px; background: #f8f9fa; border-radius: 12px; border: 1px solid #e9ecef;
     }
-    .terms-group input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-      margin-top: 2px;
-      accent-color: #2563eb;
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-    .terms-group label {
-      font-size: 14px;
-      color: #2c3e50;
-      cursor: pointer;
-      line-height: 1.6;
-    }
-    .terms-group label a {
-      color: #2563eb;
-      text-decoration: none;
-      font-weight: 600;
-    }
+    .terms-group input[type="checkbox"] { width: 20px; height: 20px; margin-top: 2px; accent-color: #2563eb; cursor: pointer; flex-shrink: 0; }
+    .terms-group label { font-size: 14px; color: #2c3e50; cursor: pointer; line-height: 1.6; }
+    .terms-group label a { color: #2563eb; text-decoration: none; font-weight: 600; }
     .terms-group label a:hover { text-decoration: underline; }
 
-    /* ====== زر التسجيل ====== */
     .register-btn {
-      width: 100%;
-      padding: 14px;
-      background: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      font-size: 18px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-family: inherit;
-      margin-top: 8px;
+      width: 100%; padding: 14px; background: #2563eb; color: white; border: none;
+      border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer;
+      transition: all 0.3s; font-family: inherit; margin-top: 8px;
     }
-    .register-btn:hover {
-      background: #1d4ed8;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(37,99,235,0.35);
-    }
-    .register-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-    }
-    .register-btn .spinner {
-      display: none;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255,255,255,0.3);
-      border-top: 3px solid white;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto;
-    }
+    .register-btn:hover { background: #1d4ed8; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37,99,235,0.35); }
+    .register-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .register-btn .spinner { display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid white; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ====== الرسائل ====== */
-    .message {
-      padding: 12px 16px;
-      border-radius: 12px;
-      font-size: 14px;
-      margin-top: 12px;
-      display: none;
-    }
+    .message { padding: 12px 16px; border-radius: 12px; font-size: 14px; margin-top: 12px; display: none; }
     .message.show { display: block; }
-    .message.success {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-    .message.error {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
-    .message.info {
-      background: #d1ecf1;
-      color: #0c5460;
-      border: 1px solid #bee5eb;
-    }
+    .message.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .message.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
-    /* ====== روابط ====== */
-    .login-link {
-      text-align: center;
-      margin-top: 18px;
-      font-size: 14px;
-      color: #6c757d;
-    }
-    .login-link a {
-      color: #2563eb;
-      text-decoration: none;
-      font-weight: 600;
-    }
+    .login-link { text-align: center; margin-top: 18px; font-size: 14px; color: #6c757d; }
+    .login-link a { color: #2563eb; text-decoration: none; font-weight: 600; }
     .login-link a:hover { text-decoration: underline; }
 
-    /* ====== تحسينات الجوال ====== */
     @media (max-width: 600px) {
       body { padding: 12px; }
       .register-container { padding: 20px 16px; border-radius: 20px; }
@@ -255,15 +93,10 @@
       .referral-code-display .code { font-size: 16px; }
       .terms-group { padding: 10px 14px; }
     }
-    @media (max-width: 400px) {
-      .register-container { padding: 16px 12px; }
-      .register-btn { font-size: 16px; padding: 12px; }
-    }
   </style>
 </head>
 <body>
   <div class="register-container">
-    <!-- الشعار -->
     <div class="logo">
       <h1>آت يونس <span>تك</span></h1>
       <p>منصة الاستثمار الترويجي الذكي</p>
@@ -303,7 +136,7 @@
         <div class="hint">سيظهر اسمك في لوحة التحكم وشبكة الإحالات</div>
       </div>
 
-      <!-- البريد الإلكتروني (مرتين) -->
+      <!-- البريد الإلكتروني -->
       <div class="form-group">
         <label>البريد الإلكتروني <span class="required">*</span></label>
         <input type="email" id="email" placeholder="أدخل بريدك الإلكتروني" required>
@@ -314,7 +147,7 @@
         <div class="hint" id="emailMatchHint"></div>
       </div>
 
-      <!-- كلمة المرور (مرتين) -->
+      <!-- كلمة المرور -->
       <div class="form-row">
         <div class="form-group">
           <label>كلمة المرور <span class="required">*</span></label>
@@ -328,7 +161,7 @@
         </div>
       </div>
 
-      <!-- رمز الإحالة (تلقائي، غير قابل للتعديل) -->
+      <!-- رمز الإحالة -->
       <div class="form-group">
         <label>رمز الإحالة</label>
         <div class="referral-code-display">
@@ -352,16 +185,13 @@
         </label>
       </div>
 
-      <!-- زر التسجيل -->
       <button type="submit" class="register-btn" id="registerBtn">
         <span class="spinner" id="spinner"></span>
         <span id="btnText">إنشاء الحساب</span>
       </button>
 
-      <!-- رسائل -->
       <div id="message" class="message"></div>
 
-      <!-- رابط تسجيل الدخول -->
       <div class="login-link">
         لديك حساب بالفعل؟ <a href="/login.html">سجل الدخول</a>
       </div>
@@ -386,13 +216,11 @@
       if (confirm && email !== confirm) {
         hint.textContent = '❌ البريد الإلكتروني غير متطابق';
         hint.style.color = '#dc3545';
-        this.classList.add('error');
-        this.classList.remove('success');
+        this.classList.add('error'); this.classList.remove('success');
       } else if (confirm && email === confirm) {
         hint.textContent = '✅ البريد الإلكتروني متطابق';
         hint.style.color = '#22c55e';
-        this.classList.remove('error');
-        this.classList.add('success');
+        this.classList.remove('error'); this.classList.add('success');
       } else {
         hint.textContent = '';
         this.classList.remove('error', 'success');
@@ -409,36 +237,14 @@
       if (confirm && password !== confirm) {
         hint.textContent = '❌ كلمة المرور غير متطابقة';
         hint.style.color = '#dc3545';
-        this.classList.add('error');
-        this.classList.remove('success');
+        this.classList.add('error'); this.classList.remove('success');
       } else if (confirm && password === confirm) {
         hint.textContent = '✅ كلمة المرور متطابقة';
         hint.style.color = '#22c55e';
-        this.classList.remove('error');
-        this.classList.add('success');
+        this.classList.remove('error'); this.classList.add('success');
       } else {
         hint.textContent = '';
         this.classList.remove('error', 'success');
-      }
-    });
-
-    // ============================================================
-    //  التحقق من البريد الإلكتروني عند تغييره
-    // ============================================================
-    document.getElementById('email').addEventListener('input', function() {
-      const confirm = document.getElementById('emailConfirm').value;
-      if (confirm) {
-        document.getElementById('emailConfirm').dispatchEvent(new Event('input'));
-      }
-    });
-
-    // ============================================================
-    //  التحقق من كلمة المرور عند تغييرها
-    // ============================================================
-    document.getElementById('password').addEventListener('input', function() {
-      const confirm = document.getElementById('passwordConfirm').value;
-      if (confirm) {
-        document.getElementById('passwordConfirm').dispatchEvent(new Event('input'));
       }
     });
 
@@ -449,9 +255,7 @@
       const msgDiv = document.getElementById('message');
       msgDiv.textContent = message;
       msgDiv.className = `message show ${type}`;
-      setTimeout(() => {
-        msgDiv.className = 'message';
-      }, 6000);
+      setTimeout(() => { msgDiv.className = 'message'; }, 6000);
     }
 
     // ============================================================
@@ -460,57 +264,13 @@
     function initReferralCode() {
       const urlParams = new URLSearchParams(window.location.search);
       let refCode = urlParams.get('ref');
-      
       if (!refCode) {
         refCode = generateReferralCode();
       }
-      
       document.getElementById('referralCode').value = refCode;
       document.getElementById('referralCodeDisplay').textContent = refCode;
+      return refCode;
     }
-
-// في register.html (داخل <script>)
-const urlParams = new URLSearchParams(window.location.search);
-const refCode = urlParams.get('ref');
-
-let autoActivate = false;
-
-if (refCode) {
-  // التحقق من صحة كود الإحالة (اختياري)
-  try {
-    const response = await fetch(`/api/auth/referrals/validate/${refCode}`);
-    const data = await response.json();
-    // إذا كان كود الإحالة يخص المسوق الرئيسي (slimanepro)، تفعيل تلقائي
-    if (data.valid && data.username === 'slimanepro') {
-      autoActivate = true;
-    }
-  } catch (error) {
-    console.error('خطأ في التحقق من كود الإحالة:', error);
-  }
-}
-
-// عند إرسال نموذج التسجيل
-document.getElementById('registerForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  // ... (جمع البيانات)
-
-  const body = {
-    username,
-    email,
-    password,
-    full_name: `${firstName} ${lastName}`,
-    phone,
-    whatsapp: whatsapp || phone,
-    referralCode: document.getElementById('referralCode').value,
-    autoActivate // ✅ إرسال هذه القيمة
-  };
-
-  // إرسال الطلب
-  const response = await fetch('/api/auth/register', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
 
     // ============================================================
     //  معالجة التسجيل
@@ -521,7 +281,6 @@ document.getElementById('registerForm').addEventListener('submit', async functio
       const btn = document.getElementById('registerBtn');
       const btnText = document.getElementById('btnText');
       const spinner = document.getElementById('spinner');
-      const messageDiv = document.getElementById('message');
 
       // جمع البيانات
       const firstName = document.getElementById('firstName').value.trim();
@@ -554,19 +313,35 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         return;
       }
 
-      // التحقق من قوة كلمة المرور
       if (password.length < 6) {
         showMessage('❌ كلمة المرور يجب أن تكون 6 أحرف على الأقل.', 'error');
         return;
       }
 
-      // التحقق من الموافقة على الشروط
       if (!termsChecked) {
         showMessage('❌ يرجى الموافقة على شروط العضوية.', 'error');
         return;
       }
 
-      // تعطيل الزر وإظهار التحميل
+      // ✅ تحديد autoActivate (التفعيل التلقائي للمسوقين الرئيسيين)
+      const urlParams = new URLSearchParams(window.location.search);
+      const refFromUrl = urlParams.get('ref');
+      let autoActivate = false;
+
+      if (refFromUrl) {
+        try {
+          const response = await fetch(`/api/auth/referrals/validate/${refFromUrl}`);
+          const data = await response.json();
+          // إذا كان كود الإحالة يخص المسوق الرئيسي (slimanepro)
+          if (data.valid && data.username === 'slimanepro') {
+            autoActivate = true;
+          }
+        } catch (error) {
+          console.error('خطأ في التحقق من كود الإحالة:', error);
+        }
+      }
+
+      // تعطيل الزر
       btn.disabled = true;
       btnText.textContent = 'جاري التسجيل...';
       spinner.style.display = 'block';
@@ -582,7 +357,8 @@ document.getElementById('registerForm').addEventListener('submit', async functio
             full_name: `${firstName} ${lastName}`,
             phone,
             whatsapp: whatsapp || phone,
-            referralCode
+            referralCode,
+            autoActivate // ✅ إرسال القيمة
           })
         });
 
@@ -596,11 +372,11 @@ document.getElementById('registerForm').addEventListener('submit', async functio
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
 
-        showMessage('✅ تم التسجيل بنجاح! جاري تحويلك إلى لوحة التحكم...', 'success');
+        showMessage(`✅ ${data.message}`, 'success');
 
         setTimeout(() => {
           window.location.href = '/dashboard.html';
-        }, 1500);
+        }, 2000);
 
       } catch (error) {
         showMessage(`❌ ${error.message}`, 'error');
