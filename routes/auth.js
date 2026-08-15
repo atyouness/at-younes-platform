@@ -2,6 +2,8 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const router = express.Router();
+const crypto = require('crypto');
+const { sendVerificationEmail, verificationTokens } = require('../server');
 
 // توليد كود إحالة عشوائي
 const generateReferralCode = () => {
@@ -11,7 +13,7 @@ const generateReferralCode = () => {
 // ✅ تسجيل مستخدم جديد
 router.post('/register', async (req, res) => {
   try {
-    const { username, email, password, full_name, phone, whatsapp, referralCode } = req.body;
+    const { username, email, password, full_name, phone, whatsapp, referralCode, autoActivate } = req.body;
 
     // التحقق من وجود البريد الإلكتروني
     const existingUser = await User.findByEmail(email);
@@ -31,9 +33,13 @@ router.post('/register', async (req, res) => {
       const referrer = await User.findByReferralCode(referralCode);
       if (referrer) {
         referredBy = referrer.id;
-     }
+        console.log(`✅ مستخدم جديد مسجل عن طريق: ${referrer.username}`);
+      } else {
+        console.log(`⚠️ كود إحالة غير صالح: ${referralCode}`);
+      }
+    }
 
-    // إنشاء المستخدم
+    // إنشاء المستخدم (غير مفعل)
     const newUser = await User.create({
       username,
       email,
@@ -43,10 +49,10 @@ router.post('/register', async (req, res) => {
       full_name: full_name || null,
       phone: phone || null,
       whatsapp: whatsapp || null
-      is_active: false
     });
 
     let isActivated = false;
+
     if (autoActivate === true) {
       // تفعيل تلقائي (للمسوقين الرئيسيين)
       await User.activate(newUser.id);
@@ -57,7 +63,7 @@ router.post('/register', async (req, res) => {
       verificationTokens[token] = { userId: newUser.id, expires: Date.now() + 3600000 };
       await sendVerificationEmail(email, username, token);
     }
-    
+
     // إنشاء توكن JWT
     const token = jwt.sign(
       { userId: newUser.id, email: newUser.email },
@@ -89,47 +95,6 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// ✅ تفعيل الحساب عبر الرابط
-router.get('/verify', async (req, res) => {
-  try {
-    const { token } = req.query;
-    if (!token) {
-      return res.status(400).json({ message: 'رمز التفعيل مطلوب' });
-    }
-
-    const data = verificationTokens[token];
-    if (!data) {
-      return res.status(400).json({ message: 'رمز التفعيل غير صالح أو منتهي الصلاحية' });
-    }
-
-    if (Date.now() > data.expires) {
-      delete verificationTokens[token];
-      return res.status(400).json({ message: 'انتهت صلاحية رمز التفعيل' });
-    }
-
-    // تفعيل الحساب
-    await User.activate(data.userId);
-    delete verificationTokens[token];
-
-    res.send(`
-      <!DOCTYPE html>
-      <html>
-      <head><meta charset="UTF-8"><title>تفعيل الحساب</title></head>
-      <body style="font-family: 'Tajawal', sans-serif; text-align: center; padding: 50px; direction: rtl;">
-        <div style="max-width: 400px; margin: 0 auto; background: #f8f9fa; padding: 30px; border-radius: 12px;">
-          <h2 style="color: #2563eb;">✅ تم تفعيل حسابك بنجاح!</h2>
-          <p style="color: #2c3e50;">يمكنك الآن تسجيل الدخول إلى المنصة.</p>
-          <a href="/login.html" style="display: inline-block; background: #2563eb; color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 600; margin-top: 10px;">تسجيل الدخول</a>
-        </div>
-      </body>
-      </html>
-    `);
-  } catch (error) {
-    console.error('❌ خطأ في التفعيل:', error);
-    res.status(500).json({ message: 'حدث خطأ في الخادم' });
-  }
-});
-
 // ✅ تسجيل الدخول
 router.post('/login', async (req, res) => {
   try {
@@ -143,6 +108,10 @@ router.post('/login', async (req, res) => {
     const isPasswordValid = await User.comparePassword(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' });
+    }
+
+    if (!user.is_active) {
+      return res.status(401).json({ message: 'الحساب غير مفعل. يرجى تفعيله عبر البريد الإلكتروني.' });
     }
 
     const token = jwt.sign(
@@ -163,12 +132,53 @@ router.post('/login', async (req, res) => {
         phone: user.phone,
         whatsapp: user.whatsapp,
         balance: user.balance,
-        role: user.role
+        role: user.role,
+        is_active: user.is_active
       }
     });
   } catch (error) {
     console.error('❌ خطأ في تسجيل الدخول:', error);
     res.status(500).json({ message: 'حدث خطأ في الخادم', error: error.message });
+  }
+});
+
+// ✅ تفعيل الحساب عبر الرابط
+router.get('/verify', async (req, res) => {
+  try {
+    const { token } = req.query;
+    if (!token) {
+      return res.status(400).json({ message: 'رمز التفعيل مطلوب' });
+    }
+
+    const data = verificationTokens[token];
+    if (!data) {
+      return res.status(400).json({ message: 'رمز التفعيل غير صالح أو منتهي الصلاحية' });
+    }
+
+    if (Date.now() > data.expires) {
+      delete verificationTokens[token];
+      return res.status(400).json({ message: 'انتهت صلاحية رمز التفعيل' });
+    }
+
+    await User.activate(data.userId);
+    delete verificationTokens[token];
+
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head><meta charset="UTF-8"><title>تفعيل الحساب</title></head>
+      <body style="font-family: 'Tajawal', sans-serif; text-align: center; padding: 50px; direction: rtl;">
+        <div style="max-width: 400px; margin: 0 auto; background: #f8f9fa; padding: 30px; border-radius: 12px;">
+          <h2 style="color: #2563eb;">✅ تم تفعيل حسابك بنجاح!</h2>
+          <p style="color: #2c3e50;">يمكنك الآن تسجيل الدخول إلى المنصة.</p>
+          <a href="/login.html" style="display: inline-block; background: #2563eb; color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 600; margin-top: 10px;">تسجيل الدخول</a>
+        </div>
+      </body>
+      </html>
+    `);
+  } catch (error) {
+    console.error('❌ خطأ في التفعيل:', error);
+    res.status(500).json({ message: 'حدث خطأ في الخادم' });
   }
 });
 
@@ -197,7 +207,8 @@ router.get('/verify', async (req, res) => {
         phone: user.phone,
         whatsapp: user.whatsapp,
         balance: user.balance,
-        role: user.role
+        role: user.role,
+        is_active: user.is_active
       }
     });
   } catch (error) {
@@ -296,7 +307,7 @@ router.get('/referrals/tree', async (req, res) => {
         username: sponsor.username,
         full_name: sponsor.full_name || sponsor.username,
         phone: sponsor.phone || null,
-        teamSize: await User.getReferralCount(sponsor.id)
+        teamSize: await User.getTeamSize(sponsor.id)
       } : null,
       level1: tree.level1,
       level2: tree.level2,
