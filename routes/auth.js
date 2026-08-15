@@ -89,6 +89,47 @@ router.post('/register', async (req, res) => {
   }
 });
 
+// ✅ تفعيل الحساب عبر الرابط
+router.get('/verify', async (req, res) => {
+  try {
+    const { token } = req.query;
+    if (!token) {
+      return res.status(400).json({ message: 'رمز التفعيل مطلوب' });
+    }
+
+    const data = verificationTokens[token];
+    if (!data) {
+      return res.status(400).json({ message: 'رمز التفعيل غير صالح أو منتهي الصلاحية' });
+    }
+
+    if (Date.now() > data.expires) {
+      delete verificationTokens[token];
+      return res.status(400).json({ message: 'انتهت صلاحية رمز التفعيل' });
+    }
+
+    // تفعيل الحساب
+    await User.activate(data.userId);
+    delete verificationTokens[token];
+
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head><meta charset="UTF-8"><title>تفعيل الحساب</title></head>
+      <body style="font-family: 'Tajawal', sans-serif; text-align: center; padding: 50px; direction: rtl;">
+        <div style="max-width: 400px; margin: 0 auto; background: #f8f9fa; padding: 30px; border-radius: 12px;">
+          <h2 style="color: #2563eb;">✅ تم تفعيل حسابك بنجاح!</h2>
+          <p style="color: #2c3e50;">يمكنك الآن تسجيل الدخول إلى المنصة.</p>
+          <a href="/login.html" style="display: inline-block; background: #2563eb; color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 600; margin-top: 10px;">تسجيل الدخول</a>
+        </div>
+      </body>
+      </html>
+    `);
+  } catch (error) {
+    console.error('❌ خطأ في التفعيل:', error);
+    res.status(500).json({ message: 'حدث خطأ في الخادم' });
+  }
+});
+
 // ✅ تسجيل الدخول
 router.post('/login', async (req, res) => {
   try {
