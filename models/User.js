@@ -42,15 +42,15 @@ class User {
 
   // البحث عن مستخدم بالمعرف
   static async findById(id) {
-  try {
-    const query = 'SELECT id, username, email, referral_code, referred_by, full_name, phone, whatsapp, balance, role FROM users WHERE id = ?';
-    const [rows] = await pool.query(query, [id]);
-    return rows[0];
-  } catch (error) {
-    console.error('❌ خطأ في البحث عن المستخدم بالمعرف:', error.message);
-    return null;
+    try {
+      const query = 'SELECT id, username, email, referral_code, referred_by, full_name, phone, whatsapp, balance, role FROM users WHERE id = ?';
+      const [rows] = await pool.query(query, [id]);
+      return rows[0];
+    } catch (error) {
+      console.error('❌ خطأ في البحث عن المستخدم بالمعرف:', error.message);
+      return null;
+    }
   }
-}
 
   // البحث عن مستخدم بواسطة كود الإحالة
   static async findByReferralCode(referralCode) {
@@ -76,7 +76,7 @@ class User {
     }
   }
 
-  // الحصول على عدد الإحالات لمستخدم معين
+  // الحصول على عدد الإحالات المباشرة لمستخدم معين
   static async getReferralCount(userId) {
     try {
       const query = 'SELECT COUNT(*) as count FROM users WHERE referred_by = ?';
@@ -88,7 +88,28 @@ class User {
     }
   }
 
-  // الحصول على قائمة الإحالات لمستخدم معين
+  // الحصول على حجم الفريق بالكامل (المباشرين وغير المباشرين)
+  static async getTeamSize(userId) {
+    try {
+      // استخدام استعلام متكرر لحساب جميع الأعضاء في الشجرة الفرعية
+      const query = `
+        WITH RECURSIVE team AS (
+          SELECT id FROM users WHERE referred_by = ?
+          UNION ALL
+          SELECT u.id FROM users u
+          INNER JOIN team t ON u.referred_by = t.id
+        )
+        SELECT COUNT(*) as count FROM team
+      `;
+      const [rows] = await pool.query(query, [userId]);
+      return rows[0].count || 0;
+    } catch (error) {
+      console.error('❌ خطأ في حساب حجم الفريق:', error.message);
+      return 0;
+    }
+  }
+
+  // الحصول على قائمة الإحالات المباشرة لمستخدم معين
   static async getReferrals(userId) {
     try {
       const query = 'SELECT id, username, email, full_name, phone, created_at FROM users WHERE referred_by = ? ORDER BY created_at DESC';
@@ -100,11 +121,12 @@ class User {
     }
   }
 
-  // الحصول على شبكة الإحالات (المستويات 1، 2، 3)
+  // الحصول على شبكة الإحالات (المستويات 1، 2، 3) مع حساب حجم الفريق بدقة
   static async getReferralTree(userId) {
     try {
+      // المستوى الأول (المباشرين)
       const level1Query = `
-        SELECT id, username, email, phone, full_name, 
+        SELECT id, username, email, phone, full_name,
                (SELECT COUNT(*) FROM users WHERE referred_by = u.id) as referralCount
         FROM users u
         WHERE referred_by = ?
@@ -116,12 +138,13 @@ class User {
       const level2 = [];
       const level3 = [];
 
+      // معالجة المستوى الأول
       for (const user of level1Rows) {
-        const teamQuery = `SELECT COUNT(*) as count FROM users WHERE referred_by = ?`;
-        const [teamRows] = await pool.query(teamQuery, [user.id]);
-        user.teamSize = teamRows[0].count || 0;
+        // حساب حجم الفريق الكامل (جميع الأعضاء في الشجرة الفرعية)
+        user.teamSize = await this.getTeamSize(user.id);
         level1.push(user);
 
+        // المستوى الثاني (إحالات المباشرين)
         const level2Query = `
           SELECT id, username, email, phone, full_name,
                  (SELECT COUNT(*) FROM users WHERE referred_by = u.id) as referralCount
@@ -130,12 +153,13 @@ class User {
           ORDER BY created_at DESC
         `;
         const [level2Rows] = await pool.query(level2Query, [user.id]);
+
         for (const u2 of level2Rows) {
-          const teamQuery2 = `SELECT COUNT(*) as count FROM users WHERE referred_by = ?`;
-          const [teamRows2] = await pool.query(teamQuery2, [u2.id]);
-          u2.teamSize = teamRows2[0].count || 0;
+          // حساب حجم فريق المستوى الثاني (جميع الأعضاء في شجرته الفرعية)
+          u2.teamSize = await this.getTeamSize(u2.id);
           level2.push(u2);
 
+          // المستوى الثالث (إحالات المستوى الثاني)
           const level3Query = `
             SELECT id, username, email, phone, full_name,
                    (SELECT COUNT(*) FROM users WHERE referred_by = u.id) as referralCount
@@ -144,10 +168,10 @@ class User {
             ORDER BY created_at DESC
           `;
           const [level3Rows] = await pool.query(level3Query, [u2.id]);
+
           for (const u3 of level3Rows) {
-            const teamQuery3 = `SELECT COUNT(*) as count FROM users WHERE referred_by = ?`;
-            const [teamRows3] = await pool.query(teamQuery3, [u3.id]);
-            u3.teamSize = teamRows3[0].count || 0;
+            // حساب حجم فريق المستوى الثالث (جميع الأعضاء في شجرته الفرعية)
+            u3.teamSize = await this.getTeamSize(u3.id);
             level3.push(u3);
           }
         }
@@ -163,6 +187,19 @@ class User {
   // التحقق من كلمة المرور
   static async comparePassword(plainPassword, hashedPassword) {
     return await bcrypt.compare(plainPassword, hashedPassword);
+  }
+
+  // تفعيل حساب المستخدم
+  static async activate(userId) {
+    try {
+      const query = 'UPDATE users SET is_active = TRUE WHERE id = ?';
+      await pool.query(query, [userId]);
+      console.log(`✅ تم تفعيل المستخدم ID: ${userId}`);
+      return true;
+    } catch (error) {
+      console.error('❌ فشل في تفعيل المستخدم:', error);
+      return false;
+    }
   }
 
   // التحقق من وجود الجدول وإنشائه
