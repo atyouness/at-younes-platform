@@ -3,14 +3,17 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const router = express.Router();
 const crypto = require('crypto');
-const { sendVerificationEmail, verificationTokens } = require('../server');
+// ✅ استيراد دوال البريد من الملف الجديد (بدون تبعية دائرية)
+const { sendVerificationEmail, verificationTokens } = require('../services/emailService');
 
 // توليد كود إحالة عشوائي
 const generateReferralCode = () => {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
 };
 
-// ✅ تسجيل مستخدم جديد
+// ============================================================
+//  ✅ تسجيل مستخدم جديد (مع تفعيل تلقائي أو عبر البريد)
+// ============================================================
 router.post('/register', async (req, res) => {
   try {
     const { username, email, password, full_name, phone, whatsapp, referralCode, autoActivate } = req.body;
@@ -95,7 +98,9 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// ✅ تسجيل الدخول
+// ============================================================
+//  ✅ تسجيل الدخول
+// ============================================================
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -105,15 +110,18 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' });
     }
 
+    // التحقق من كلمة المرور
     const isPasswordValid = await User.comparePassword(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' });
     }
 
+    // التحقق من أن الحساب مفعل
     if (!user.is_active) {
       return res.status(401).json({ message: 'الحساب غير مفعل. يرجى تفعيله عبر البريد الإلكتروني.' });
     }
 
+    // إنشاء توكن JWT
     const token = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.JWT_SECRET || 'secret_key',
@@ -142,7 +150,9 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// ✅ تفعيل الحساب عبر الرابط
+// ============================================================
+//  ✅ تفعيل الحساب عبر الرابط
+// ============================================================
 router.get('/verify', async (req, res) => {
   try {
     const { token } = req.query;
@@ -163,6 +173,7 @@ router.get('/verify', async (req, res) => {
     await User.activate(data.userId);
     delete verificationTokens[token];
 
+    // صفحة نجاح التفعيل
     res.send(`
       <!DOCTYPE html>
       <html>
@@ -182,8 +193,10 @@ router.get('/verify', async (req, res) => {
   }
 });
 
-// ✅ التحقق من صحة التوكن
-router.get('/verify', async (req, res) => {
+// ============================================================
+//  ✅ التحقق من صحة التوكن (الجلسة)
+// ============================================================
+router.get('/verify-session', async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
@@ -217,12 +230,16 @@ router.get('/verify', async (req, res) => {
   }
 });
 
-// ✅ تسجيل الخروج
+// ============================================================
+//  ✅ تسجيل الخروج
+// ============================================================
 router.post('/logout', (req, res) => {
   res.json({ message: '✅ تم تسجيل الخروج بنجاح' });
 });
 
-// ✅ الحصول على إحصائيات الإحالات
+// ============================================================
+//  ✅ الحصول على إحصائيات الإحالات
+// ============================================================
 router.get('/referrals/stats', async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
@@ -253,7 +270,9 @@ router.get('/referrals/stats', async (req, res) => {
   }
 });
 
-// ✅ التحقق من صحة كود الإحالة
+// ============================================================
+//  ✅ التحقق من صحة كود الإحالة
+// ============================================================
 router.get('/referrals/validate/:code', async (req, res) => {
   try {
     const { code } = req.params;
@@ -269,7 +288,9 @@ router.get('/referrals/validate/:code', async (req, res) => {
   }
 });
 
-// ✅ الحصول على شبكة الإحالات
+// ============================================================
+//  ✅ الحصول على شبكة الإحالات (المستويات 1، 2، 3)
+// ============================================================
 router.get('/referrals/tree', async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
@@ -285,13 +306,16 @@ router.get('/referrals/tree', async (req, res) => {
       return res.status(404).json({ message: 'المستخدم غير موجود' });
     }
 
+    // جلب الراعي (إذا وجد)
     let sponsor = null;
     if (currentUser.referred_by) {
       sponsor = await User.findById(currentUser.referred_by);
     }
 
+    // جلب شبكة الإحالات
     const tree = await User.getReferralTree(userId);
 
+    // حساب الرتبة
     const totalTeam = tree.level1.length + tree.level2.length + tree.level3.length;
     let userRank = '👤 عضو';
     if (totalTeam >= 20) userRank = '🎖️ قائد';
