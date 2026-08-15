@@ -31,11 +31,7 @@ router.post('/register', async (req, res) => {
       const referrer = await User.findByReferralCode(referralCode);
       if (referrer) {
         referredBy = referrer.id;
-        console.log(`✅ مستخدم جديد مسجل عن طريق: ${referrer.username} (ID: ${referrer.id})`);
-      } else {
-        console.log(`⚠️ كود إحالة غير صالح: ${referralCode}`);
-      }
-    }
+     }
 
     // إنشاء المستخدم
     const newUser = await User.create({
@@ -47,8 +43,21 @@ router.post('/register', async (req, res) => {
       full_name: full_name || null,
       phone: phone || null,
       whatsapp: whatsapp || null
+      is_active: false
     });
 
+    let isActivated = false;
+    if (autoActivate === true) {
+      // تفعيل تلقائي (للمسوقين الرئيسيين)
+      await User.activate(newUser.id);
+      isActivated = true;
+    } else {
+      // إرسال بريد التفعيل
+      const token = crypto.randomBytes(32).toString('hex');
+      verificationTokens[token] = { userId: newUser.id, expires: Date.now() + 3600000 };
+      await sendVerificationEmail(email, username, token);
+    }
+    
     // إنشاء توكن JWT
     const token = jwt.sign(
       { userId: newUser.id, email: newUser.email },
@@ -57,7 +66,9 @@ router.post('/register', async (req, res) => {
     );
 
     res.status(201).json({
-      message: '✅ تم التسجيل بنجاح',
+      message: isActivated
+        ? '✅ تم التسجيل وتفعيل الحساب بنجاح!'
+        : '✅ تم التسجيل بنجاح! يرجى تفعيل حسابك عبر البريد الإلكتروني.',
       token,
       user: {
         id: newUser.id,
@@ -68,7 +79,8 @@ router.post('/register', async (req, res) => {
         phone: newUser.phone,
         whatsapp: newUser.whatsapp,
         balance: newUser.balance || 0,
-        role: newUser.role || 'user'
+        role: newUser.role || 'user',
+        is_active: isActivated || false
       }
     });
   } catch (error) {
