@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
   secure: true,
   auth: {
     user: 'info@atyouness.com',
-    pass: process.env.EMAIL_PASSWORD
+    pass: process.env.EMAIL_PASSWORD || 'UJN741ik85/*i' // استخدم متغير بيئي
   },
   tls: {
     rejectUnauthorized: false
