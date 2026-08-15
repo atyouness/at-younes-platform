@@ -469,6 +469,49 @@
       document.getElementById('referralCodeDisplay').textContent = refCode;
     }
 
+// في register.html (داخل <script>)
+const urlParams = new URLSearchParams(window.location.search);
+const refCode = urlParams.get('ref');
+
+let autoActivate = false;
+
+if (refCode) {
+  // التحقق من صحة كود الإحالة (اختياري)
+  try {
+    const response = await fetch(`/api/auth/referrals/validate/${refCode}`);
+    const data = await response.json();
+    // إذا كان كود الإحالة يخص المسوق الرئيسي (slimanepro)، تفعيل تلقائي
+    if (data.valid && data.username === 'slimanepro') {
+      autoActivate = true;
+    }
+  } catch (error) {
+    console.error('خطأ في التحقق من كود الإحالة:', error);
+  }
+}
+
+// عند إرسال نموذج التسجيل
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  // ... (جمع البيانات)
+
+  const body = {
+    username,
+    email,
+    password,
+    full_name: `${firstName} ${lastName}`,
+    phone,
+    whatsapp: whatsapp || phone,
+    referralCode: document.getElementById('referralCode').value,
+    autoActivate // ✅ إرسال هذه القيمة
+  };
+
+  // إرسال الطلب
+  const response = await fetch('/api/auth/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
     // ============================================================
     //  معالجة التسجيل
     // ============================================================
