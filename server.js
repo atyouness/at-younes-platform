@@ -7,8 +7,8 @@ const rateLimit = require('express-rate-limit');
 const { connectDB } = require('./config/database');
 const User = require('./models/User');
 const path = require('path');
-const nodemailer = require('nodemailer'); // ✅ إضافة Nodemailer
-const crypto = require('crypto'); // ✅ لتوليد توكنات التفعيل
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 // استيراد المسارات
 const authRoutes = require('./routes/auth');
@@ -19,7 +19,7 @@ const paymentRoutes = require('./routes/payments');
 
 // إنشاء تطبيق Express
 const app = express();
-app.set('trust proxy', 1); // ✅ تفعيل الثقة بالبروكسي
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 
 // إعدادات الأمان والأداء
@@ -35,7 +35,7 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// ✅ خدمة الملفات الثابتة
+// خدمة الملفات الثابتة
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ============================================================
@@ -44,9 +44,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 const transporter = nodemailer.createTransport({
   host: 'smtp.hostinger.com',
   port: 465,
-  secure: true, // يستخدم SSL
+  secure: true,
   auth: {
-    user: 'info@atyouness.com', // أو slimanepro@atyouness.com
+    user: 'info@atyouness.com',
     pass: process.env.EMAIL_PASSWORD || 'UJN741ik85/*i' // استخدم متغير بيئي
   },
   tls: {
@@ -87,7 +87,7 @@ async function sendVerificationEmail(email, username, verificationToken) {
   }
 }
 
-// تخزين مؤقت للتوكنات (في الإنتاج، استخدم قاعدة بيانات)
+// تخزين مؤقت للتوكنات
 const verificationTokens = {};
 
 // ============================================================
@@ -108,27 +108,22 @@ app.use('/api/payments', paymentRoutes);
 // ============================================================
 //  ✅ الصفحات الثابتة
 // ============================================================
-// الصفحة الرئيسية
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// لوحة التحكم
 app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
 });
 
-// صفحة التسجيل
 app.get('/register', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'register.html'));
 });
 
-// صفحة تسجيل الدخول
 app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
-// صفحة شبكة الإحالات
 app.get('/referrals', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'referrals.html'));
 });
