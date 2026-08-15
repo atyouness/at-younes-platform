@@ -343,4 +343,35 @@ router.get('/referrals/tree', async (req, res) => {
   }
 });
 
+// ✅ إعادة إرسال رابط التفعيل
+router.post('/resend-activation', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: 'البريد الإلكتروني مطلوب' });
+    }
+
+    const user = await User.findByEmail(email);
+    if (!user) {
+      return res.status(404).json({ message: 'المستخدم غير موجود' });
+    }
+
+    if (user.is_active) {
+      return res.status(400).json({ message: 'الحساب مفعل بالفعل' });
+    }
+
+    // إنشاء توكن جديد
+    const token = crypto.randomBytes(32).toString('hex');
+    verificationTokens[token] = { userId: user.id, expires: Date.now() + 3600000 };
+
+    await sendVerificationEmail(email, user.username, token);
+
+    res.json({ message: '✅ تم إعادة إرسال رابط التفعيل' });
+  } catch (error) {
+    console.error('❌ خطأ في إعادة إرسال التفعيل:', error);
+    res.status(500).json({ message: 'حدث خطأ في الخادم' });
+  }
+});
+
 module.exports = router;
