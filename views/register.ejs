@@ -1,0 +1,237 @@
+<%- include('partials/header', { title: 'التسجيل | آت يونس تك', user: user }) %>
+
+<div style="max-width:680px; margin:30px auto; background:white; padding:30px; border-radius:20px; box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+  <h2 style="text-align:center; color:#1a2a3a;">📝 إنشاء حساب جديد</h2>
+  <p style="text-align:center; color:#6c757d; font-size:14px;">انضم إلى منصة آت يونس تك وابدأ رحلة الاستثمار الترويجي</p>
+
+  <form id="registerForm" style="margin-top:20px;">
+    <!-- الاسم واللقب -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+      <div>
+        <label style="font-weight:600; display:block; margin-bottom:4px;">الاسم <span style="color:#dc3545;">*</span></label>
+        <input type="text" id="firstName" placeholder="الاسم" style="width:100%; padding:12px; border:2px solid #e9ecef; border-radius:10px; background:#f8f9fa;">
+      </div>
+      <div>
+        <label style="font-weight:600; display:block; margin-bottom:4px;">اللقب <span style="color:#dc3545;">*</span></label>
+        <input type="text" id="lastName" placeholder="اللقب" style="width:100%; padding:12px; border:2px solid #e9ecef; border-radius:10px; background:#f8f9fa;">
+      </div>
+    </div>
+
+    <!-- الهواتف -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:15px;">
+      <div>
+        <label style="font-weight:600; display:block; margin-bottom:4px;">رقم الهاتف <span style="color:#dc3545;">*</span></label>
+        <input type="tel" id="phone" placeholder="مثال: 0555123456" style="width:100%; padding:12px; border:2px solid #e9ecef; border-radius:10px; background:#f8f9fa;">
+      </div>
+      <div>
+        <label style="font-weight:600; display:block; margin-bottom:4px;">رقم واتساب</label>
+        <input type="tel" id="whatsapp" placeholder="مثال: 0555123456" style="width:100%; padding:12px; border:2px solid #e9ecef; border-radius:10px; background:#f8f9fa;">
+        <div style="font-size:12px; color:#6c757d; margin-top:3px;">اختياري</div>
+      </div>
+    </div>
+
+    <!-- اسم المستخدم -->
+    <div style="margin-top:15px;">
+      <label style="font-weight:600; display:block; margin-bottom:4px;">اسم المستخدم <span style="color:#dc3545;">*</span></label>
+      <input type="text" id="username" placeholder="اختر اسماً فريداً" style="width:100%; padding:12px; border:2px solid #e9ecef; border-radius:10px; background:#f8f9fa;">
+    </div>
+
+    <!-- البريد الإلكتروني -->
+    <div style="margin-top:15px;">
+      <label style="font-weight:600; display:block; margin-bottom:4px;">البريد الإلكتروني <span style="color:#dc3545;">*</span></label>
+      <input type="email" id="email" placeholder="أدخل بريدك الإلكتروني" style="width:100%; padding:12px; border:2px solid #e9ecef; border-radius:10px; background:#f8f9fa;">
+    </div>
+    <div style="margin-top:15px;">
+      <label style="font-weight:600; display:block; margin-bottom:4px;">تأكيد البريد الإلكتروني <span style="color:#dc3545;">*</span></label>
+      <input type="email" id="emailConfirm" placeholder="أعد إدخال البريد الإلكتروني" style="width:100%; padding:12px; border:2px solid #e9ecef; border-radius:10px; background:#f8f9fa;">
+      <div id="emailMatchHint" style="font-size:12px; margin-top:3px;"></div>
+    </div>
+
+    <!-- كلمة المرور -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:15px;">
+      <div>
+        <label style="font-weight:600; display:block; margin-bottom:4px;">كلمة المرور <span style="color:#dc3545;">*</span></label>
+        <input type="password" id="password" placeholder="6 أحرف على الأقل" style="width:100%; padding:12px; border:2px solid #e9ecef; border-radius:10px; background:#f8f9fa;">
+      </div>
+      <div>
+        <label style="font-weight:600; display:block; margin-bottom:4px;">تأكيد كلمة المرور <span style="color:#dc3545;">*</span></label>
+        <input type="password" id="passwordConfirm" placeholder="أعد إدخال كلمة المرور" style="width:100%; padding:12px; border:2px solid #e9ecef; border-radius:10px; background:#f8f9fa;">
+        <div id="passwordMatchHint" style="font-size:12px; margin-top:3px;"></div>
+      </div>
+    </div>
+
+    <!-- رمز الإحالة (تلقائي) -->
+    <div style="margin-top:15px; background:#f8f9fa; padding:12px 16px; border-radius:10px; border:2px dashed #adb5bd;">
+      <label style="font-weight:600; display:block; margin-bottom:4px;">🔗 رمز الإحالة</label>
+      <div style="display:flex; align-items:center; gap:10px; justify-content:center;">
+        <span style="font-family:monospace; font-size:20px; font-weight:700; color:#2563eb;" id="referralCodeDisplay">جاري التحميل...</span>
+        <span style="color:#6c757d;">🔒</span>
+      </div>
+      <input type="hidden" id="referralCode" value="">
+      <div style="font-size:12px; color:#6c757d; text-align:center;">تم إنشاء هذا الرمز تلقائياً وهو فريد لك</div>
+    </div>
+
+    <!-- الموافقة على الشروط -->
+    <div style="display:flex; align-items:flex-start; gap:12px; margin:15px 0; padding:12px 16px; background:#f8f9fa; border-radius:10px; border:1px solid #e9ecef;">
+      <input type="checkbox" id="termsCheck" style="width:20px; height:20px; margin-top:2px; accent-color:#2563eb;">
+      <label for="termsCheck" style="font-size:14px; color:#2c3e50; cursor:pointer;">
+        أوافق على <a href="/terms" style="color:#2563eb; text-decoration:none;">شروط العضوية</a> و <a href="/privacy" style="color:#2563eb; text-decoration:none;">سياسة الخصوصية</a>
+      </label>
+    </div>
+
+    <button type="submit" id="registerBtn" style="width:100%; padding:14px; background:#2563eb; color:white; border:none; border-radius:12px; font-size:18px; font-weight:700; cursor:pointer;">إنشاء الحساب</button>
+    <div id="registerMessage" style="margin-top:12px; padding:10px; border-radius:10px; display:none;"></div>
+  </form>
+
+  <div style="text-align:center; margin-top:18px; font-size:14px; color:#6c757d;">
+    لديك حساب بالفعل؟ <a href="/login" style="color:#2563eb; text-decoration:none; font-weight:600;">سجل الدخول</a>
+  </div>
+</div>
+
+<script>
+  // توليد كود الإحالة
+  function generateReferralCode() {
+    return Math.random().toString(36).substring(2, 8).toUpperCase();
+  }
+
+  // تهيئة رمز الإحالة
+  const urlParams = new URLSearchParams(window.location.search);
+  let refCode = urlParams.get('ref') || generateReferralCode();
+  document.getElementById('referralCode').value = refCode;
+  document.getElementById('referralCodeDisplay').textContent = refCode;
+
+  // التحقق من تطابق البريد الإلكتروني
+  document.getElementById('emailConfirm').addEventListener('input', function() {
+    const email = document.getElementById('email').value;
+    const confirm = this.value;
+    const hint = document.getElementById('emailMatchHint');
+    if (confirm && email !== confirm) {
+      hint.textContent = '❌ البريد الإلكتروني غير متطابق';
+      hint.style.color = '#dc3545';
+    } else if (confirm && email === confirm) {
+      hint.textContent = '✅ البريد الإلكتروني متطابق';
+      hint.style.color = '#22c55e';
+    } else {
+      hint.textContent = '';
+    }
+  });
+
+  // التحقق من تطابق كلمة المرور
+  document.getElementById('passwordConfirm').addEventListener('input', function() {
+    const password = document.getElementById('password').value;
+    const confirm = this.value;
+    const hint = document.getElementById('passwordMatchHint');
+    if (confirm && password !== confirm) {
+      hint.textContent = '❌ كلمة المرور غير متطابقة';
+      hint.style.color = '#dc3545';
+    } else if (confirm && password === confirm) {
+      hint.textContent = '✅ كلمة المرور متطابقة';
+      hint.style.color = '#22c55e';
+    } else {
+      hint.textContent = '';
+    }
+  });
+
+  // معالجة التسجيل
+  document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('registerBtn');
+    const msgDiv = document.getElementById('registerMessage');
+
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const whatsapp = document.getElementById('whatsapp').value.trim();
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const emailConfirm = document.getElementById('emailConfirm').value.trim();
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('passwordConfirm').value;
+    const referralCode = document.getElementById('referralCode').value;
+    const termsChecked = document.getElementById('termsCheck').checked;
+
+    if (!firstName || !lastName || !phone || !username || !email || !emailConfirm || !password || !passwordConfirm) {
+      msgDiv.textContent = '❌ يرجى ملء جميع الحقول المطلوبة.';
+      msgDiv.style.display = 'block';
+      msgDiv.style.background = '#f8d7da';
+      msgDiv.style.color = '#721c24';
+      return;
+    }
+    if (email !== emailConfirm) {
+      msgDiv.textContent = '❌ البريد الإلكتروني غير متطابق.';
+      msgDiv.style.display = 'block';
+      msgDiv.style.background = '#f8d7da';
+      msgDiv.style.color = '#721c24';
+      return;
+    }
+    if (password !== passwordConfirm) {
+      msgDiv.textContent = '❌ كلمة المرور غير متطابقة.';
+      msgDiv.style.display = 'block';
+      msgDiv.style.background = '#f8d7da';
+      msgDiv.style.color = '#721c24';
+      return;
+    }
+    if (password.length < 6) {
+      msgDiv.textContent = '❌ كلمة المرور يجب أن تكون 6 أحرف على الأقل.';
+      msgDiv.style.display = 'block';
+      msgDiv.style.background = '#f8d7da';
+      msgDiv.style.color = '#721c24';
+      return;
+    }
+    if (!termsChecked) {
+      msgDiv.textContent = '❌ يرجى الموافقة على شروط العضوية.';
+      msgDiv.style.display = 'block';
+      msgDiv.style.background = '#f8d7da';
+      msgDiv.style.color = '#721c24';
+      return;
+    }
+
+    // تحديد autoActivate
+    let autoActivate = false;
+    if (urlParams.get('ref')) {
+      try {
+        const resp = await fetch(`/api/auth/referrals/validate/${refCode}`);
+        const data = await resp.json();
+        if (data.valid && data.username === 'slimanepro') autoActivate = true;
+      } catch(e) { /* تجاهل */ }
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'جاري التسجيل...';
+
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username, email, password,
+          full_name: `${firstName} ${lastName}`,
+          phone, whatsapp: whatsapp || phone,
+          referralCode, autoActivate
+        })
+      });
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data.message);
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      msgDiv.textContent = `✅ ${data.message}`;
+      msgDiv.style.display = 'block';
+      msgDiv.style.background = '#d4edda';
+      msgDiv.style.color = '#155724';
+
+      setTimeout(() => window.location.href = '/dashboard', 2000);
+    } catch (error) {
+      msgDiv.textContent = `❌ ${error.message}`;
+      msgDiv.style.display = 'block';
+      msgDiv.style.background = '#f8d7da';
+      msgDiv.style.color = '#721c24';
+      btn.disabled = false;
+      btn.textContent = 'إنشاء الحساب';
+    }
+  });
+</script>
+
+<%- include('partials/footer') %>
