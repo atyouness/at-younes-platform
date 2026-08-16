@@ -422,4 +422,72 @@ router.post('/forgot-password', async (req, res) => {
   }
 });
 
+// ✅ الحصول على بيانات الملف الشخصي
+router.get('/profile', async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ message: 'غير مصرح' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'المستخدم غير موجود' });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error('❌ خطأ في جلب الملف الشخصي:', error);
+    res.status(500).json({ message: 'حدث خطأ في الخادم' });
+  }
+});
+
+// ✅ تحديث بيانات الملف الشخصي
+router.put('/profile', async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) {
+      return res.status(401).json({ message: 'غير مصرح' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+    const userId = decoded.userId;
+
+    const {
+      full_name, profession, birth_date, birth_place, address,
+      phone, whatsapp, national_id, national_id_issue_date, national_id_issue_place,
+      guardian_name, guardian_relation, guardian_birth_date, guardian_birth_place,
+      guardian_national_id, guardian_national_id_issue_date, guardian_national_id_issue_place,
+      heir_name, heir_relation, heir_national_id, heir_phone
+    } = req.body;
+
+    const query = `
+      UPDATE users SET
+        full_name = ?, profession = ?, birth_date = ?, birth_place = ?, address = ?,
+        phone = ?, whatsapp = ?, national_id = ?, national_id_issue_date = ?, national_id_issue_place = ?,
+        guardian_name = ?, guardian_relation = ?, guardian_birth_date = ?, guardian_birth_place = ?,
+        guardian_national_id = ?, guardian_national_id_issue_date = ?, guardian_national_id_issue_place = ?,
+        heir_name = ?, heir_relation = ?, heir_national_id = ?, heir_phone = ?
+      WHERE id = ?
+    `;
+
+    const values = [
+      full_name, profession, birth_date, birth_place, address,
+      phone, whatsapp, national_id, national_id_issue_date, national_id_issue_place,
+      guardian_name, guardian_relation, guardian_birth_date, guardian_birth_place,
+      guardian_national_id, guardian_national_id_issue_date, guardian_national_id_issue_place,
+      heir_name, heir_relation, heir_national_id, heir_phone,
+      userId
+    ];
+
+    await pool.query(query, values);
+
+    res.json({ message: '✅ تم تحديث البيانات بنجاح' });
+  } catch (error) {
+    console.error('❌ خطأ في تحديث الملف الشخصي:', error);
+    res.status(500).json({ message: 'حدث خطأ في الخادم' });
+  }
+});
+
 module.exports = router;
