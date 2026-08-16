@@ -6,10 +6,9 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const path = require('path');
+const path = require('path'); // ✅ تعريف واحد فقط
 const { connectDB } = require('./config/database');
 const User = require('./models/User');
-const path = require('path');
 
 // استيراد المسارات
 const authRoutes = require('./routes/auth');
@@ -23,13 +22,11 @@ const paymentRoutes = require('./routes/payments');
 // ============================================================
 const app = express();
 app.set('trust proxy', 1);
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; // ✅ تعريف واحد فقط
 
 // إعداد محرك القوالب EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
-const PORT = process.env.PORT || 3000;
 
 // ============================================================
 //  إعدادات الأمان والأداء
