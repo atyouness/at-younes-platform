@@ -240,6 +240,8 @@ router.post('/logout', (req, res) => {
 // ============================================================
 //  ✅ الحصول على إحصائيات الإحالات
 // ============================================================
+const query = 'SELECT id, username, email, referral_code, referred_by, full_name, phone, whatsapp, balance, role, is_active, profile_updated_at, ... FROM users WHERE id = ?';
+
 router.get('/referrals/stats', async (req, res) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
