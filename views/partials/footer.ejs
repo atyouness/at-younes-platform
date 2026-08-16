@@ -1,7 +1,42 @@
   </main>
-  <footer>
-    <p>جميع الحقوق محفوظة © 2026 آت يونس تك</p>
+
+  <!-- الفوتر -->
+  <footer class="main-footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h4>آت يونس تك</h4>
+        <p style="color:#adb5bd;">منصة الاستثمار الترويجي الذكي</p>
+      </div>
+      <div class="footer-section">
+        <h4>روابط سريعة</h4>
+        <ul>
+          <li><a href="/">الرئيسية</a></li>
+          <li><a href="/dashboard">لوحة التحكم</a></li>
+          <li><a href="/referrals">شبكة الإحالات</a></li>
+          <li><a href="/profile">حسابي</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4>تواصل معنا</h4>
+        <p style="color:#adb5bd;">📧 info@atyouness.com</p>
+        <p style="color:#adb5bd;">📱 0552 902 921</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>جميع الحقوق محفوظة © 2026 آت يونس تك</p>
+    </div>
   </footer>
+
   <script src="/js/script.js"></script>
+  <script>
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+    }
+  </script>
+  <% if (pageScripts) { %>
+    <%- pageScripts %>
+  <% } %>
 </body>
 </html>
