@@ -57,23 +57,7 @@ app.use('/api/payments', paymentRoutes);
 //  ✅ الصفحات الثابتة
 // ============================================================
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
-});
-
-app.get('/register', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'register.html'));
-});
-
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
-});
-
-app.get('/referrals', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'referrals.html'));
+    res.render('index', { title: 'الصفحة الرئيسية' });
 });
 
 // ============================================================
