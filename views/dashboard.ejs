@@ -1,0 +1,92 @@
+<%- include('partials/header', { title: 'لوحة التحكم | آت يونس تك', user: user }) %>
+
+<div class="dashboard-container">
+  <!-- الإحصائيات السريعة -->
+  <div class="stats-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:15px; margin-bottom:25px;">
+    <div class="stat-card" style="background:white; padding:20px; border-radius:12px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+      <div class="number" style="font-size:28px; font-weight:700; color:#1a2a3a;" id="balance">0.00</div>
+      <div class="label" style="color:#6c757d; font-size:14px;">💰 الرصيد</div>
+    </div>
+    <div class="stat-card" style="background:white; padding:20px; border-radius:12px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+      <div class="number" style="font-size:28px; font-weight:700; color:#1a2a3a;" id="referralsCount">0</div>
+      <div class="label" style="color:#6c757d; font-size:14px;">👥 الإحالات</div>
+    </div>
+    <div class="stat-card" style="background:white; padding:20px; border-radius:12px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+      <div class="number" style="font-size:28px; font-weight:700; color:#1a2a3a;" id="earnings">0</div>
+      <div class="label" style="color:#6c757d; font-size:14px;">📈 الأرباح</div>
+    </div>
+    <div class="stat-card" style="background:white; padding:20px; border-radius:12px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+      <div class="number" style="font-size:28px; font-weight:700; color:#1a2a3a;" id="rank">مبتدئ</div>
+      <div class="label" style="color:#6c757d; font-size:14px;">🏆 الرتبة</div>
+    </div>
+  </div>
+
+  <!-- الروابط السريعة -->
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px; margin-bottom:25px;">
+    <a href="/referrals" style="background:white; padding:14px; border-radius:12px; text-align:center; text-decoration:none; color:#1a2a3a; font-weight:500; box-shadow:0 2px 8px rgba(0,0,0,0.04); border:1px solid #e9ecef;">👥 شبكة الإحالات</a>
+    <a href="/profile" style="background:white; padding:14px; border-radius:12px; text-align:center; text-decoration:none; color:#1a2a3a; font-weight:500; box-shadow:0 2px 8px rgba(0,0,0,0.04); border:1px solid #e9ecef;">👤 حسابي</a>
+    <a href="#" style="background:white; padding:14px; border-radius:12px; text-align:center; text-decoration:none; color:#1a2a3a; font-weight:500; box-shadow:0 2px 8px rgba(0,0,0,0.04); border:1px solid #e9ecef;">📋 المهام</a>
+    <a href="#" style="background:white; padding:14px; border-radius:12px; text-align:center; text-decoration:none; color:#1a2a3a; font-weight:500; box-shadow:0 2px 8px rgba(0,0,0,0.04); border:1px solid #e9ecef;">📈 الأرباح</a>
+  </div>
+
+  <!-- المهام اليومية -->
+  <div style="background:#f8f9fa; border-radius:16px; padding:18px 20px; margin-bottom:20px; border:1px solid #e9ecef;">
+    <h2 style="font-size:18px; font-weight:700; color:#1a2a3a; margin:0 0 12px 0;">📋 المهام اليومية</h2>
+    <div id="dailyTasks">
+      <p style="color:#6c757d;">جاري تحميل المهام...</p>
+    </div>
+  </div>
+
+  <!-- سجل النشاطات -->
+  <div style="background:#f8f9fa; border-radius:16px; padding:18px 20px; border:1px solid #e9ecef;">
+    <h2 style="font-size:18px; font-weight:700; color:#1a2a3a; margin:0 0 12px 0;">📜 سجل النشاطات</h2>
+    <div id="activityLog">
+      <p style="color:#6c757d;">لا توجد نشاطات حتى الآن.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // تحميل بيانات لوحة التحكم
+  document.addEventListener('DOMContentLoaded', function() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) return;
+
+    // تحديث اسم المستخدم
+    document.querySelector('.welcome').textContent = `مرحباً، ${user.username} 👋`;
+    document.getElementById('rank').textContent = user.role || 'مبتدئ';
+
+    // تحميل الإحالات
+    fetch('/api/auth/referrals/stats', {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('referralsCount').textContent = data.count || 0;
+    })
+    .catch(err => console.error('خطأ في تحميل الإحالات:', err));
+
+    // المهام اليومية
+    const tasks = [
+      { name: '📱 مشاركة منشور على فيسبوك', points: 10 },
+      { name: '🐦 تغريدة عن المنصة', points: 5 },
+      { name: '📢 دعوة صديق جديد', points: 15 }
+    ];
+    document.getElementById('dailyTasks').innerHTML = tasks.map(task => `
+      <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f0f0f0;">
+        <span>${task.name}</span>
+        <span style="color:#2563eb; font-weight:600;">${task.points} نقطة</span>
+      </div>
+    `).join('');
+
+    // سجل النشاطات
+    document.getElementById('activityLog').innerHTML = `
+      <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #f0f0f0;">
+        <span>🔑 تم تسجيل الدخول</span>
+        <span style="color:#6c757d; font-size:13px;">${new Date().toLocaleDateString('ar-EG')}</span>
+      </div>
+    `;
+  });
+</script>
+
+<%- include('partials/footer', { pageScripts: '<script src="/js/dashboard.js"></script>' }) %>
