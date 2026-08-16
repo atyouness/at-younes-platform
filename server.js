@@ -75,8 +75,8 @@ app.get('/profile', (req, res) => res.render('profile', { title: 'حسابي' })
 // ============================================================
 //  ✅ معالج الأخطاء
 // ============================================================
-const errorHandler = require('./middleware/errorHandler');
-app.use(errorHandler);
+// const errorHandler = require('./middleware/errorHandler');
+// app.use(errorHandler);
 
 // ============================================================
 //  ✅ بدء الخادم
