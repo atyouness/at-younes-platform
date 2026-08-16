@@ -1,9 +1,12 @@
-<%- include('partials/header', { title: 'الرئيسية | آت يونس تك' }) %>
+<%- include('partials/header', { title: 'الرئيسية | آت يونس تك', user: user }) %>
 
-<div class="hero">
-  <h1>مرحباً بكم في آت يونس تك</h1>
-  <p>منصة الاستثمار الترويجي الذكي</p>
-  <a href="/register" class="btn">انضم الآن</a>
+<div style="text-align: center; padding: 40px 20px;">
+  <h1 style="font-size: 36px; color: #1a2a3a;">مرحباً بكم في <span style="color:#2563eb;">آت يونس تك</span></h1>
+  <p style="font-size: 18px; color: #4b5563; max-width: 600px; margin: 20px auto;">المنصة الاستثمارية الترويجية الذكية التي تربط بين الحلول التكنولوجية والفرص الاستثمارية.</p>
+  <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 30px;">
+    <a href="/register" style="background: #2563eb; color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 600;">انضم الآن</a>
+    <a href="/login" style="background: #e9ecef; color: #2c3e50; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 600;">تسجيل الدخول</a>
+  </div>
 </div>
 
 <%- include('partials/footer') %>
