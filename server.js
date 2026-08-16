@@ -79,6 +79,57 @@ app.get('/profile', (req, res) => res.render('profile', { title: 'حسابي' })
 // app.use(errorHandler);
 
 // ============================================================
+//  ✅ الصفحات (باستخدام EJS)
+// ============================================================
+// الصفحة الرئيسية
+app.get('/', (req, res) => {
+  res.render('index', { 
+    title: 'آت يونس تك - منصة الاستثمار الترويجي',
+    user: null
+  });
+});
+
+// لوحة التحكم
+app.get('/dashboard', (req, res) => {
+  res.render('dashboard', { 
+    title: 'لوحة التحكم | آت يونس تك',
+    user: null
+  });
+});
+
+// صفحة التسجيل
+app.get('/register', (req, res) => {
+  res.render('register', { 
+    title: 'التسجيل | آت يونس تك',
+    user: null
+  });
+});
+
+// صفحة تسجيل الدخول
+app.get('/login', (req, res) => {
+  res.render('login', { 
+    title: 'تسجيل الدخول | آت يونس تك',
+    user: null
+  });
+});
+
+// صفحة شبكة الإحالات
+app.get('/referrals', (req, res) => {
+  res.render('referrals', { 
+    title: 'شبكة الإحالات | آت يونس تك',
+    user: null
+  });
+});
+
+// صفحة الحساب الشخصي
+app.get('/profile', (req, res) => {
+  res.render('profile', { 
+    title: 'حسابي | آت يونس تك',
+    user: null
+  });
+});
+
+// ============================================================
 //  ✅ بدء الخادم
 // ============================================================
 app.listen(PORT, '0.0.0.0', () => {
