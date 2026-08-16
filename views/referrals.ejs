@@ -1,0 +1,227 @@
+<%- include('partials/header', { title: 'شبكة الإحالات | آت يونس تك', user: user }) %>
+
+<div class="referrals-container">
+  <!-- رابط الإحالة -->
+  <div style="background:#f8f9fa; border-radius:14px; padding:14px 18px; margin-bottom:20px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:10px; border:2px dashed #d1d5db;">
+    <span style="font-weight:600; color:#2c3e50; font-size:14px;">🔗 رابط الإحالة الخاص بك</span>
+    <code id="referralLink" style="background:white; padding:6px 16px; border-radius:10px; font-size:14px; font-family:monospace; color:#2563eb; word-break:break-all; flex:1; min-width:180px; border:1px solid #e9ecef; direction:ltr; text-align:left;">جاري التحميل...</code>
+    <button id="copyReferralBtn" style="background:#2563eb; color:white; border:none; padding:8px 22px; border-radius:30px; cursor:pointer; font-size:14px; font-weight:600;">📋 نسخ الرابط</button>
+  </div>
+  <div id="copyMessage" style="margin-top:8px; padding:10px 16px; border-radius:10px; display:none; font-size:14px;"></div>
+
+  <!-- الإحصائيات السريعة -->
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:10px; margin-bottom:20px;">
+    <div style="background:#f8f9fa; padding:12px; border-radius:12px; text-align:center; border:1px solid #e9ecef;">
+      <div style="font-size:24px; font-weight:800; color:#1a2a3a;" id="totalReferrals">0</div>
+      <div style="font-size:12px; color:#6c757d;">إجمالي الإحالات</div>
+    </div>
+    <div style="background:#f8f9fa; padding:12px; border-radius:12px; text-align:center; border:1px solid #e9ecef;">
+      <div style="font-size:24px; font-weight:800; color:#1a2a3a;" id="totalTeam">0</div>
+      <div style="font-size:12px; color:#6c757d;">حجم الفريق</div>
+    </div>
+    <div style="background:#f8f9fa; padding:12px; border-radius:12px; text-align:center; border:1px solid #e9ecef;">
+      <div style="font-size:24px; font-weight:800; color:#1a2a3a;" id="userRank">👤 عضو</div>
+      <div style="font-size:12px; color:#6c757d;">الرتبة</div>
+    </div>
+    <div style="background:#f8f9fa; padding:12px; border-radius:12px; text-align:center; border:1px solid #e9ecef;">
+      <div style="font-size:24px; font-weight:800; color:#1a2a3a;" id="commissionEarned">0</div>
+      <div style="font-size:12px; color:#6c757d;">العمولات</div>
+    </div>
+  </div>
+
+  <!-- شريط البحث والتصفية -->
+  <div style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:20px; align-items:center; background:#f8f9fa; padding:12px 16px; border-radius:14px; border:1px solid #e9ecef;">
+    <input type="text" id="searchInput" placeholder="🔍 بحث حسب الاسم، اسم المستخدم، الهاتف..." style="flex:2; min-width:180px; padding:10px 16px; border:2px solid #e9ecef; border-radius:30px; font-size:14px; font-family:inherit; background:white; transition:all 0.3s; color:#1a2a3a;">
+    <select id="rankFilter" style="padding:10px 16px; border:2px solid #e9ecef; border-radius:30px; font-size:14px; font-family:inherit; background:white; cursor:pointer; min-width:130px;">
+      <option value="all">جميع الرتب</option>
+      <option value="قائد">🎖️ قائد</option>
+      <option value="نقيب">🏅 نقيب</option>
+      <option value="عضو مميز">⭐ عضو مميز</option>
+      <option value="عضو">👤 عضو</option>
+    </select>
+    <button id="sortBtn" style="background:#2563eb; color:white; border:none; padding:8px 18px; border-radius:30px; cursor:pointer; font-size:13px; font-weight:600;">🔤 ترتيب أبجدي</button>
+    <button id="clearBtn" style="background:#dc3545; color:white; border:none; padding:8px 18px; border-radius:30px; cursor:pointer; font-size:13px; font-weight:600;">✖ مسح</button>
+  </div>
+
+  <!-- المستويات -->
+  <div style="background:#f8f9fa; border-radius:16px; padding:16px 18px; margin-top:16px; border:1px solid #e9ecef;">
+    <h2 style="font-size:17px; font-weight:700; color:#1a2a3a; margin:0 0 12px 0;">🔗 المباشرين <span style="font-size:12px; padding:2px 14px; border-radius:30px; background:#2563eb; color:white; font-weight:600;">المستوى الأول</span></h2>
+    <div id="level1Container"><p style="color:#6c757d; text-align:center; padding:30px 0;">لا يوجد أعضاء في هذا المستوى</p></div>
+  </div>
+
+  <div style="background:#f8f9fa; border-radius:16px; padding:16px 18px; margin-top:16px; border:1px solid #e9ecef;">
+    <h2 style="font-size:17px; font-weight:700; color:#1a2a3a; margin:0 0 12px 0;">🔹 المستوى الثاني <span style="font-size:12px; padding:2px 14px; border-radius:30px; background:#7c3aed; color:white; font-weight:600;">المستوى الثاني</span></h2>
+    <div id="level2Container"><p style="color:#6c757d; text-align:center; padding:30px 0;">لا يوجد أعضاء في هذا المستوى</p></div>
+  </div>
+
+  <div style="background:#f8f9fa; border-radius:16px; padding:16px 18px; margin-top:16px; border:1px solid #e9ecef;">
+    <h2 style="font-size:17px; font-weight:700; color:#1a2a3a; margin:0 0 12px 0;">🔸 المستوى الثالث <span style="font-size:12px; padding:2px 14px; border-radius:30px; background:#dc2626; color:white; font-weight:600;">المستوى الثالث</span></h2>
+    <div id="level3Container"><p style="color:#6c757d; text-align:center; padding:30px 0;">لا يوجد أعضاء في هذا المستوى</p></div>
+  </div>
+</div>
+
+<script>
+  // بيانات الإحالات
+  let referralData = { level1: [], level2: [], level3: [] };
+  let activeFilter = 'all', searchTerm = '', sortAsc = true;
+
+  function maskPhone(phone, level) {
+    if (!phone) return 'غير متوفر';
+    if (level === 1) return phone;
+    if (phone.length >= 8) return phone.slice(0,4) + '****' + phone.slice(-2);
+    return phone;
+  }
+
+  function getRank(teamSize) {
+    if (teamSize >= 20) return 'قائد';
+    if (teamSize >= 10) return 'نقيب';
+    if (teamSize >= 5) return 'عضو مميز';
+    return 'عضو';
+  }
+
+  function getRankEmoji(rank) {
+    if (rank === 'قائد') return '🎖️';
+    if (rank === 'نقيب') return '🏅';
+    if (rank === 'عضو مميز') return '⭐';
+    return '👤';
+  }
+
+  function renderUserRow(user, level) {
+    const rank = getRank(user.teamSize || 0);
+    return `
+      <div style="background:white; border-radius:14px; padding:10px 16px; margin-bottom:8px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; border-right:5px solid ${level===1?'#2563eb':level===2?'#7c3aed':'#dc2626'}; box-shadow:0 2px 8px rgba(0,0,0,0.03); transition:all 0.25s ease; gap:6px 12px;">
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px 16px; flex:2; min-width:160px;">
+          <span style="font-weight:700; color:#1a2a3a; font-size:15px;">${user.full_name || user.username}</span>
+          <span style="color:#6c757d; font-size:13px;">@${user.username}</span>
+          <span style="color:#6c757d; font-size:13px; direction:ltr; background:#f1f3f5; padding:0 10px; border-radius:6px;">📱 ${maskPhone(user.phone, level)}</span>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; align-items:center; gap:12px 18px;">
+          <span style="display:flex; align-items:center; gap:4px; font-size:14px;"><span style="font-weight:700; color:#2c3e50;">${user.teamSize || 0}</span><span style="color:#6c757d; font-size:12px;">👥 الفريق</span></span>
+          <span style="display:flex; align-items:center; gap:4px; font-size:14px;"><span style="font-weight:700; color:#2c3e50;">${user.referralCount || 0}</span><span style="color:#6c757d; font-size:12px;">📌 إحالات</span></span>
+          <span style="background:#f1c40f; color:#2c3e50; padding:2px 14px; border-radius:30px; font-size:12px; font-weight:700;">${getRankEmoji(rank)} ${rank}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderLevel(containerId, users, level) {
+    const container = document.getElementById(containerId);
+    if (!users || users.length === 0) {
+      container.innerHTML = '<p style="color:#6c757d; text-align:center; padding:30px 0;">لا يوجد أعضاء في هذا المستوى</p>';
+      return;
+    }
+    container.innerHTML = users.map(u => renderUserRow(u, level)).join('');
+  }
+
+  function filterAndSort(users) {
+    if (!users) return [];
+    let filtered = users;
+    if (activeFilter !== 'all') {
+      filtered = filtered.filter(u => getRank(u.teamSize || 0) === activeFilter);
+    }
+    if (searchTerm.trim()) {
+      const term = searchTerm.trim().toLowerCase();
+      filtered = filtered.filter(u => {
+        const name = (u.full_name || u.username || '').toLowerCase();
+        const username = (u.username || '').toLowerCase();
+        const phone = (u.phone || '').toLowerCase();
+        return name.includes(term) || username.includes(term) || phone.includes(term);
+      });
+    }
+    filtered.sort((a, b) => {
+      const nameA = a.full_name || a.username || '';
+      const nameB = b.full_name || b.username || '';
+      return sortAsc ? nameA.localeCompare(nameB, 'ar') : nameB.localeCompare(nameA, 'ar');
+    });
+    return filtered;
+  }
+
+  function renderAll() {
+    renderLevel('level1Container', filterAndSort(referralData.level1), 1);
+    renderLevel('level2Container', filterAndSort(referralData.level2), 2);
+    renderLevel('level3Container', filterAndSort(referralData.level3), 3);
+  }
+
+  // تحميل البيانات
+  async function loadReferralTree() {
+    const token = localStorage.getItem('token');
+    if (!token) { window.location.href = '/login'; return; }
+    try {
+      const res = await fetch('/api/auth/referrals/tree', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.status === 401) { localStorage.removeItem('token'); localStorage.removeItem('user'); window.location.href = '/login'; return; }
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      document.getElementById('totalReferrals').textContent = data.totalReferrals || 0;
+      document.getElementById('totalTeam').textContent = data.totalTeam || 0;
+      document.getElementById('userRank').textContent = data.userRank || '👤 عضو';
+      document.getElementById('commissionEarned').textContent = (data.totalReferrals || 0) * 5;
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user && user.referralCode) {
+        document.getElementById('referralLink').textContent = `${window.location.origin}/register.html?ref=${user.referralCode}`;
+      }
+      referralData = { level1: data.level1 || [], level2: data.level2 || [], level3: data.level3 || [] };
+      renderAll();
+    } catch(e) {
+      document.getElementById('level1Container').innerHTML = '<p style="color:#dc3545; text-align:center; padding:30px 0;">حدث خطأ في تحميل البيانات</p>';
+      document.getElementById('level2Container').innerHTML = '<p style="color:#dc3545; text-align:center; padding:30px 0;">حدث خطأ في تحميل البيانات</p>';
+      document.getElementById('level3Container').innerHTML = '<p style="color:#dc3545; text-align:center; padding:30px 0;">حدث خطأ في تحميل البيانات</p>';
+    }
+  }
+
+  // نسخ الرابط
+  document.getElementById('copyReferralBtn').addEventListener('click', function() {
+    const link = document.getElementById('referralLink').textContent;
+    if (!link || link === 'جاري التحميل...') return;
+    navigator.clipboard.writeText(link).then(() => {
+      const msg = document.getElementById('copyMessage');
+      msg.textContent = '✅ تم نسخ رابط الإحالة بنجاح!';
+      msg.style.display = 'block';
+      msg.style.background = '#d4edda';
+      msg.style.color = '#155724';
+      setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    }).catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = link;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      const msg = document.getElementById('copyMessage');
+      msg.textContent = '✅ تم نسخ رابط الإحالة بنجاح!';
+      msg.style.display = 'block';
+      msg.style.background = '#d4edda';
+      msg.style.color = '#155724';
+      setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    });
+  });
+
+  // أحداث البحث والتصفية
+  document.getElementById('searchInput').addEventListener('input', function() {
+    searchTerm = this.value;
+    renderAll();
+  });
+  document.getElementById('rankFilter').addEventListener('change', function() {
+    activeFilter = this.value;
+    renderAll();
+  });
+  document.getElementById('sortBtn').addEventListener('click', function() {
+    sortAsc = !sortAsc;
+    this.textContent = sortAsc ? '🔤 ترتيب أبجدي (تصاعدي)' : '🔤 ترتيب أبجدي (تنازلي)';
+    renderAll();
+  });
+  document.getElementById('clearBtn').addEventListener('click', function() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('rankFilter').value = 'all';
+    searchTerm = '';
+    activeFilter = 'all';
+    sortAsc = true;
+    document.getElementById('sortBtn').textContent = '🔤 ترتيب أبجدي';
+    renderAll();
+  });
+
+  document.addEventListener('DOMContentLoaded', loadReferralTree);
+</script>
+
+<%- include('partials/footer') %>
