@@ -1,0 +1,226 @@
+<%- include('partials/header', { title: 'حسابي | آت يونس تك', user: user }) %>
+
+<div style="max-width:900px; margin:20px auto; background:white; padding:25px 28px; border-radius:24px; box-shadow:0 4px 20px rgba(0,0,0,0.06);">
+  <h2 style="margin:0 0 20px 0; font-size:24px; color:#1a2a3a;">👤 حسابي</h2>
+
+  <!-- حالة الحساب -->
+  <div style="background:#f8f9fa; border-radius:12px; padding:12px 16px; margin-bottom:20px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; border:1px solid #e9ecef;">
+    <div><span style="font-weight:600;">🔐 حالة الحساب:</span> <span id="accountStatus" style="font-weight:700; padding:4px 14px; border-radius:30px; color:white; background:#22c55e; display:inline-block; margin-right:8px;">مفعل</span></div>
+    <div><span style="color:#6c757d; font-size:14px;">آخر تحديث: <span id="profileUpdatedAt">-</span></span></div>
+  </div>
+
+  <form id="profileForm">
+    <!-- القسم 1: البيانات الأساسية -->
+    <div style="background:#f8f9fa; border-radius:16px; padding:18px 20px; margin-bottom:20px; border:1px solid #e9ecef;">
+      <h3 style="font-size:17px; font-weight:700; color:#1a2a3a; margin:0 0 14px 0;">📋 البيانات الأساسية</h3>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px 16px;">
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">الاسم <span style="color:#dc3545;">*</span></label><input type="text" id="full_name" placeholder="الاسم الكامل" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">اسم المستخدم</label><input type="text" id="username" disabled style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:#f1f3f5; color:#6c757d;"></div>
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">البريد الإلكتروني</label><input type="email" id="email" disabled style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:#f1f3f5; color:#6c757d;"></div>
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">المهنة</label><input type="text" id="profession" placeholder="المهنة (اختياري)" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">تاريخ الميلاد</label><input type="date" id="birth_date" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">مكان الميلاد</label><input type="text" id="birth_place" placeholder="المدينة، الولاية" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+      </div>
+      <div style="margin-top:10px;"><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">العنوان السكني</label><textarea id="address" placeholder="العنوان الكامل (الشارع، الحي، البلدية، الولاية)" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; min-height:60px; background:white;"></textarea></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px 16px; margin-top:10px;">
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">رقم الهاتف <span style="color:#dc3545;">*</span></label><input type="tel" id="phone" placeholder="مثال: 0555123456" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">رقم واتساب</label><input type="tel" id="whatsapp" placeholder="مثال: 0555123456" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+      </div>
+    </div>
+
+    <!-- القسم 2: بيانات الهوية الرسمية -->
+    <div style="background:#f8f9fa; border-radius:16px; padding:18px 20px; margin-bottom:20px; border:1px solid #e9ecef;">
+      <h3 style="font-size:17px; font-weight:700; color:#1a2a3a; margin:0 0 14px 0;">🪪 بيانات الهوية الرسمية</h3>
+      <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">رقم بطاقة التعريف الوطنية <span style="color:#dc3545;">*</span></label><input type="text" id="national_id" placeholder="رقم البطاقة" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px 16px; margin-top:10px;">
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">تاريخ الإصدار</label><input type="date" id="national_id_issue_date" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">جهة الإصدار</label><input type="text" id="national_id_issue_place" placeholder="المدينة، الولاية" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+      </div>
+    </div>
+
+    <!-- القسم 3: الولي الشرعي -->
+    <div style="background:#f8f9fa; border-radius:16px; padding:18px 20px; margin-bottom:20px; border:1px solid #e9ecef;">
+      <h3 style="font-size:17px; font-weight:700; color:#1a2a3a; margin:0 0 14px 0;">👨‍👦 الولي الشرعي <span style="font-size:12px; color:#6c757d; font-weight:300;">(للمستخدمين أقل من 18 سنة)</span></h3>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px 16px;">
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">اسم ولقب الولي</label><input type="text" id="guardian_name" placeholder="الاسم الكامل" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">الصفة</label><select id="guardian_relation" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"><option value="">اختر...</option><option value="أب">أب</option><option value="أم">أم</option><option value="وصي">وصي</option></select></div>
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">تاريخ ميلاد الولي</label><input type="date" id="guardian_birth_date" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">مكان ميلاد الولي</label><input type="text" id="guardian_birth_place" placeholder="المدينة، الولاية" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">رقم بطاقة الولي</label><input type="text" id="guardian_national_id" placeholder="رقم البطاقة" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">جهة إصدار بطاقة الولي</label><input type="text" id="guardian_national_id_issue_place" placeholder="المدينة، الولاية" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+        <div style="grid-column:1/3;"><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">تاريخ إصدار بطاقة الولي</label><input type="date" id="guardian_national_id_issue_date" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+      </div>
+    </div>
+
+    <!-- القسم 4: الوريث -->
+    <div style="background:#f8f9fa; border-radius:16px; padding:18px 20px; margin-bottom:20px; border:1px solid #e9ecef;">
+      <h3 style="font-size:17px; font-weight:700; color:#1a2a3a; margin:0 0 14px 0;">👨‍👩‍👧 الوريث / المستفيد المسمّى <span style="font-size:12px; color:#6c757d; font-weight:300;">(للتواصل عند اللزوم)</span></h3>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px 16px;">
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">اسم ولقب الوريث</label><input type="text" id="heir_name" placeholder="الاسم الكامل" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">صلة القرابة</label><input type="text" id="heir_relation" placeholder="مثال: زوج، ابن، أخت" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">رقم بطاقة الوريث</label><input type="text" id="heir_national_id" placeholder="رقم البطاقة" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+        <div><label style="font-weight:600; font-size:13px; color:#2c3e50; display:block; margin-bottom:4px;">هاتف الوريث</label><input type="tel" id="heir_phone" placeholder="رقم الهاتف" style="width:100%; padding:10px 14px; border:2px solid #e9ecef; border-radius:10px; font-size:14px; background:white;"></div>
+      </div>
+    </div>
+
+    <button type="submit" id="saveBtn" style="width:100%; padding:14px; background:#2563eb; color:white; border:none; border-radius:14px; font-size:18px; font-weight:700; cursor:pointer; transition:all 0.3s;">💾 حفظ التغييرات</button>
+    <div id="profileMessage" style="margin-top:12px; padding:10px; border-radius:10px; display:none;"></div>
+  </form>
+
+  <!-- روابط إدارة الحساب -->
+  <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:16px; padding-top:16px; border-top:2px solid #e9ecef;">
+    <a id="resendActivationLink" style="display:none; color:#2563eb; text-decoration:none; font-weight:500; font-size:14px;">📧 إعادة إرسال رابط التفعيل</a>
+    <a href="#" style="color:#2563eb; text-decoration:none; font-weight:500; font-size:14px;">🔒 تغيير كلمة المرور</a>
+    <a href="#" style="color:#2563eb; text-decoration:none; font-weight:500; font-size:14px;">🔄 نسيت كلمة المرور</a>
+  </div>
+</div>
+
+<script>
+  // تحميل بيانات الملف الشخصي
+  async function loadProfile() {
+    const token = localStorage.getItem('token');
+    if (!token) { window.location.href = '/login'; return; }
+    try {
+      const res = await fetch('/api/auth/profile', { headers: { 'Authorization': `Bearer ${token}` } });
+      if (res.status === 401) { localStorage.removeItem('token'); localStorage.removeItem('user'); window.location.href = '/login'; return; }
+      if (!res.ok) throw new Error();
+      const user = await res.json();
+
+      document.getElementById('full_name').value = user.full_name || '';
+      document.getElementById('username').value = user.username || '';
+      document.getElementById('email').value = user.email || '';
+      document.getElementById('profession').value = user.profession || '';
+      document.getElementById('birth_date').value = user.birth_date || '';
+      document.getElementById('birth_place').value = user.birth_place || '';
+      document.getElementById('address').value = user.address || '';
+      document.getElementById('phone').value = user.phone || '';
+      document.getElementById('whatsapp').value = user.whatsapp || '';
+      document.getElementById('national_id').value = user.national_id || '';
+      document.getElementById('national_id_issue_date').value = user.national_id_issue_date || '';
+      document.getElementById('national_id_issue_place').value = user.national_id_issue_place || '';
+      document.getElementById('guardian_name').value = user.guardian_name || '';
+      document.getElementById('guardian_relation').value = user.guardian_relation || '';
+      document.getElementById('guardian_birth_date').value = user.guardian_birth_date || '';
+      document.getElementById('guardian_birth_place').value = user.guardian_birth_place || '';
+      document.getElementById('guardian_national_id').value = user.guardian_national_id || '';
+      document.getElementById('guardian_national_id_issue_date').value = user.guardian_national_id_issue_date || '';
+      document.getElementById('guardian_national_id_issue_place').value = user.guardian_national_id_issue_place || '';
+      document.getElementById('heir_name').value = user.heir_name || '';
+      document.getElementById('heir_relation').value = user.heir_relation || '';
+      document.getElementById('heir_national_id').value = user.heir_national_id || '';
+      document.getElementById('heir_phone').value = user.heir_phone || '';
+
+      // حالة الحساب
+      const statusSpan = document.getElementById('accountStatus');
+      if (user.is_active) {
+        statusSpan.textContent = '✅ مفعل';
+        statusSpan.style.background = '#22c55e';
+      } else {
+        statusSpan.textContent = '⏳ غير مفعل';
+        statusSpan.style.background = '#dc3545';
+        document.getElementById('resendActivationLink').style.display = 'inline-flex';
+      }
+      if (user.profile_updated_at) {
+        const d = new Date(user.profile_updated_at);
+        document.getElementById('profileUpdatedAt').textContent = d.toLocaleDateString('ar-EG') + ' ' + d.toLocaleTimeString('ar-EG', { hour:'2-digit', minute:'2-digit' });
+      }
+    } catch(e) {
+      document.getElementById('profileMessage').textContent = '❌ حدث خطأ في تحميل البيانات';
+      document.getElementById('profileMessage').style.display = 'block';
+      document.getElementById('profileMessage').style.background = '#f8d7da';
+      document.getElementById('profileMessage').style.color = '#721c24';
+    }
+  }
+
+  // حفظ البيانات
+  document.getElementById('profileForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('saveBtn');
+    const msgDiv = document.getElementById('profileMessage');
+    btn.disabled = true;
+    btn.textContent = 'جاري الحفظ...';
+
+    const data = {
+      full_name: document.getElementById('full_name').value.trim(),
+      profession: document.getElementById('profession').value.trim(),
+      birth_date: document.getElementById('birth_date').value,
+      birth_place: document.getElementById('birth_place').value.trim(),
+      address: document.getElementById('address').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      whatsapp: document.getElementById('whatsapp').value.trim(),
+      national_id: document.getElementById('national_id').value.trim(),
+      national_id_issue_date: document.getElementById('national_id_issue_date').value,
+      national_id_issue_place: document.getElementById('national_id_issue_place').value.trim(),
+      guardian_name: document.getElementById('guardian_name').value.trim(),
+      guardian_relation: document.getElementById('guardian_relation').value,
+      guardian_birth_date: document.getElementById('guardian_birth_date').value,
+      guardian_birth_place: document.getElementById('guardian_birth_place').value.trim(),
+      guardian_national_id: document.getElementById('guardian_national_id').value.trim(),
+      guardian_national_id_issue_date: document.getElementById('guardian_national_id_issue_date').value,
+      guardian_national_id_issue_place: document.getElementById('guardian_national_id_issue_place').value.trim(),
+      heir_name: document.getElementById('heir_name').value.trim(),
+      heir_relation: document.getElementById('heir_relation').value.trim(),
+      heir_national_id: document.getElementById('heir_national_id').value.trim(),
+      heir_phone: document.getElementById('heir_phone').value.trim()
+    };
+
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch('/api/auth/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(data)
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.message);
+      msgDiv.textContent = '✅ تم حفظ البيانات بنجاح!';
+      msgDiv.style.display = 'block';
+      msgDiv.style.background = '#d4edda';
+      msgDiv.style.color = '#155724';
+      // تحديث localStorage
+      const user = JSON.parse(localStorage.getItem('user'));
+      user.full_name = data.full_name;
+      user.phone = data.phone;
+      user.whatsapp = data.whatsapp;
+      localStorage.setItem('user', JSON.stringify(user));
+    } catch(err) {
+      msgDiv.textContent = `❌ ${err.message}`;
+      msgDiv.style.display = 'block';
+      msgDiv.style.background = '#f8d7da';
+      msgDiv.style.color = '#721c24';
+    }
+    btn.disabled = false;
+    btn.textContent = '💾 حفظ التغييرات';
+  });
+
+  // إعادة إرسال التفعيل
+  document.getElementById('resendActivationLink').addEventListener('click', async function(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    if (!email) return;
+    try {
+      const res = await fetch('/api/auth/resend-activation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+      const msgDiv = document.getElementById('profileMessage');
+      if (!res.ok) throw new Error(data.message);
+      msgDiv.textContent = '✅ تم إعادة إرسال رابط التفعيل!';
+      msgDiv.style.display = 'block';
+      msgDiv.style.background = '#d4edda';
+      msgDiv.style.color = '#155724';
+    } catch(err) {
+      const msgDiv = document.getElementById('profileMessage');
+      msgDiv.textContent = `❌ ${err.message}`;
+      msgDiv.style.display = 'block';
+      msgDiv.style.background = '#f8d7da';
+      msgDiv.style.color = '#721c24';
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', loadProfile);
+</script>
+
+<%- include('partials/footer') %>
