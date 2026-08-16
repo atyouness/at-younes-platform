@@ -6,7 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const path = require('path'); // ✅ تعريف واحد فقط
+const path = require('path');
 const { connectDB } = require('./config/database');
 const User = require('./models/User');
 
@@ -22,7 +22,7 @@ const paymentRoutes = require('./routes/payments');
 // ============================================================
 const app = express();
 app.set('trust proxy', 1);
-const PORT = process.env.PORT || 3000; // ✅ تعريف واحد فقط
+const PORT = process.env.PORT || 3000;
 
 // إعداد محرك القوالب EJS
 app.set('view engine', 'ejs');
