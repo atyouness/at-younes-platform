@@ -18,14 +18,17 @@ const paymentRoutes = require('./routes/payments');
 // إنشاء تطبيق Express
 const app = express();
 app.set('trust proxy', 1);
+
+// إعداد محرك القوالب EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 const PORT = process.env.PORT || 3000;
 
 // إعدادات الأمان والأداء
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 
 // تحديد عدد الطلبات
@@ -54,10 +57,54 @@ app.use('/api/referrals', referralRoutes);
 app.use('/api/payments', paymentRoutes);
 
 // ============================================================
-//  ✅ الصفحات الثابتة
+//  ✅ الصفحات (باستخدام EJS)
 // ============================================================
+// الصفحة الرئيسية
 app.get('/', (req, res) => {
-    res.render('index', { title: 'الصفحة الرئيسية' });
+  res.render('index', { 
+    title: 'آت يونس تك - منصة الاستثمار الترويجي',
+    user: null
+  });
+});
+
+// لوحة التحكم
+app.get('/dashboard', (req, res) => {
+  res.render('dashboard', { 
+    title: 'لوحة التحكم | آت يونس تك',
+    user: null
+  });
+});
+
+// صفحة التسجيل
+app.get('/register', (req, res) => {
+  res.render('register', { 
+    title: 'التسجيل | آت يونس تك',
+    user: null
+  });
+});
+
+// صفحة تسجيل الدخول
+app.get('/login', (req, res) => {
+  res.render('login', { 
+    title: 'تسجيل الدخول | آت يونس تك',
+    user: null
+  });
+});
+
+// صفحة شبكة الإحالات
+app.get('/referrals', (req, res) => {
+  res.render('referrals', { 
+    title: 'شبكة الإحالات | آت يونس تك',
+    user: null
+  });
+});
+
+// صفحة الحساب الشخصي
+app.get('/profile', (req, res) => {
+  res.render('profile', { 
+    title: 'حسابي | آت يونس تك',
+    user: null
+  });
 });
 
 // ============================================================
