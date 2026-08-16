@@ -1,6 +1,11 @@
 // ============================================================
 //  استيراد المكتبات والإعدادات
 // ============================================================
+// اختبار EJS
+app.get('/test-ejs', (req, res) => {
+  res.render('test', { message: '✅ EJS يعمل بنجاح!' });
+});
+
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
