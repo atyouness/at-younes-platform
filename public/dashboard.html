@@ -42,6 +42,22 @@
       padding: 6px 16px; border-radius: 8px; cursor: pointer;
       font-size: 13px; font-weight: 500; transition: background 0.3s;
     }
+    .profile-link {
+  background: #e9ecef;
+  color: #2c3e50;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.profile-link:hover { background: #d1d5db; }
     .logout-btn:hover { background: #c82333; }
 
     /* ====== بطاقات الإحصائيات ====== */
@@ -165,8 +181,9 @@
     <div class="header">
       <h1>📊 لوحة التحكم</h1>
       <div class="user-info">
-        <span class="username" id="username">مرحباً، ...</span>
-        <button class="logout-btn" id="logoutBtn">تسجيل الخروج</button>
+       <span class="username" id="username">مرحباً، ...</span>
+       <a href="/profile.html" class="profile-link">👤 حسابي</a>
+       <button class="logout-btn" id="logoutBtn">تسجيل الخروج</button>
       </div>
     </div>
 
@@ -194,6 +211,10 @@
     <div class="section">
       <h2>🚀 الروابط السريعة</h2>
       <div class="quick-links">
+        <a href="/profile.html" class="quick-link">
+          <span class="icon">👤</span>
+          حسابي
+        </a>
         <a href="/referrals.html" class="quick-link">
           <span class="icon">👥</span>
           شبكة الإحالات
