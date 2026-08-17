@@ -71,19 +71,14 @@ app.get('/login', (req, res) => res.render('login', { title: 'تسجيل الد�
 app.get('/register', (req, res) => res.render('register', { title: 'التسجيل' }));
 app.get('/referrals', (req, res) => res.render('referrals', { title: 'شبكة الإحالات' }));
 app.get('/profile', (req, res) => res.render('profile', { title: 'حسابي' }));
-app.get('/test-ejs', function(req, res) {
-    res.render('test'); // أو اسم ملف ejs الخاص بك
-});
+app.get('/test-ejs', function(req, res) => res.render('test', { message: 'مرحباً، هذا اختبار' }); // أو اسم ملف ejs الخاص بك
+
 
 // ============================================================
 //  ✅ معالج الأخطاء
 // ============================================================
 // const errorHandler = require('./middleware/errorHandler');
 // app.use(errorHandler);
-
-// ============================================================
-//  الصفحات (EJS) - استبدل res.sendFile بـ res.render
-// ============================================================
 
 // ============================================================
 //  الصفحات (EJS) - استبدل res.sendFile بـ res.render
