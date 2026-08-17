@@ -1,3 +1,8 @@
-app.get('/test-ejs', (req, res) => {
-  res.render('test', { message: '✅ EJS يعمل بنجاح!' });
-});
+<!DOCTYPE html>
+<html>
+<head><title>اختبار</title></head>
+<body>
+  <h1>✅ EJS يعمل!</h1>
+  <p>الرسالة: <%= message %></p>
+</body>
+</html>
