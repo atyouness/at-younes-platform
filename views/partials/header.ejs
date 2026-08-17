@@ -6,7 +6,7 @@
   <title><%= title || 'آت يونس تك' %></title>
   <link rel="stylesheet" href="/css/style.css">
   <style>
-    /* أنماط أساسية للهيدر والفوتر */
+    /* الأنماط الأساسية */
     body { margin: 0; font-family: 'Tajawal', 'Segoe UI', sans-serif; background: #f0f4f8; }
     .main-header {
       background: white; padding: 12px 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
@@ -26,31 +26,14 @@
     .user-actions .logout-btn:hover { background: #c82333; }
     .user-actions a { text-decoration: none; color: #2563eb; font-weight: 500; }
     .main-content { max-width: 1200px; margin: 0 auto; padding: 20px; }
-    .main-footer {
-      background: #1a2a3a; color: white; padding: 20px 24px;
-      text-align: center; margin-top: 30px;
-    }
-    .main-footer a { color: #e9ecef; text-decoration: none; }
-    .main-footer a:hover { color: #2563eb; }
-    .footer-container {
-      max-width: 1200px; margin: 0 auto;
-      display: flex; flex-wrap: wrap; justify-content: space-between;
-    }
-    .footer-section { flex: 1; min-width: 150px; margin: 10px; }
-    .footer-section h4 { color: #e9ecef; margin-bottom: 8px; }
-    .footer-section ul { list-style: none; padding: 0; }
-    .footer-section ul li { margin: 4px 0; }
-    .footer-bottom { border-top: 1px solid #2c3e50; padding-top: 12px; margin-top: 12px; font-size: 14px; }
     @media (max-width: 768px) {
       .main-header { flex-direction: column; align-items: stretch; gap: 10px; }
       .main-header nav { display: flex; flex-wrap: wrap; gap: 8px; }
       .user-actions { justify-content: center; }
-      .footer-container { flex-direction: column; align-items: center; }
     }
   </style>
 </head>
 <body>
-  <!-- الهيدر العلوي -->
   <header class="main-header">
     <div class="logo">
       <a href="/" style="text-decoration:none;"><h1>آت يونس <span>تك</span></h1></a>
@@ -62,7 +45,7 @@
       <a href="/profile">حسابي</a>
     </nav>
     <div class="user-actions">
-      <% if (user) { %>
+      <% if (user && user.username) { %>
         <span class="welcome">مرحباً، <%= user.username %></span>
         <button class="logout-btn" onclick="logout()">تسجيل الخروج</button>
       <% } else { %>
@@ -71,6 +54,4 @@
       <% } %>
     </div>
   </header>
-
-  <!-- بداية المحتوى -->
   <main class="main-content">
