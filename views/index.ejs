@@ -8,5 +8,190 @@
     <a href="/login" style="background: #e9ecef; color: #2c3e50; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 600;">تسجيل الدخول</a>
   </div>
 </div>
-
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آت يونس تك – المنصة الاستثمارية الترويجية الذكية</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Tajawal', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            padding: 50px 40px;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .logo {
+            font-size: 48px;
+            font-weight: 800;
+            color: #1a2a3a;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+        .logo span {
+            color: #2563eb;
+        }
+        .tagline {
+            font-size: 20px;
+            color: #4b5563;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+        .badge {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            letter-spacing: 0.5px;
+        }
+        .description {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #374151;
+            max-width: 700px;
+            margin: 0 auto 35px;
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .btn {
+            padding: 14px 36px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.35);
+        }
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37,99,235,0.45);
+        }
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+        .btn-secondary:hover {
+            background: #d1d5db;
+            transform: translateY(-2px);
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 40px;
+        }
+        .feature-item {
+            text-align: center;
+        }
+        .feature-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .feature-title {
+            font-weight: 700;
+            color: #1a2a3a;
+            margin-bottom: 5px;
+        }
+        .feature-desc {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #9ca3af;
+        }
+        @media (max-width: 640px) {
+            .container {
+                padding: 30px 20px;
+            }
+            .logo {
+                font-size: 32px;
+            }
+            .btn {
+                padding: 12px 28px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="badge">🚀 مرحباً بك في المنصة</div>
+        <div class="logo">آت يونس <span>تك</span></div>
+        <div class="tagline">المنصة الاستثمارية الترويجية الذكية</div>
+        <div class="description">
+            انضم إلى شبكة المروجين الجزائريين واستثمر في مشاريع عقارية رقمية.
+            <br>احصل على مكافآت يومية، عمولات إحالة، وفرص استثمارية حصرية.
+        </div>
+        <div class="actions">
+            <a href="/register.html" class="btn btn-primary">📝 تسجيل جديد</a>
+            <a href="/login.html" class="btn btn-secondary">🔑 تسجيل الدخول</a>
+        </div>
+        <div class="features">
+            <div class="feature-item">
+                <div class="feature-icon">🏢</div>
+                <div class="feature-title">استثمار عقاري</div>
+                <div class="feature-desc">مشاريع سكنية في قلب الجزائر</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">👥</div>
+                <div class="feature-title">نظام إحالات</div>
+                <div class="feature-desc">عمولات تصل إلى 3 مستويات</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">💰</div>
+                <div class="feature-title">مكافآت يومية</div>
+                <div class="feature-desc">اربح مع كل مشاركة ونشاط</div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">📈</div>
+                <div class="feature-title">شركة ناشئة</div>
+                <div class="feature-desc">الهدف: مؤسسة مرخصة وقابلة للتداول</div>
+            </div>
+        </div>
+        <div class="footer">
+            © 2026 آت يونس تك – جميع الحقوق محفوظة
+        </div>
+    </div>
+</body>
+</html>
 <%- include('partials/footer') %>
