@@ -72,7 +72,7 @@ app.get('/register', (req, res) => res.render('register', { title: 'التسجي
 app.get('/referrals', (req, res) => res.render('referrals', { title: 'شبكة الإحالات' }));
 app.get('/profile', (req, res) => res.render('profile', { title: 'حسابي' }));
 app.get('/test-ejs', function(req, res) {
-    res.render('test');
+    res.render('test', { message: 'مرحباً، هذا اختبار' });
 });
 
 // ============================================================
