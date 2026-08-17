@@ -79,54 +79,37 @@ app.get('/profile', (req, res) => res.render('profile', { title: 'حسابي' })
 // app.use(errorHandler);
 
 // ============================================================
-//  ✅ الصفحات (باستخدام EJS)
+//  الصفحات (EJS) - استبدل res.sendFile بـ res.render
 // ============================================================
+
 // الصفحة الرئيسية
 app.get('/', (req, res) => {
-  res.render('index', { 
-    title: 'آت يونس تك - منصة الاستثمار الترويجي',
-    user: null
-  });
+  res.render('index', { title: 'الرئيسية', user: null });
 });
 
 // لوحة التحكم
 app.get('/dashboard', (req, res) => {
-  res.render('dashboard', { 
-    title: 'لوحة التحكم | آت يونس تك',
-    user: null
-  });
+  res.render('dashboard', { title: 'لوحة التحكم', user: null });
 });
 
-// صفحة التسجيل
-app.get('/register', (req, res) => {
-  res.render('register', { 
-    title: 'التسجيل | آت يونس تك',
-    user: null
-  });
-});
-
-// صفحة تسجيل الدخول
+// تسجيل الدخول
 app.get('/login', (req, res) => {
-  res.render('login', { 
-    title: 'تسجيل الدخول | آت يونس تك',
-    user: null
-  });
+  res.render('login', { title: 'تسجيل الدخول', user: null });
 });
 
-// صفحة شبكة الإحالات
+// التسجيل
+app.get('/register', (req, res) => {
+  res.render('register', { title: 'التسجيل', user: null });
+});
+
+// شبكة الإحالات
 app.get('/referrals', (req, res) => {
-  res.render('referrals', { 
-    title: 'شبكة الإحالات | آت يونس تك',
-    user: null
-  });
+  res.render('referrals', { title: 'شبكة الإحالات', user: null });
 });
 
-// صفحة الحساب الشخصي
+// حسابي
 app.get('/profile', (req, res) => {
-  res.render('profile', { 
-    title: 'حسابي | آت يونس تك',
-    user: null
-  });
+  res.render('profile', { title: 'حسابي', user: null });
 });
 
 // ============================================================
