@@ -82,36 +82,44 @@ app.get('/profile', (req, res) => res.render('profile', { title: 'حسابي' })
 //  الصفحات (EJS) - استبدل res.sendFile بـ res.render
 // ============================================================
 
+// ============================================================
+//  الصفحات (EJS) - استبدل res.sendFile بـ res.render
+// ============================================================
+
 // الصفحة الرئيسية
 app.get('/', (req, res) => {
-  res.render('index', { title: 'الرئيسية', user: null });
-});
-
-// لوحة التحكم
-app.get('/dashboard', (req, res) => {
-  res.render('dashboard', { title: 'لوحة التحكم', user: null });
+  res.render('index', { title: 'الرئيسية' });
 });
 
 // تسجيل الدخول
 app.get('/login', (req, res) => {
-  res.render('login', { title: 'تسجيل الدخول', user: null });
+  res.render('login', { title: 'تسجيل الدخول' });
 });
 
 // التسجيل
 app.get('/register', (req, res) => {
-  res.render('register', { title: 'التسجيل', user: null });
+  res.render('register', { title: 'التسجيل' });
+});
+
+// لوحة التحكم
+app.get('/dashboard', (req, res) => {
+  res.render('dashboard', { title: 'لوحة التحكم' });
 });
 
 // شبكة الإحالات
 app.get('/referrals', (req, res) => {
-  res.render('referrals', { title: 'شبكة الإحالات', user: null });
+  res.render('referrals', { title: 'شبكة الإحالات' });
 });
 
 // حسابي
 app.get('/profile', (req, res) => {
-  res.render('profile', { title: 'حسابي', user: null });
+  res.render('profile', { title: 'حسابي' });
 });
 
+// اختبار EJS
+app.get('/test', (req, res) => {
+  res.render('test', { message: '✅ EJS يعمل بنجاح!' });
+});
 // ============================================================
 //  ✅ بدء الخادم
 // ============================================================
