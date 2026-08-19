@@ -8,7 +8,10 @@ const authMiddleware = async (req, res, next) => {
       return res.status(401).json({ message: 'غير مصرح، يرجى تسجيل الدخول' });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key');
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({ message: 'إعداد JWT_SECRET غير موجود في البيئة' });
+    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.userId);
     if (!user) {
       return res.status(401).json({ message: 'المستخدم غير موجود' });

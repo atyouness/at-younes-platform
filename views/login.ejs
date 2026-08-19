@@ -1,74 +1,35 @@
-<%- include('partials/header', { title: 'تسجيل الدخول | آت يونس تك', user: user }) %>
-
-<div style="max-width: 440px; margin: 40px auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
-  <h2 style="text-align: center; color: #1a2a3a;">🔑 تسجيل الدخول</h2>
-
-  <form id="loginForm" style="margin-top: 20px;">
-    <div style="margin-bottom: 16px;">
-      <label style="font-weight: 600; display: block; margin-bottom: 4px;">البريد الإلكتروني</label>
-      <input type="email" id="email" placeholder="أدخل بريدك الإلكتروني" style="width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 10px; font-size: 15px; background: #f8f9fa;">
-    </div>
-    <div style="margin-bottom: 16px;">
-      <label style="font-weight: 600; display: block; margin-bottom: 4px;">كلمة المرور</label>
-      <input type="password" id="password" placeholder="أدخل كلمة المرور" style="width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 10px; font-size: 15px; background: #f8f9fa;">
-    </div>
-    <button type="submit" id="loginBtn" style="width: 100%; padding: 14px; background: #2563eb; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: 700; cursor: pointer;">🔑 دخول</button>
-    <div id="loginMessage" style="margin-top: 12px; padding: 10px; border-radius: 10px; display: none;"></div>
-  </form>
-
-  <div style="display: flex; justify-content: space-between; margin-top: 16px; flex-wrap: wrap; gap: 8px;">
-    <a href="#" id="resendActivationLink" style="display:none; color:#2563eb; text-decoration:none; font-size:14px;">📧 إعادة إرسال رابط التفعيل</a>
-    <a href="#" id="forgotPasswordLink" style="color:#2563eb; text-decoration:none; font-size:14px;">🔒 نسيت كلمة المرور</a>
-  </div>
-  <div style="text-align: center; margin-top: 18px; font-size: 14px; color: #6c757d;">
-    ليس لديك حساب؟ <a href="/register" style="color:#2563eb; text-decoration:none; font-weight:600;">سجل الآن</a>
-  </div>
-</div>
-
-<script>
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
-  const msgDiv = document.getElementById('loginMessage');
-
-  if (!email || !password) {
-    msgDiv.textContent = '❌ يرجى إدخال البريد الإلكتروني وكلمة المرور.';
-    msgDiv.style.display = 'block';
-    msgDiv.style.background = '#f8d7da';
-    msgDiv.style.color = '#721c24';
-    return;
-  }
-
-  try {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> | آت يونس تك</title>
+  <style>body{font-family:system-ui,sans-serif;background:#f4f6f8;display:grid;place-items:center;min-height:100vh;margin:0}.box{background:#fff;width:min(420px,calc(100% - 32px));padding:28px;border-radius:12px;box-shadow:0 8px 30px #0001}label{display:block;margin:14px 0 6px}input{width:100%;box-sizing:border-box;padding:11px;border:1px solid #ccd3da;border-radius:6px}button{width:100%;margin-top:20px;padding:12px;border:0;border-radius:6px;background:#1769aa;color:#fff;font-size:16px;cursor:pointer}.message{margin-top:14px;color:#a33}.link{display:block;margin-top:16px}</style>
+</head>
+<body>
+  <main class="box">
+    <h1>تسجيل الدخول</h1>
+    <form id="login-form">
+      <label for="email">البريد الإلكتروني</label>
+      <input id="email" name="email" type="email" required autocomplete="email">
+      <label for="password">كلمة المرور</label>
+      <input id="password" name="password" type="password" required autocomplete="current-password">
+      <button type="submit">دخول</button>
+    </form>
+    <p id="message" class="message" role="alert"></p>
+    <a class="link" href="/register">إنشاء حساب جديد</a>
+  </main>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const message = document.getElementById('message');
+      const body = Object.fromEntries(new FormData(event.currentTarget));
+      const response = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      const data = await response.json();
+      if (!response.ok) { message.textContent = data.message || 'تعذر تسجيل الدخول'; return; }
+      localStorage.setItem('token', data.token);
+      window.location.href = '/';
     });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      msgDiv.textContent = `❌ ${data.message || 'حدث خطأ'}`;
-      msgDiv.style.display = 'block';
-      msgDiv.style.background = '#f8d7da';
-      msgDiv.style.color = '#721c24';
-      return;
-    }
-
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
-    window.location.href = '/dashboard';
-
-  } catch (error) {
-    console.error('❌ خطأ:', error);
-    msgDiv.textContent = '❌ حدث خطأ في الاتصال بالخادم.';
-    msgDiv.style.display = 'block';
-    msgDiv.style.background = '#f8d7da';
-    msgDiv.style.color = '#721c24';
-  }
-});
-</script>
-
-<%- include('partials/footer') %>
+  </script>
+</body>
+</html>
