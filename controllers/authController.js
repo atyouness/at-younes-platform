@@ -10,7 +10,10 @@ const createToken = (user) => jwt.sign(
 
 const register = async (req, res, next) => {
   try {
-    const { firstName, lastName, username, email, phone, password, referralCode } = req.body;
+    const firstName = req.body.firstName || req.body.first_name;
+    const lastName = req.body.lastName || req.body.last_name;
+    const { username, email, phone, whatsapp, password } = req.body;
+    const referralCode = req.body.referralCode || req.body.referral_code;
     if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ message: 'الاسم الأول واللقب والبريد وكلمة المرور مطلوبة' });
     }
@@ -31,6 +34,7 @@ const register = async (req, res, next) => {
       username: username || null,
       email,
       phone: phone || null,
+      whatsapp: whatsapp || null,
       password,
       referralCode: crypto.randomBytes(5).toString('hex').toUpperCase(),
       parentUserId: parent ? parent.id : null

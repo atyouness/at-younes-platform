@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(100) NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
     phone VARCHAR(20) NULL UNIQUE,
+    whatsapp VARCHAR(20) NULL,
     password_hash VARCHAR(255) NOT NULL,
     role_id INT NOT NULL DEFAULT 2,
     referral_code VARCHAR(50) NULL UNIQUE,

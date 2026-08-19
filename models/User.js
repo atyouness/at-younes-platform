@@ -7,14 +7,14 @@ class User {
     return safeUser;
   }
 
-  static async create({ firstName, lastName, username, email, phone, password, referralCode, parentUserId }) {
+  static async create({ firstName, lastName, username, email, phone, whatsapp, password, referralCode, parentUserId }) {
     const passwordHash = await bcrypt.hash(password, 12);
     const [result] = await pool.query(
       `INSERT INTO users
-        (first_name, last_name, username, email, phone, password_hash, role_id,
+        (first_name, last_name, username, email, phone, whatsapp, password_hash, role_id,
          referral_code, parent_user_id, status, is_active)
-       VALUES (?, ?, ?, ?, ?, ?, 2, ?, ?, 'active', 1)`,
-      [firstName, lastName, username, email, phone, passwordHash, referralCode, parentUserId]
+       VALUES (?, ?, ?, ?, ?, ?, ?, 2, ?, ?, 'active', 1)`,
+      [firstName, lastName, username, email, phone, whatsapp, passwordHash, referralCode, parentUserId]
     );
     return User.findById(result.insertId);
   }
@@ -26,7 +26,7 @@ class User {
 
   static async findById(id) {
     const [rows] = await pool.query(
-      `SELECT id, first_name, last_name, username, email, phone, role_id,
+      `SELECT id, first_name, last_name, username, email, phone, whatsapp, role_id,
               referral_code, parent_user_id, status, is_active, balance,
               total_earnings, total_referrals, created_at, updated_at
        FROM users WHERE id = ? LIMIT 1`,

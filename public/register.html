@@ -125,7 +125,7 @@
         <div class="form-group">
           <label>رقم واتساب</label>
           <input type="tel" id="whatsapp" placeholder="مثال: 0555123456">
-          <div class="hint">اختياري، نفس الرقم إذا لم يكن مختلفاً</div>
+          <div class="hint">اختياري، ويُستخدم للتواصل حول الحساب والمهام</div>
         </div>
       </div>
 
@@ -152,7 +152,7 @@
         <div class="form-group">
           <label>كلمة المرور <span class="required">*</span></label>
           <input type="password" id="password" placeholder="أدخل كلمة المرور" required minlength="6">
-          <div class="hint">6 أحرف على الأقل</div>
+          <div class="hint">8 أحرف على الأقل</div>
         </div>
         <div class="form-group">
           <label>تأكيد كلمة المرور <span class="required">*</span></label>
@@ -165,11 +165,11 @@
       <div class="form-group">
         <label>رمز الإحالة</label>
         <div class="referral-code-display">
-          <span class="label">🔗 رمزك:</span>
+          <span class="label">🔗 رمز الراعي:</span>
           <span class="code" id="referralCodeDisplay">جاري التحميل...</span>
           <span class="lock-icon">🔒</span>
         </div>
-        <div class="hint">تم إنشاء هذا الرمز تلقائياً وهو فريد لك</div>
+        <div class="hint">هذا الرمز يأتي من رابط الدعوة ولا يمكن تعديله. سيُنشأ رمز إحالتك الخاص بعد التسجيل.</div>
         <input type="hidden" id="referralCode" value="">
       </div>
 
@@ -199,13 +199,6 @@
   </div>
 
   <script>
-    // ============================================================
-    //  توليد كود إحالة عشوائي
-    // ============================================================
-    function generateReferralCode() {
-      return Math.random().toString(36).substring(2, 8).toUpperCase();
-    }
-
     // ============================================================
     //  التحقق من تطابق البريد الإلكتروني
     // ============================================================
@@ -264,11 +257,8 @@
     function initReferralCode() {
       const urlParams = new URLSearchParams(window.location.search);
       let refCode = urlParams.get('ref');
-      if (!refCode) {
-        refCode = generateReferralCode();
-      }
       document.getElementById('referralCode').value = refCode;
-      document.getElementById('referralCodeDisplay').textContent = refCode;
+      document.getElementById('referralCodeDisplay').textContent = refCode || 'بدون رمز دعوة';
       return refCode;
     }
 
@@ -313,32 +303,14 @@
         return;
       }
 
-      if (password.length < 6) {
-        showMessage('❌ كلمة المرور يجب أن تكون 6 أحرف على الأقل.', 'error');
+      if (password.length < 8) {
+        showMessage('❌ كلمة المرور يجب أن تكون 8 أحرف على الأقل.', 'error');
         return;
       }
 
       if (!termsChecked) {
         showMessage('❌ يرجى الموافقة على شروط العضوية.', 'error');
         return;
-      }
-
-      // ✅ تحديد autoActivate (التفعيل التلقائي للمسوقين الرئيسيين)
-      const urlParams = new URLSearchParams(window.location.search);
-      const refFromUrl = urlParams.get('ref');
-      let autoActivate = false;
-
-      if (refFromUrl) {
-        try {
-          const response = await fetch(`/api/auth/referrals/validate/${refFromUrl}`);
-          const data = await response.json();
-          // إذا كان كود الإحالة يخص المسوق الرئيسي (slimanepro)
-          if (data.valid && data.username === 'slimanepro') {
-            autoActivate = true;
-          }
-        } catch (error) {
-          console.error('خطأ في التحقق من كود الإحالة:', error);
-        }
       }
 
       // تعطيل الزر
@@ -351,14 +323,14 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            firstName,
+            lastName,
             username,
             email,
             password,
-            full_name: `${firstName} ${lastName}`,
             phone,
-            whatsapp: whatsapp || phone,
-            referralCode,
-            autoActivate // ✅ إرسال القيمة
+            whatsapp: whatsapp || null,
+            referralCode: referralCode || null
           })
         });
 
