@@ -299,6 +299,12 @@
         <option value="عضو مميز">⭐ عضو مميز</option>
         <option value="عضو">👤 عضو</option>
       </select>
+      <select class="filter-select" id="levelFilter" aria-label="تصفية حسب المستوى">
+        <option value="all">جميع المستويات</option>
+        <option value="1">المستوى الأول</option>
+        <option value="2">المستوى الثاني</option>
+        <option value="3">المستوى الثالث</option>
+      </select>
       <button class="sort-btn" id="sortBtn">🔤 ترتيب أبجدي</button>
       <button class="clear-btn" id="clearBtn">✖ مسح</button>
     </div>
@@ -328,6 +334,7 @@
     // ============================================================
     let referralData = { level1: [], level2: [], level3: [] };
     let activeFilter = 'all';
+    let activeLevel = 'all';
     let searchTerm = '';
     let sortAsc = true;
 
@@ -450,9 +457,9 @@
     //  عرض جميع المستويات
     // ============================================================
     function renderAllLevels() {
-      const level1Filtered = filterAndSortLevel(referralData.level1, 1);
-      const level2Filtered = filterAndSortLevel(referralData.level2, 2);
-      const level3Filtered = filterAndSortLevel(referralData.level3, 3);
+      const level1Filtered = activeLevel === 'all' || activeLevel === '1' ? filterAndSortLevel(referralData.level1, 1) : [];
+      const level2Filtered = activeLevel === 'all' || activeLevel === '2' ? filterAndSortLevel(referralData.level2, 2) : [];
+      const level3Filtered = activeLevel === 'all' || activeLevel === '3' ? filterAndSortLevel(referralData.level3, 3) : [];
 
       renderLevel('level1Container', level1Filtered, 1);
       renderLevel('level2Container', level2Filtered, 2);
@@ -545,6 +552,11 @@
       renderAllLevels();
     });
 
+    document.getElementById('levelFilter').addEventListener('change', function() {
+      activeLevel = this.value;
+      renderAllLevels();
+    });
+
     document.getElementById('sortBtn').addEventListener('click', function() {
       sortAsc = !sortAsc;
       this.textContent = sortAsc ? '🔤 ترتيب أبجدي (تصاعدي)' : '🔤 ترتيب أبجدي (تنازلي)';
@@ -554,8 +566,10 @@
     document.getElementById('clearBtn').addEventListener('click', function() {
       document.getElementById('searchInput').value = '';
       document.getElementById('rankFilter').value = 'all';
+      document.getElementById('levelFilter').value = 'all';
       searchTerm = '';
       activeFilter = 'all';
+      activeLevel = 'all';
       sortAsc = true;
       document.getElementById('sortBtn').textContent = '🔤 ترتيب أبجدي';
       renderAllLevels();

@@ -76,6 +76,21 @@ class User {
       [userId]
     );
 
+    const allMembers = [...level1, ...level2, ...level3];
+    for (const member of allMembers) {
+      const [directRows] = await pool.query('SELECT COUNT(*) AS count FROM users WHERE parent_user_id = ?', [member.id]);
+      const [teamRows] = await pool.query(
+        `WITH RECURSIVE team AS (
+           SELECT id FROM users WHERE parent_user_id = ?
+           UNION ALL
+           SELECT child.id FROM users child INNER JOIN team ON child.parent_user_id = team.id
+         ) SELECT COUNT(*) AS count FROM team`,
+        [member.id]
+      );
+      member.referralCount = Number(directRows[0].count || 0);
+      member.teamSize = Number(teamRows[0].count || 0);
+    }
+
     return {
       sponsor: sponsorRows[0] || null,
       level1,
@@ -85,6 +100,22 @@ class User {
       totalTeam: level1.length + level2.length + level3.length,
       userRank: level1.length >= 20 ? '🎖️ قائد' : level1.length >= 10 ? '🏅 نقيب' : level1.length >= 5 ? '⭐ عضو مميز' : '👤 عضو'
     };
+  }
+
+  static async getUpline(userId, maxLevels = 3) {
+    const uplines = [];
+    let currentId = userId;
+    for (let level = 1; level <= maxLevels; level += 1) {
+      const [rows] = await pool.query(
+        `SELECT id, first_name, last_name, email, parent_user_id
+         FROM users WHERE id = (SELECT parent_user_id FROM users WHERE id = ?)`,
+        [currentId]
+      );
+      if (!rows[0]) break;
+      uplines.push({ ...rows[0], level });
+      currentId = rows[0].id;
+    }
+    return uplines;
   }
 
   static async saveVerificationToken(userId, tokenHash, expiresAt) {

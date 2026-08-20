@@ -36,4 +36,23 @@ async function sendVerificationEmail({ email, name, token }) {
   });
 }
 
-module.exports = { sendVerificationEmail };
+async function sendReferralSignupEmail({ email, sponsorName, memberName, level }) {
+  const missing = requiredEmailSettings.filter((setting) => !process.env[setting]);
+  if (missing.length) {
+    throw new Error(`إعدادات البريد ناقصة: ${missing.join(', ')}`);
+  }
+
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM || `آت يونس تك <${emailUser}>`,
+    to: email,
+    subject: `تهانينا ${sponsorName || ''} | عضو جديد في المستوى ${level}`,
+    html: `
+      <div dir="rtl" style="font-family:Arial,sans-serif;max-width:620px;margin:auto;padding:28px;background:#f5f7f6;color:#17212b">
+        <h2 style="color:#16715b">تهانينا ${sponsorName || 'بك'} 🎉</h2>
+        <p>تم تسجيل العضو <strong>${memberName}</strong> ضمن شبكتك في المستوى <strong>${level}</strong>.</p>
+        <p>يمكنك متابعة فريقك من صفحة شبكة الإحالات داخل حسابك.</p>
+      </div>`
+  });
+}
+
+module.exports = { sendVerificationEmail, sendReferralSignupEmail };

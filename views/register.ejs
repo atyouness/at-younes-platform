@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= title %> | آت يونس تك</title>
-  <style>body{margin:0;background:#f5f7f6;font-family:'Cairo','Segoe UI',sans-serif}.box{background:#fff;width:min(460px,calc(100% - 32px));margin:48px auto;padding:28px;border-radius:6px;box-shadow:0 8px 30px #0001}label{display:block;margin:12px 0 6px}input{width:100%;box-sizing:border-box;padding:11px;border:1px solid #ccd3da;border-radius:6px}button{width:100%;margin-top:20px;padding:12px;border:0;border-radius:6px;background:#16715b;color:#fff;font-size:16px;cursor:pointer}.message{margin-top:14px;color:#a33}.link{display:block;margin-top:16px}</style>
+  <style>body{margin:0;background:#f5f7f6;font-family:'Cairo','Segoe UI',sans-serif}.box{background:#fff;width:min(460px,calc(100% - 32px));margin:48px auto;padding:28px;border-radius:6px;box-shadow:0 8px 30px #0001}label{display:block;margin:12px 0 6px}input{width:100%;box-sizing:border-box;padding:11px;border:1px solid #ccd3da;border-radius:6px}.password-wrap{position:relative}.password-wrap input{padding-left:70px}.password-toggle{position:absolute;left:7px;top:7px;width:58px;margin:0;padding:6px 2px;border:0;border-radius:5px;background:#e9ecef;color:#2c3e50;font-size:12px;cursor:pointer}.password-toggle:hover{background:#d1d5db}button[type=submit]{width:100%;margin-top:20px;padding:12px;border:0;border-radius:6px;background:#16715b;color:#fff;font-size:16px;cursor:pointer}.message{margin-top:14px;color:#a33}.link{display:block;margin-top:16px}</style>
 </head>
 <body class="auth-page">
   <main class="box">
@@ -15,7 +15,7 @@
       <label for="username">اسم المستخدم</label><input id="username" name="username" autocomplete="username">
       <label for="email">البريد الإلكتروني</label><input id="email" name="email" type="email" required autocomplete="email">
       <label for="phone">الهاتف</label><input id="phone" name="phone" type="tel">
-      <label for="password">كلمة المرور</label><input id="password" name="password" type="password" minlength="8" required autocomplete="new-password">
+      <label for="password">كلمة المرور</label><div class="password-wrap"><input id="password" name="password" type="password" minlength="8" required autocomplete="new-password"><button type="button" class="password-toggle" data-target="password">إظهار</button></div>
       <label for="referralCode">كود الإحالة</label><input id="referralCode" name="referralCode">
       <button type="submit">إنشاء الحساب</button>
     </form>
@@ -23,6 +23,13 @@
     <a class="link" href="/login">لديك حساب؟ تسجيل الدخول</a>
   </main>
   <script>
+    document.querySelectorAll('.password-toggle').forEach((button) => button.addEventListener('click', () => {
+      const input = document.getElementById(button.dataset.target);
+      const visible = input.type === 'text';
+      input.type = visible ? 'password' : 'text';
+      button.textContent = visible ? 'إظهار' : 'إخفاء';
+    }));
+
     document.getElementById('register-form').addEventListener('submit', async (event) => {
       event.preventDefault();
       const message = document.getElementById('message');

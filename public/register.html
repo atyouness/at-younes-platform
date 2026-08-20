@@ -46,6 +46,10 @@
     }
     .form-group input.error { border-color: #dc3545; background: #fff5f5; }
     .form-group input.success { border-color: #22c55e; background: #f0fdf4; }
+    .password-wrap { position: relative; display: flex; align-items: center; }
+    .password-wrap input { padding-left: 76px; }
+    .password-toggle { position: absolute; left: 8px; width: 62px; margin: 0; padding: 6px 4px; border: 0; border-radius: 6px; background: #e9ecef; color: #2c3e50; font-size: 12px; cursor: pointer; }
+    .password-toggle:hover { background: #d1d5db; }
 
     .referral-code-display {
       background: #e9ecef; border-radius: 12px; padding: 12px 16px;
@@ -151,12 +155,18 @@
       <div class="form-row">
         <div class="form-group">
           <label>كلمة المرور <span class="required">*</span></label>
-          <input type="password" id="password" placeholder="أدخل كلمة المرور" required minlength="6">
+          <div class="password-wrap">
+            <input type="password" id="password" placeholder="أدخل كلمة المرور" required minlength="8">
+            <button type="button" class="password-toggle" data-target="password" aria-label="إظهار كلمة المرور">إظهار</button>
+          </div>
           <div class="hint">8 أحرف على الأقل</div>
         </div>
         <div class="form-group">
           <label>تأكيد كلمة المرور <span class="required">*</span></label>
-          <input type="password" id="passwordConfirm" placeholder="أعد إدخال كلمة المرور" required>
+          <div class="password-wrap">
+            <input type="password" id="passwordConfirm" placeholder="أعد إدخال كلمة المرور" required>
+            <button type="button" class="password-toggle" data-target="passwordConfirm" aria-label="إظهار تأكيد كلمة المرور">إظهار</button>
+          </div>
           <div class="hint" id="passwordMatchHint"></div>
         </div>
       </div>
@@ -250,6 +260,16 @@
       msgDiv.className = `message show ${type}`;
       setTimeout(() => { msgDiv.className = 'message'; }, 6000);
     }
+
+    document.querySelectorAll('.password-toggle').forEach((button) => {
+      button.addEventListener('click', () => {
+        const input = document.getElementById(button.dataset.target);
+        const visible = input.type === 'text';
+        input.type = visible ? 'password' : 'text';
+        button.textContent = visible ? 'إظهار' : 'إخفاء';
+        button.setAttribute('aria-label', visible ? 'إظهار كلمة المرور' : 'إخفاء كلمة المرور');
+      });
+    });
 
     // ============================================================
     //  تهيئة رمز الإحالة

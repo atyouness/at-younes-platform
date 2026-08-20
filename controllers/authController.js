@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const User = require('../models/User');
-const { sendVerificationEmail } = require('../services/emailService');
+const { sendVerificationEmail, sendReferralSignupEmail } = require('../services/emailService');
 
 const createToken = (user) => jwt.sign(
   { userId: user.id, roleId: user.role_id },
@@ -49,6 +49,13 @@ const register = async (req, res, next) => {
       name: `${firstName} ${lastName}`,
       token: verificationToken
     });
+    const uplines = await User.getUpline(user.id, 3);
+    await Promise.allSettled(uplines.map((sponsor) => sendReferralSignupEmail({
+      email: sponsor.email,
+      sponsorName: `${sponsor.first_name} ${sponsor.last_name}`,
+      memberName: `${firstName} ${lastName}`,
+      level: sponsor.level
+    })));
 
     return res.status(201).json({ message: 'تم إنشاء الحساب. تحقق من بريدك الإلكتروني لتفعيل الحساب.' });
   } catch (error) {
