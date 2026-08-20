@@ -79,6 +79,8 @@
     .form-group .hint {
       font-size: 12px; color: #6c757d; margin-top: 3px;
     }
+    .privacy-option { display: block; padding: 10px 0; color: #2c3e50; font-size: 14px; }
+    .privacy-option input { width: auto; margin-left: 8px; }
 
     .form-group input:disabled {
       background: #f1f3f5; color: #6c757d; cursor: not-allowed;
@@ -198,6 +200,15 @@
             <div class="hint">اختياري، نفس الرقم إذا لم يكن مختلفاً</div>
           </div>
         </div>
+      </div>
+
+      <div class="profile-section">
+        <h2>🔐 خصوصية رقم الهاتف</h2>
+        <label class="privacy-option"><input type="checkbox" id="showPhoneToLevel2"> إظهار رقمي للراعي في المستوى الثاني</label>
+        <label class="privacy-option"><input type="checkbox" id="showPhoneToLevel3"> إظهار رقمي للراعي في المستوى الثالث</label>
+        <p class="hint">عند إيقاف الخيار سيظهر الرقم مخفيًا مثل: 📱 0797****35.</p>
+        <button type="button" class="save-btn" id="saveVisibilityBtn">حفظ إعدادات الخصوصية</button>
+        <div id="visibilityMessage" class="message"></div>
       </div>
 
       <!-- القسم 2: بيانات الهوية الرسمية -->
@@ -336,6 +347,14 @@
         if (!response.ok) throw new Error('فشل في تحميل البيانات');
 
         const user = await response.json();
+        const visibilityResponse = await fetch('/api/auth/profile-visibility', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (visibilityResponse.ok) {
+          const visibility = await visibilityResponse.json();
+          document.getElementById('showPhoneToLevel2').checked = visibility.show_phone_to_level_2;
+          document.getElementById('showPhoneToLevel3').checked = visibility.show_phone_to_level_3;
+        }
 
         const statusSpan = document.getElementById('accountStatus');
         const resendActivationLink = document.getElementById('resendActivationLink');
@@ -454,6 +473,22 @@
 
       btn.disabled = false;
       btn.textContent = '💾 حفظ التغييرات';
+    });
+
+    document.getElementById('saveVisibilityBtn').addEventListener('click', async function() {
+      const message = document.getElementById('visibilityMessage');
+      const token = localStorage.getItem('token');
+      const response = await fetch('/api/auth/profile-visibility', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({
+          show_phone_to_level_2: document.getElementById('showPhoneToLevel2').checked,
+          show_phone_to_level_3: document.getElementById('showPhoneToLevel3').checked
+        })
+      });
+      const data = await response.json();
+      message.textContent = data.message || 'تعذر حفظ الإعدادات';
+      message.className = `message show ${response.ok ? 'success' : 'error'}`;
     });
 
     // ============================================================

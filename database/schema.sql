@@ -15,8 +15,7 @@ CREATE TABLE IF NOT EXISTS roles (
 INSERT IGNORE INTO roles (id, name, description) VALUES
     (1, 'admin', 'مدير النظام'),
     (2, 'user', 'مستخدم عادي'),
-    (3, 'investor', 'مستثمر'),
-    (4, 'marketer', 'مسوق');
+    (3, 'supervisor', 'مشرف');
 
 CREATE TABLE IF NOT EXISTS users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -26,6 +25,8 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(255) NOT NULL UNIQUE,
     phone VARCHAR(20) NULL UNIQUE,
     whatsapp VARCHAR(20) NULL,
+    show_phone_to_level_2 TINYINT(1) NOT NULL DEFAULT 0,
+    show_phone_to_level_3 TINYINT(1) NOT NULL DEFAULT 0,
     password_hash VARCHAR(255) NOT NULL,
     role_id INT NOT NULL DEFAULT 2,
     referral_code VARCHAR(50) NULL UNIQUE,

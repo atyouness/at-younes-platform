@@ -26,7 +26,8 @@ class User {
 
   static async findById(id) {
     const [rows] = await pool.query(
-      `SELECT id, first_name, last_name, username, email, phone, whatsapp, role_id,
+            `SELECT id, first_name, last_name, username, email, phone, whatsapp,
+              show_phone_to_level_2, show_phone_to_level_3, role_id,
               referral_code, parent_user_id, status, is_active, balance,
               total_earnings, total_referrals, created_at, updated_at
        FROM users WHERE id = ? LIMIT 1`,
@@ -49,7 +50,7 @@ class User {
     const fields = `
       SELECT id, first_name, last_name,
              CONCAT(first_name, ' ', last_name) AS full_name,
-             username, email, phone, whatsapp, referral_code,
+             username, email, phone, whatsapp, show_phone_to_level_2, show_phone_to_level_3, referral_code,
              parent_user_id, status, is_active, created_at
       FROM users
       WHERE parent_user_id = ?
@@ -75,6 +76,13 @@ class User {
        FROM users WHERE id = (SELECT parent_user_id FROM users WHERE id = ?)`,
       [userId]
     );
+
+    level2.forEach((member) => {
+      if (!member.show_phone_to_level_2) member.phone = null;
+    });
+    level3.forEach((member) => {
+      if (!member.show_phone_to_level_3) member.phone = null;
+    });
 
     const allMembers = [...level1, ...level2, ...level3];
     for (const member of allMembers) {
@@ -124,6 +132,15 @@ class User {
        SET verification_token_hash = ?, verification_expires_at = ?
        WHERE id = ?`,
       [tokenHash, expiresAt, userId]
+    );
+  }
+
+  static async updatePhoneVisibility(userId, { level2, level3 }) {
+    await pool.query(
+      `UPDATE users
+       SET show_phone_to_level_2 = ?, show_phone_to_level_3 = ?
+       WHERE id = ?`,
+      [level2 ? 1 : 0, level3 ? 1 : 0, userId]
     );
   }
 

@@ -181,7 +181,7 @@
     <div class="header">
       <h1>📊 لوحة التحكم</h1>
       <div class="user-info">
-       <span class="username" id="username">مرحباً، ...</span>
+      <span class="username" id="username">مرحباً، جاري التحميل 👋</span>
        <a href="/profile.html" class="profile-link">👤 حسابي</a>
        <button class="logout-btn" id="logoutBtn">تسجيل الخروج</button>
       </div>
@@ -243,6 +243,18 @@
           <span class="icon">📈</span>
           الأرباح
         </a>
+        <a href="/investments.html" class="quick-link">
+          <span class="icon">🏗️</span>
+          الاستثمارات
+        </a>
+        <a href="/projects.html" class="quick-link">
+          <span class="icon">🧩</span>
+          المشاريع المصغرة
+        </a>
+        <a href="/finance.html" class="quick-link">
+          <span class="icon">💳</span>
+          الإيداع والسحب
+        </a>
       </div>
     </div>
 
@@ -297,7 +309,8 @@
         window.location.href = '/login.html';
         return;
       }
-      document.getElementById('username').textContent = `مرحباً، ${user.username} 👋`;
+      const fullName = `${user.first_name || ''} ${user.last_name || ''}`.trim();
+      document.getElementById('username').textContent = `مرحباً، ${fullName || user.username} 👋`;
       document.getElementById('balance').textContent = user.balance || 0;
       const referralCode = user.referral_code || user.referralCode;
       const referralLink = referralCode ? `${window.location.origin}/register.html?ref=${encodeURIComponent(referralCode)}` : '';

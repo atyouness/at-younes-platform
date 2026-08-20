@@ -52,6 +52,9 @@ body.auth-page > main {
 .site-nav { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .site-nav a { color: var(--muted); text-decoration: none; padding: 8px 12px; border-radius: 6px; font-size: 14px; font-weight: 600; }
 .site-nav a:hover, .site-nav a[aria-current='page'] { color: var(--green-dark); background: #e8f2ee; }
+.site-nav__welcome { color: var(--green-dark); font-size: 13px; font-weight: 700; }
+.site-nav__logout, .site-footer__logout { border: 0; background: transparent; color: inherit; cursor: pointer; font: inherit; font-size: 13px; padding: 8px 12px; }
+.site-nav__logout:hover, .site-footer__logout:hover { color: #b42318; }
 .site-nav .site-nav__action { color: var(--white); background: var(--green); }
 .site-nav .site-nav__action:hover { color: var(--white); background: var(--green-dark); }
 .site-footer { background: var(--ink); color: #d5dfe0; margin-top: 48px; padding: 28px 0 20px; }

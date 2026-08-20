@@ -8,6 +8,7 @@ const fs = require('fs');
 const { connectDB } = require('./config/database');
 const authRoutes = require('./routes/auth');
 const pageRoutes = require('./routes/pages');
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
@@ -29,6 +30,7 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 app.use(express.static(publicPath));
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/', pageRoutes);
 
 app.get('/', (req, res) => {
