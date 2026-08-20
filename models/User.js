@@ -45,6 +45,48 @@ class User {
     return rows[0] || null;
   }
 
+  static async getReferralTree(userId) {
+    const fields = `
+      SELECT id, first_name, last_name,
+             CONCAT(first_name, ' ', last_name) AS full_name,
+             username, email, phone, whatsapp, referral_code,
+             parent_user_id, status, is_active, created_at
+      FROM users
+      WHERE parent_user_id = ?
+      ORDER BY created_at DESC`;
+
+    const [level1] = await pool.query(fields, [userId]);
+    const level2 = [];
+    const level3 = [];
+
+    for (const member of level1) {
+      const [children] = await pool.query(fields, [member.id]);
+      level2.push(...children);
+      for (const child of children) {
+        const [grandchildren] = await pool.query(fields, [child.id]);
+        level3.push(...grandchildren);
+      }
+    }
+
+    const [sponsorRows] = await pool.query(
+      `SELECT id, first_name, last_name,
+              CONCAT(first_name, ' ', last_name) AS full_name,
+              username, email, phone, whatsapp, referral_code, parent_user_id
+       FROM users WHERE id = (SELECT parent_user_id FROM users WHERE id = ?)`,
+      [userId]
+    );
+
+    return {
+      sponsor: sponsorRows[0] || null,
+      level1,
+      level2,
+      level3,
+      totalReferrals: level1.length,
+      totalTeam: level1.length + level2.length + level3.length,
+      userRank: level1.length >= 20 ? '🎖️ قائد' : level1.length >= 10 ? '🏅 نقيب' : level1.length >= 5 ? '⭐ عضو مميز' : '👤 عضو'
+    };
+  }
+
   static async saveVerificationToken(userId, tokenHash, expiresAt) {
     await pool.query(
       `UPDATE users
