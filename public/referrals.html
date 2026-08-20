@@ -203,6 +203,13 @@
       border-radius: 30px; font-size: 12px; font-weight: 700;
       white-space: nowrap;
     }
+    .member-referral-btn {
+      background: #e8f2ee; color: #16624f; border: 1px solid #b8d8ca;
+      padding: 6px 12px; border-radius: 6px; cursor: pointer;
+      font-size: 12px; font-weight: 700; white-space: nowrap;
+    }
+    .member-referral-btn:hover { background: #d3e8de; }
+    .member-referral-btn:disabled { color: #899596; background: #eef0f0; border-color: #d7dddd; cursor: not-allowed; }
 
     /* ====== حالة فارغة ====== */
     .empty-state { text-align: center; padding: 30px 0; color: #6c757d; }
@@ -239,6 +246,7 @@
       .user-row .info .name { font-size: 14px; white-space: normal; }
       .user-row .stats { justify-content: center; }
       .user-row .rank-badge { align-self: center; }
+      .member-referral-btn { width: 100%; }
       .section { padding: 12px 14px; }
       .section h2 { font-size: 15px; }
     }
@@ -387,6 +395,38 @@
       });
     }
 
+    function getReferralLink(referralCode) {
+      return `${window.location.origin}/register.html?ref=${encodeURIComponent(referralCode)}`;
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+      const input = document.createElement('textarea');
+      input.value = text;
+      input.style.position = 'fixed';
+      input.style.opacity = '0';
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      input.remove();
+    }
+
+    document.addEventListener('click', async (event) => {
+      const button = event.target.closest('.member-referral-btn');
+      if (!button || !button.dataset.referralCode) return;
+      try {
+        await copyText(getReferralLink(button.dataset.referralCode));
+        button.textContent = 'تم نسخ الرابط';
+        setTimeout(() => { button.textContent = 'نسخ رابط الإحالة'; }, 1800);
+      } catch (error) {
+        button.textContent = 'تعذر النسخ';
+        setTimeout(() => { button.textContent = 'نسخ رابط الإحالة'; }, 1800);
+      }
+    });
+
     // مقارنة أبجدية عربية (مرتبة حسب الحروف)
     function arabicCompare(a, b) {
       return a.localeCompare(b, 'ar');
@@ -400,6 +440,10 @@
       const rank = getRank(teamSize);
       const rankEmoji = getRankEmoji(rank);
       const levelClass = level === 1 ? '' : level === 2 ? 'level-2' : 'level-3';
+      const referralCode = user.referral_code || '';
+      const referralButton = referralCode
+        ? `<button class="member-referral-btn" type="button" data-referral-code="${referralCode}">نسخ رابط الإحالة</button>`
+        : '<button class="member-referral-btn" type="button" disabled>رابط غير متوفر</button>';
 
       return `
         <div class="user-row ${levelClass}" data-rank="${rank}" data-name="${user.full_name || user.username}" data-username="${user.username}" data-phone="${user.phone || ''}">
@@ -412,6 +456,7 @@
             <span class="stat-item"><span class="num">${teamSize}</span><span class="label">👥 الفريق</span></span>
             <span class="stat-item"><span class="num">${user.referralCount || 0}</span><span class="label">📌 إحالات</span></span>
             <span class="rank-badge">${rankEmoji} ${rank}</span>
+            ${referralButton}
           </div>
         </div>
       `;
