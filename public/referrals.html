@@ -275,13 +275,12 @@
       <div class="badge" id="sponsorBadge">🏅 عضو مميز</div>
     </div>
 
-    <!-- رابط الإحالة -->
-    <div class="referral-link-box">
+    <!-- رابط الإحالة الخاص بالمستخدم -->
+    <div class="referral-link-box" aria-label="رابط الإحالة الخاص بك">
       <span class="label">🔗 رابط الإحالة الخاص بك</span>
-      <code class="link" id="referralLink">جاري التحميل...</code>
-      <button class="copy-btn" id="copyReferralBtn">📋 نسخ الرابط</button>
+      <span class="link" id="referralLink">جاري إنشاء الرابط...</span>
+      <button class="copy-btn" id="copyReferralBtn" type="button">نسخ الرابط</button>
     </div>
-    <div id="copyMessage" class="message"></div>
 
     <!-- الإحصائيات السريعة -->
     <div class="stats-mini">
@@ -359,6 +358,27 @@
       if (rank === 'نقيب') return '🏅';
       if (rank === 'عضو مميز') return '⭐';
       return '👤';
+    }
+
+    function setupReferralLink() {
+      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      const referralCode = user && (user.referral_code || user.referralCode);
+      const linkElement = document.getElementById('referralLink');
+      const copyButton = document.getElementById('copyReferralBtn');
+
+      if (!referralCode) {
+        linkElement.textContent = 'رمز الإحالة غير متوفر';
+        copyButton.disabled = true;
+        return;
+      }
+
+      const referralLink = `${window.location.origin}/register.html?ref=${encodeURIComponent(referralCode)}`;
+      linkElement.textContent = referralLink;
+      copyButton.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(referralLink);
+        copyButton.textContent = 'تم النسخ';
+        setTimeout(() => { copyButton.textContent = 'نسخ الرابط'; }, 1800);
+      });
     }
 
     // مقارنة أبجدية عربية (مرتبة حسب الحروف)
@@ -480,13 +500,6 @@
         document.getElementById('userRank').textContent = data.userRank || '👤 عضو';
         document.getElementById('commissionEarned').textContent = (data.totalReferrals || 0) * 5;
 
-        // رابط الإحالة
-        const user = JSON.parse(localStorage.getItem('user'));
-        if (user && user.referralCode) {
-          const referralLink = `${window.location.origin}/register.html?ref=${user.referralCode}`;
-          document.getElementById('referralLink').textContent = referralLink;
-        }
-
         // الراعي
         if (data.sponsor) {
           document.getElementById('sponsorName').textContent = data.sponsor.full_name || data.sponsor.username;
@@ -518,43 +531,6 @@
         document.getElementById('level2Container').innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>حدث خطأ في تحميل البيانات</p></div>';
         document.getElementById('level3Container').innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><p>حدث خطأ في تحميل البيانات</p></div>';
       }
-    }
-
-    // ============================================================
-    //  نسخ رابط الإحالة
-    // ============================================================
-    function setupCopyReferral() {
-      const copyBtn = document.getElementById('copyReferralBtn');
-      const msgDiv = document.getElementById('copyMessage');
-
-      copyBtn.addEventListener('click', async function() {
-        const linkElement = document.getElementById('referralLink');
-        const link = linkElement.textContent;
-
-        if (!link || link === 'جاري التحميل...') {
-          msgDiv.textContent = '⚠️ رابط الإحالة غير متاح حالياً';
-          msgDiv.className = 'message show error';
-          setTimeout(() => { msgDiv.className = 'message'; }, 3000);
-          return;
-        }
-
-        try {
-          await navigator.clipboard.writeText(link);
-          msgDiv.textContent = '✅ تم نسخ رابط الإحالة بنجاح!';
-          msgDiv.className = 'message show success';
-          setTimeout(() => { msgDiv.className = 'message'; }, 3000);
-        } catch (err) {
-          const textArea = document.createElement('textarea');
-          textArea.value = link;
-          document.body.appendChild(textArea);
-          textArea.select();
-          document.execCommand('copy');
-          document.body.removeChild(textArea);
-          msgDiv.textContent = '✅ تم نسخ رابط الإحالة بنجاح!';
-          msgDiv.className = 'message show success';
-          setTimeout(() => { msgDiv.className = 'message'; }, 3000);
-        }
-      });
     }
 
     // ============================================================
@@ -590,8 +566,8 @@
     //  تهيئة الصفحة
     // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
+      setupReferralLink();
       loadReferralTree();
-      setupCopyReferral();
     });
   </script>
   <script src="/js/site-shell.js"></script>
