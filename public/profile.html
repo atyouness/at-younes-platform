@@ -322,22 +322,6 @@
         return;
       }
 
-      // عرض حالة الحساب
-const statusSpan = document.getElementById('accountStatus');
-if (user.is_active) {
-  statusSpan.textContent = '✅ مفعل';
-  statusSpan.style.background = '#22c55e';
-} else {
-  statusSpan.textContent = '⏳ غير مفعل';
-  statusSpan.style.background = '#dc3545';
-}
-
-// عرض تاريخ آخر تحديث
-if (user.profile_updated_at) {
-  const date = new Date(user.profile_updated_at);
-  document.getElementById('profileUpdatedAt').textContent = date.toLocaleDateString('ar-EG') + ' ' + date.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-}
-      
       try {
         const response = await fetch('/api/auth/profile', {
           headers: { 'Authorization': `Bearer ${token}` }
@@ -352,6 +336,23 @@ if (user.profile_updated_at) {
         if (!response.ok) throw new Error('فشل في تحميل البيانات');
 
         const user = await response.json();
+
+        const statusSpan = document.getElementById('accountStatus');
+        const resendActivationLink = document.getElementById('resendActivationLink');
+        if (user.is_active) {
+          statusSpan.textContent = '✅ مفعل';
+          statusSpan.style.background = '#22c55e';
+          resendActivationLink.style.display = 'none';
+        } else {
+          statusSpan.textContent = '⏳ غير مفعل';
+          statusSpan.style.background = '#dc3545';
+          resendActivationLink.style.display = 'inline-flex';
+        }
+
+        if (user.profile_updated_at) {
+          const date = new Date(user.profile_updated_at);
+          document.getElementById('profileUpdatedAt').textContent = date.toLocaleDateString('ar-EG') + ' ' + date.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+        }
 
         // تعبئة الحقول
         document.getElementById('full_name').value = user.full_name || '';
@@ -379,11 +380,6 @@ if (user.profile_updated_at) {
         document.getElementById('heir_relation').value = user.heir_relation || '';
         document.getElementById('heir_national_id').value = user.heir_national_id || '';
         document.getElementById('heir_phone').value = user.heir_phone || '';
-
-        // إظهار زر إعادة التفعيل فقط إذا كان الحساب غير مفعل
-        if (!user.is_active) {
-          document.getElementById('resendActivationLink').style.display = 'inline-flex';
-        }
 
       } catch (error) {
         console.error('❌ خطأ في تحميل الملف الشخصي:', error);

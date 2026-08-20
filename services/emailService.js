@@ -1,55 +1,39 @@
-// services/emailService.js
 const nodemailer = require('nodemailer');
-const crypto = require('crypto');
 
-// إعداد Nodemailer
+const emailUser = process.env.EMAIL_USER || 'info@atyouness.com';
+const requiredEmailSettings = ['EMAIL_PASSWORD'];
+
 const transporter = nodemailer.createTransport({
-  host: 'smtp.hostinger.com',
-  port: 465,
-  secure: true,
+  host: process.env.EMAIL_HOST || 'smtp.hostinger.com',
+  port: Number(process.env.EMAIL_PORT || 465),
+  secure: String(process.env.EMAIL_SECURE || 'true') === 'true',
   auth: {
-    user: 'info@atyouness.com',
-    pass: process.env.EMAIL_PASSWORD || 'UJN741ik85/*i' // استخدم متغير بيئي
-  },
-  tls: {
-    rejectUnauthorized: false
+    user: emailUser,
+    pass: process.env.EMAIL_PASSWORD
   }
 });
 
-// تخزين مؤقت للتوكنات
-const verificationTokens = {};
-
-// دالة إرسال بريد التفعيل
-async function sendVerificationEmail(email, username, verificationToken) {
-  const verificationLink = `https://atyouness.com/api/auth/verify?token=${verificationToken}`;
-  
-  const mailOptions = {
-    from: '"آت يونس تك" <info@atyouness.com>',
-    to: email,
-    subject: '🔐 تفعيل حسابك في آت يونس تك',
-    html: `
-      <div dir="rtl" style="font-family: 'Tajawal', sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f8f9fa; border-radius: 12px;">
-        <h2 style="color: #2563eb;">مرحباً ${username}،</h2>
-        <p style="font-size: 16px; color: #2c3e50;">شكراً لتسجيلك في منصة <strong>آت يونس تك</strong>.</p>
-        <p style="font-size: 16px; color: #2c3e50;">لتفعيل حسابك، يرجى النقر على الرابط التالي:</p>
-        <div style="text-align: center; margin: 25px 0;">
-          <a href="${verificationLink}" style="background: #2563eb; color: white; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: 600; display: inline-block;">تفعيل الحساب</a>
-        </div>
-        <p style="font-size: 14px; color: #6c757d;">إذا لم تقم بالتسجيل، يرجى تجاهل هذا البريد.</p>
-        <hr style="border: 1px solid #e9ecef;">
-        <p style="font-size: 12px; color: #6c757d; text-align: center;">© 2026 آت يونس تك - جميع الحقوق محفوظة</p>
-      </div>
-    `
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log(`✅ تم إرسال بريد التفعيل إلى ${email}`);
-    return true;
-  } catch (error) {
-    console.error('❌ فشل في إرسال بريد التفعيل:', error);
-    return false;
+async function sendVerificationEmail({ email, name, token }) {
+  const missing = requiredEmailSettings.filter((setting) => !process.env[setting]);
+  if (missing.length) {
+    throw new Error(`إعدادات البريد ناقصة: ${missing.join(', ')}`);
   }
+
+  const appUrl = process.env.APP_URL || 'https://atyouness.com';
+  const verificationLink = `${appUrl}/api/auth/verify?token=${encodeURIComponent(token)}`;
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM || `آت يونس تك <${emailUser}>`,
+    to: email,
+    subject: 'مرحبًا بك في آت يونس تك | تفعيل الحساب',
+    html: `
+      <div dir="rtl" style="font-family:Arial,sans-serif;max-width:620px;margin:auto;padding:28px;background:#f5f7f6;color:#17212b">
+        <h2 style="color:#16715b">مرحبًا ${name || 'بك'}،</h2>
+        <p>شكرًا لانضمامك إلى منصة <strong>آت يونس تك</strong>.</p>
+        <p>لتفعيل حسابك والبدء باستخدام المنصة، اضغط على الزر التالي:</p>
+        <p style="text-align:center;margin:28px 0"><a href="${verificationLink}" style="background:#16715b;color:#fff;padding:13px 25px;text-decoration:none;border-radius:6px">تفعيل الحساب</a></p>
+        <p style="font-size:13px;color:#66727d">ينتهي رابط التفعيل خلال 24 ساعة. إذا لم تطلب إنشاء الحساب، تجاهل هذه الرسالة.</p>
+      </div>`
+  });
 }
 
-module.exports = { sendVerificationEmail, verificationTokens };
+module.exports = { sendVerificationEmail };

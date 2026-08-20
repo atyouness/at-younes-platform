@@ -340,15 +340,9 @@
           throw new Error(data.message || 'حدث خطأ في التسجيل');
         }
 
-        // حفظ التوكن والمستخدم
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-
         showMessage(`✅ ${data.message}`, 'success');
-
-        setTimeout(() => {
-          window.location.href = '/dashboard.html';
-        }, 2000);
+        btnText.textContent = 'تحقق من بريدك الإلكتروني';
+        spinner.style.display = 'none';
 
       } catch (error) {
         showMessage(`❌ ${error.message}`, 'error');
@@ -365,6 +359,5 @@
       initReferralCode();
     });
   </script>
-  <script src="/js/site-shell.js"></script>
 </body>
 </html>

@@ -13,7 +13,7 @@ class User {
       `INSERT INTO users
         (first_name, last_name, username, email, phone, whatsapp, password_hash, role_id,
          referral_code, parent_user_id, status, is_active)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 2, ?, ?, 'active', 1)`,
+       VALUES (?, ?, ?, ?, ?, ?, ?, 2, ?, ?, 'pending', 0)`,
       [firstName, lastName, username, email, phone, whatsapp, passwordHash, referralCode, parentUserId]
     );
     return User.findById(result.insertId);
@@ -43,6 +43,37 @@ class User {
   static async findByReferralCode(referralCode) {
     const [rows] = await pool.query('SELECT id, referral_code FROM users WHERE referral_code = ? LIMIT 1', [referralCode]);
     return rows[0] || null;
+  }
+
+  static async saveVerificationToken(userId, tokenHash, expiresAt) {
+    await pool.query(
+      `UPDATE users
+       SET verification_token_hash = ?, verification_expires_at = ?
+       WHERE id = ?`,
+      [tokenHash, expiresAt, userId]
+    );
+  }
+
+  static async clearVerificationToken(userId) {
+    await pool.query(
+      `UPDATE users
+       SET verification_token_hash = NULL, verification_expires_at = NULL
+       WHERE id = ?`,
+      [userId]
+    );
+  }
+
+  static async verifyEmailToken(tokenHash) {
+    const [result] = await pool.query(
+      `UPDATE users
+       SET status = 'active', is_active = 1, email_verified_at = CURRENT_TIMESTAMP,
+           verification_token_hash = NULL, verification_expires_at = NULL
+       WHERE verification_token_hash = ?
+         AND verification_expires_at > CURRENT_TIMESTAMP
+         AND status = 'pending'`,
+      [tokenHash]
+    );
+    return result.affectedRows === 1;
   }
 
   static async comparePassword(password, passwordHash) {

@@ -246,6 +246,15 @@
       </div>
     </div>
 
+    <div class="section">
+      <h2>🔗 رابط الإحالة الخاص بك</h2>
+      <div class="referral-link-box">
+        <code class="link" id="dashboardReferralLink">جاري التحميل...</code>
+        <button class="copy-btn" id="dashboardCopyReferralBtn">📋 نسخ الرابط</button>
+      </div>
+      <p id="dashboardReferralMessage" style="color:#6c757d;font-size:13px;margin:8px 0 0"></p>
+    </div>
+
     <!-- المهام اليومية -->
     <div class="section">
       <h2>📋 المهام اليومية <a href="/tasks.html">عرض الكل →</a></h2>
@@ -290,6 +299,14 @@
       }
       document.getElementById('username').textContent = `مرحباً، ${user.username} 👋`;
       document.getElementById('balance').textContent = user.balance || 0;
+      const referralCode = user.referral_code || user.referralCode;
+      const referralLink = referralCode ? `${window.location.origin}/register.html?ref=${encodeURIComponent(referralCode)}` : '';
+      document.getElementById('dashboardReferralLink').textContent = referralLink || 'رابط الإحالة غير متاح';
+      document.getElementById('dashboardCopyReferralBtn').addEventListener('click', async () => {
+        if (!referralLink) return;
+        await navigator.clipboard.writeText(referralLink);
+        document.getElementById('dashboardReferralMessage').textContent = 'تم نسخ الرابط بنجاح.';
+      });
     }
 
     // ============================================================
