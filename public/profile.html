@@ -140,8 +140,8 @@
     <div class="header">
       <h1>👤 حسابي <span>البيانات الشخصية</span></h1>
     </div>
-    <!-- حالة الحساب -->
-    <div style="background: #f8f9fa; border-radius: 12px; padding: 12px 16px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; border: 1px solid #e9ecef;">
+      <!-- حالة الحساب -->
+    <div id="security" style="background: #f8f9fa; border-radius: 12px; padding: 12px 16px; margin-bottom: 20px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; border: 1px solid #e9ecef;">
      <div>
        <span style="font-weight: 600;">🔐 حالة الحساب:</span>
        <span id="accountStatus" style="font-weight: 700; padding: 4px 14px; border-radius: 30px; color: white; background: #22c55e; display: inline-block; margin-right: 8px;">مفعل</span>
@@ -152,7 +152,7 @@
     </div>
     <form id="profileForm" novalidate>
       <!-- القسم 1: البيانات الأساسية -->
-      <div class="profile-section">
+      <div class="profile-section" id="basic">
         <h2>📋 البيانات الأساسية</h2>
         <div class="form-row">
           <div class="form-group">
@@ -201,7 +201,7 @@
         </div>
       </div>
 
-      <div class="profile-section">
+      <div class="profile-section" id="settings">
         <h2>🔐 خصوصية رقم الهاتف</h2>
         <label class="privacy-option"><input type="checkbox" id="showPhoneToLevel2"> إظهار رقمي للراعي في المستوى الثاني</label>
         <label class="privacy-option"><input type="checkbox" id="showPhoneToLevel3"> إظهار رقمي للراعي في المستوى الثالث</label>
@@ -211,7 +211,7 @@
       </div>
 
       <!-- القسم 2: بيانات الهوية الرسمية -->
-      <div class="profile-section">
+      <div class="profile-section" id="identity">
         <h2>🪪 بيانات الهوية الرسمية</h2>
         <div class="form-group">
           <label>رقم بطاقة التعريف الوطنية <span class="required">*</span></label>
@@ -230,7 +230,7 @@
       </div>
 
       <!-- القسم 3: الولي الشرعي (للقاصرين) -->
-      <div class="profile-section">
+      <div class="profile-section" id="guardian">
         <h2>👨‍👦 الولي الشرعي <span class="sub-badge">(للمستخدمين أقل من 18 سنة)</span></h2>
         <div class="form-row">
           <div class="form-group">
@@ -274,7 +274,7 @@
       </div>
 
       <!-- القسم 4: الوريث / المستفيد المسمّى -->
-      <div class="profile-section">
+      <div class="profile-section" id="heir">
         <h2>👨‍👩‍👧 الوريث / المستفيد المسمّى <span class="sub-badge">(للتواصل عند اللزوم)</span></h2>
         <div class="form-row">
           <div class="form-group">
