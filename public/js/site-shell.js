@@ -52,7 +52,69 @@
 
   const footer = document.createElement('footer');
   footer.className = 'site-footer';
-  footer.innerHTML = `<div class="site-footer__inner"><div><h2>آت يونس تك</h2><p>منصة جزائرية تجمع الترويج المسؤول، متابعة المشاريع، والعروض المحلية في تجربة واضحة.</p></div><div class="site-footer__links"><a href="/">الرئيسية</a><a href="/products.html">العروض</a><a href="/finance.html">الإيداع والسحب</a>${isActive ? '<a href="/profile.html">👤 حسابي</a><button class="site-footer__logout" type="button" data-logout>تسجيل الخروج</button>' : '<a href="/login.html">تسجيل الدخول</a><a href="/register.html">إنشاء حساب</a>'}</div></div><div class="site-footer__bottom">© 2026 آت يونس تك. جميع الحقوق محفوظة.</div>`;
+  footer.innerHTML = `
+    <div class="site-footer__top">
+      <div class="site-footer__inner">
+        <div class="site-footer__brand">
+          <div class="site-footer__logo">آت يونس <span>تك</span></div>
+          <p>منصة استثمارية وترويجية ذكية تضع أدوات النجاح بين يديك، من إدارة المشاريع إلى بناء شبكة إحالات قوية.</p>
+          <div class="site-footer__cta">
+            <a href="${isActive ? '/dashboard.html' : '/register.html'}">${isActive ? 'لوحة التحكم' : 'انضم الآن'}</a>
+          </div>
+        </div>
+
+        <div class="site-footer__column">
+          <h3>الشركة</h3>
+          <a href="/">الرئيسية</a>
+          <a href="/products.html">العروض</a>
+          <a href="/projects.html">المشاريع</a>
+          <a href="/investments.html">الاستثمارات</a>
+        </div>
+
+        <div class="site-footer__column">
+          <h3>الموارد</h3>
+          <a href="/tasks.html">المهام</a>
+          <a href="/dashboard.html">لوحة التحكم</a>
+          <a href="/referrals.html">شبكة الإحالات</a>
+          <a href="/finance.html">الإيداع والسحب</a>
+        </div>
+
+        <div class="site-footer__column">
+          <h3>الدعم</h3>
+          <a href="/profile.html">حسابي</a>
+          <a href="/login.html">تسجيل الدخول</a>
+          <a href="/register.html">إنشاء حساب</a>
+          ${isActive ? '<button class="site-footer__logout" type="button" data-logout>تسجيل الخروج</button>' : ''}
+        </div>
+
+        <div class="site-footer__column site-footer__contact">
+          <h3>تواصل معنا</h3>
+          <a href="tel:+966500000000">📞 +966 50 000 0000</a>
+          <a href="mailto:support@atyounes.com">📧 support@atyounes.com</a>
+          <a href="https://wa.me/966500000000" target="_blank" rel="noreferrer">💬 واتساب</a>
+          <span>🕒 دعم عربي على مدار اليوم</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="site-footer__trust">
+      <div class="site-footer__inner site-footer__trust-inner">
+        <span>🔒 دفع آمن</span>
+        <span>🛡️ حماية بيانات</span>
+        <span>⚡ دعم فني</span>
+        <span>🤝 شراكات موثوقة</span>
+      </div>
+    </div>
+
+    <div class="site-footer__bottom">
+      <div class="site-footer__inner">
+        <p>© 2026 آت يونس تك. جميع الحقوق محفوظة.</p>
+        <div class="site-footer__legal">
+          <a href="/">الشروط</a>
+          <a href="/">سياسة الخصوصية</a>
+        </div>
+      </div>
+    </div>`;
 
   document.body.classList.add('site-shell-ready');
   document.body.prepend(header);
